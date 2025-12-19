@@ -20,12 +20,21 @@ int main() {
         // Update
         // Update variables here
 
+		Monkey.handleUpdates();
+
         // Draw
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
+        BeginMode2D(Monkey.getCamera());
+
+
         GameWorld.handleWorld(Monkey);
-		Monkey.handlePlayer();
+        Monkey.handlePlayer();
+
+
+        EndMode2D();
+
 
         EndDrawing();
     }
