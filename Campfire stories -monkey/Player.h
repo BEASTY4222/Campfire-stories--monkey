@@ -7,7 +7,9 @@ class PlayerMonkey{
 	Rectangle PlayerBox;
 	bool inAir = false;
 	bool doubleJumpUsed = false;
-	Camera2D mainCamera = { 0 };
+	Camera2D mainCamera;
+	float jumpProgress;
+	const std::string TAG;
 
 	void drawPlayer() const {
 		DrawRectangleRec(this->PlayerBox, BROWN);
@@ -23,33 +25,33 @@ class PlayerMonkey{
 		if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_SPACE)) {
 			if (inAir) {
 				if (!doubleJumpUsed) {
-					this->PlayerBox.y -= 150.0f;
+					if (jumpProgress != 150.0f) {
+						jumpProgress += 150.0f * GetFrameTime();
+					}
+					this->PlayerBox.y -= jumpProgress;
 					doubleJumpUsed = true;
 					return;
 				}
 			}
 			else {
-				this->PlayerBox.y -= 350.0f;
+				if (jumpProgress != 350.0f) {
+					jumpProgress += 350.0f * (GetFrameTime() * 50);
+				}
+				this->PlayerBox.y -= jumpProgress;
 				inAir = true;
 			}			
 		}
 		if (PlayerBox.y == 800.0f) {
 			inAir = false;
 			doubleJumpUsed = false;
+			jumpProgress = 0.0f;
 		}
 	}
 public:
-	PlayerMonkey() {
-		this->PlayerBox.x = 100.0f;
-		this->PlayerBox.y = 920.0f;
-		this->PlayerBox.width = 80.0f;
-		this->PlayerBox.height = 120.0f;
-
-		this->mainCamera.offset = { 1920.0f / 2, 720.0f };
-		this->mainCamera.target = { 1920 / 2, 1080 * 0.75f };
-		this->mainCamera.rotation = 0.0f;
-		this->mainCamera.zoom = 0.6f;
-	}
+	PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 120.0f }, 
+		mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 0.6f},
+		jumpProgress{ 0.0f }, TAG{ "PLAYER" }
+		 {}
 
 	void handleCamera() {
 		this->mainCamera.target.x = { this->PlayerBox.x };
@@ -65,6 +67,10 @@ public:
 		
 		drawPlayer();
 
+	}
+
+	bool colliedsWithRectangle(const Rectangle& other) const {
+		return CheckCollisionRecs(this->PlayerBox, other);
 	}
 	Rectangle& getRectangle() { return PlayerBox; } // Non-const getter
 

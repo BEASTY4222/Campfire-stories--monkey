@@ -1,21 +1,24 @@
 #pragma once
 #include "raylib.h"
+#include "GroundObject.h"
 
 class World {
-	float worldGroundLevel = 9200.0f;
+	float worldGroundLevel = 920.0f;
 	float timeInAir = 0.f;
+	GroundObject mainGround;
 
 	void drawWorld() const {
-		// Draw ground
-		DrawRectangle(0, 920, 1920000, 160, DARKGREEN);
+		// Draw random Mountain 
+		DrawRectangle(-10000, -1000, 1920000, 10000, GRAY);
 		// Draw sky
-		DrawRectangle(0, 0, 1920, 920, SKYBLUE);
+		DrawRectangle(0, -10000, 19200, 920000, SKYBLUE);
+		// Draw ground
+		mainGround.drawObject();
 	}
 	
 public:
-	World() {
-		// Constructor implementation (if needed)
-	}
+	World() :mainGround(-10000.f, worldGroundLevel, 200000.f, 20000.f, DARKGREEN)
+	{}
 	
 	void gravityEffect(Rectangle& playerBox) {
 		// Simple gravity effect

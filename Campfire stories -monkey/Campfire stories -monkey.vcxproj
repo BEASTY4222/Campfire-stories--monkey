@@ -129,6 +129,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GroundObject.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
