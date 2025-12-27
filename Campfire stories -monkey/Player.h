@@ -1,79 +1,54 @@
 #pragma once
+#include <string>
 
 #include "raylib.h"
+#include "GroundObject.h"
+#include "World.h"
 
 
 class PlayerMonkey{
+	// Player properties
 	Rectangle PlayerBox;
-	bool inAir = false;
-	bool doubleJumpUsed = false;
 	Camera2D mainCamera;
+	// Player sprite
+	Image IdlePlayerImage1;
+	//Image IdlePlayerImage2;
+	// Jump mechanics
+	bool doubleJumpUsed = false;
+	bool inAir = false;
+	const float doubleJumpPower;
+	const float jumpPower;
 	float jumpProgress;
+	float jumpProgressDoubleJump;
+	// TAG
 	const std::string TAG;
+	// Dashig mechanics
+	float dashCooldown;// seconds
+	const float dashPower;
 
-	void drawPlayer() const {
-		DrawRectangleRec(this->PlayerBox, BROWN);
+	inline void drawPlayer() {
+		IdlePlayerImage1 = LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png");
+		DrawTexture(LoadTextureFromImage(IdlePlayerImage1), PlayerBox.x, PlayerBox.y + 20, WHITE);
+		//ImageDrawRectangleRec(&IdlePlayerImage1, PlayerBox, WHITE);
+
+		UnloadImage(IdlePlayerImage1);
 	}
 
-	void handleMovement() {
-		if (IsKeyDown(KEY_D)) {
-			this->PlayerBox.x += 15.0f;
-		}
-		if (IsKeyDown(KEY_A)) {
-			this->PlayerBox.x -= 15.0f;
-		}
-		if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_SPACE)) {
-			if (inAir) {
-				if (!doubleJumpUsed) {
-					if (jumpProgress != 150.0f) {
-						jumpProgress += 150.0f * GetFrameTime();
-					}
-					this->PlayerBox.y -= jumpProgress;
-					doubleJumpUsed = true;
-					return;
-				}
-			}
-			else {
-				if (jumpProgress != 350.0f) {
-					jumpProgress += 350.0f * (GetFrameTime() * 50);
-				}
-				this->PlayerBox.y -= jumpProgress;
-				inAir = true;
-			}			
-		}
-		if (PlayerBox.y == 800.0f) {
-			inAir = false;
-			doubleJumpUsed = false;
-			jumpProgress = 0.0f;
-		}
-	}
+	inline void handleCamera() { this->mainCamera.target.x = { this->PlayerBox.x }; }
+	void handleMovement();
+	void handleCollisionsGroundObjects(GroundObject object);// Collision 
 public:
-	PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 120.0f }, 
-		mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 0.6f},
-		jumpProgress{ 0.0f }, TAG{ "PLAYER" }
-		 {}
+	PlayerMonkey();
 
-	void handleCamera() {
-		this->mainCamera.target.x = { this->PlayerBox.x };
-	}
-	
-	void handleUpdates() {
-		handleMovement();
-		handleCamera();
-	}
+	// Handlers
+	void handleUpdates(World world);// for vars that need to be updated every frame
+	void handlePlayer();// visuals
 
-	void handlePlayer() {
-		
-		
-		drawPlayer();
+	// Collision with rectangle objects
+	void CollisionWithRectangle(GroundObject object);
 
-	}
-
-	bool colliedsWithRectangle(const Rectangle& other) const {
-		return CheckCollisionRecs(this->PlayerBox, other);
-	}
-	Rectangle& getRectangle() { return PlayerBox; } // Non-const getter
-
-	Camera2D& getCamera() { return mainCamera; } // Non-const getter
+	// getters	
+	inline Rectangle& getRectangle() { return PlayerBox; } // Non-const getter
+	inline Camera2D& getCamera() { return mainCamera; } // Non-const getter
 };
 

@@ -1,10 +1,10 @@
 #pragma once
-#include "raylib.h"
 #include "GroundObject.h"
+#include "Player.h"
 
 class World {
-	float worldGroundLevel = 920.0f;
-	float timeInAir = 0.f;
+	float worldGroundLevel = 1000.0f;
+	float timeInAir = 0.0f;
 	GroundObject mainGround;
 
 	void drawWorld() const {
@@ -17,30 +17,33 @@ class World {
 	}
 	
 public:
-	World() :mainGround(-10000.f, worldGroundLevel, 200000.f, 20000.f, DARKGREEN)
+	World() : mainGround(-10000.f, 1000.f, 200000.f, 20000.f, DARKGREEN, "GROUND")
 	{}
 	
-	void gravityEffect(Rectangle& playerBox) {
+	void gravityEffect(Rectangle& entityBox) {
 		// Simple gravity effect
-		if (playerBox.y + playerBox.height < 920.f) { // If player is above ground
+		if (entityBox.y + entityBox.height < 1000.0f) { // If player is above ground
 			timeInAir += GetFrameTime();
 			if (timeInAir < 0.5f)
-				playerBox.y += 3.0f;
+				entityBox.y += 1.0f;
 			else
-				playerBox.y += 10.0f; // Apply gravity
+				entityBox.y += 10.0f; // Apply gravity
 		}
 		else {
-			playerBox.y = 920.f - playerBox.height; // Reset to ground level
-			timeInAir = 0.f;
+			entityBox.y = 1000.0f - entityBox.height; // Reset to ground level
+			timeInAir = 0.0f;// its 800 cuss of the height of the ground + height of the player
+							// 680 + 120 = 800
 		}
 	}
-	void handleWorld(PlayerMonkey& player) {
+	void handleWorld(Rectangle& monkey) {
+		gravityEffect(monkey);
 		drawWorld();
-		gravityEffect(player.getRectangle());
 	}
 
 	float getGroundLevel() const {
 		return 800.0f;
 	}
+
+	GroundObject getMainGround()const { return mainGround; }
 };
 

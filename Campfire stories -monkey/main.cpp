@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "raylib.h"
 #include "Player.h"
 #include "World.h"
@@ -9,7 +10,7 @@ int main() {
     const int screenHeight = 1080;
 
 	PlayerMonkey Monkey;
-	World GameWorld;
+	World gameWorld;
 
     InitWindow(screenWidth, screenHeight, "Campfire stories: Monkey");
 
@@ -20,7 +21,7 @@ int main() {
         // Update
         // Update variables here
 
-		Monkey.handleUpdates();
+		Monkey.handleUpdates(gameWorld);
 
         // Draw
         BeginDrawing();
@@ -28,14 +29,11 @@ int main() {
 
         BeginMode2D(Monkey.getCamera());
 
-
-        GameWorld.handleWorld(Monkey);
+        gameWorld.handleWorld(Monkey.getRectangle());
         Monkey.handlePlayer();
 
 
         EndMode2D();
-
-
         EndDrawing();
     }
 
