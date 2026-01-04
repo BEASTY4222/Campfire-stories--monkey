@@ -2,19 +2,36 @@
 
 PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 120.0f },
 	mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },
-	//IdlePlayerImage1{LoadImage("C:\Users\IvanSuperPC\source\repos\BEASTY4222\Campfire-stories--monkey\spritesMonkey\IdleAnim\idle1.png")},
-	//IdlePlayerImage2{LoadImage("C:\Users\IvanSuperPC\source\repos\BEASTY4222\Campfire-stories--monkey\spritesMonkey\IdleAnim\idel2.png")},
 	jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 250.0f }, doubleJumpPower{ 150.0f},
-	dashCooldown{ 0.0f }, dashPower{ 150.0f }, TAG{ "PLAYER" }
+	dashCooldown{ 0.0f }, dashPower{ 150.0f },
+	IdlePlayerImage1(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
+	currentMoveSpeed(0), walkSpeed(5.0f), sprintSpeed(10.0f),
+	facingRight(true)
+	, TAG{"PLAYER"}
 	{}
 // Handlers
 // Movement handler
 void PlayerMonkey::handleMovement() {
 	if (IsKeyDown(KEY_D)) {
-		this->PlayerBox.x += 15.0f;
+
+		if (!facingRight) {
+			ImageFlipHorizontal(&IdlePlayerImage1);
+			UpdateTexture(idleTexture, IdlePlayerImage1.data);
+
+		}
+		this->PlayerBox.x += currentMoveSpeed;
+		facingRight = true;
+
 	}
 	if (IsKeyDown(KEY_A)) {
-		this->PlayerBox.x -= 15.0f;
+
+		if (facingRight) {
+			ImageFlipHorizontal(&IdlePlayerImage1);
+			UpdateTexture(idleTexture, IdlePlayerImage1.data);
+		}
+		this->PlayerBox.x -= currentMoveSpeed;
+		facingRight = false;
+
 	}
 	if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_SPACE)) {
 		if (inAir) {
@@ -38,9 +55,9 @@ void PlayerMonkey::handleMovement() {
 		}
 	}
 	
-	if (IsKeyPressed(KEY_LEFT_SHIFT)) {
+	if (IsKeyPressed(KEY_Q)) {
 		if (dashCooldown >= 2.0f) {
-			if (IsKeyDown(KEY_D)) {
+			if (IsKeyDown(KEY_E)) {
 				this->PlayerBox.x += dashPower;
 			}
 			if (IsKeyDown(KEY_A)) {
@@ -53,7 +70,14 @@ void PlayerMonkey::handleMovement() {
 		dashCooldown += GetFrameTime();
 	}
 
-	// Not on ground zero all 
+	if (IsKeyDown(KEY_LEFT_SHIFT)) {
+		currentMoveSpeed = sprintSpeed;
+	}
+	else {
+		currentMoveSpeed = walkSpeed;
+	}
+
+	// On ground zero all 
 	if (PlayerBox.y == 1000.0f) {
 		inAir = false;
 		doubleJumpUsed = false;

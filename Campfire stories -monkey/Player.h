@@ -10,9 +10,17 @@ class PlayerMonkey{
 	// Player properties
 	Rectangle PlayerBox;
 	Camera2D mainCamera;
-	// Player sprite
+	// Player sprites
 	Image IdlePlayerImage1;
-	//Image IdlePlayerImage2;
+	// Player Textures
+	Texture2D idleTexture = LoadTextureFromImage(IdlePlayerImage1);
+
+	// Direction vars
+	bool facingRight;
+	// Moving vars
+	float currentMoveSpeed;
+	const float walkSpeed;
+	const float sprintSpeed;
 	// Jump mechanics
 	bool doubleJumpUsed = false;
 	bool inAir = false;
@@ -27,11 +35,10 @@ class PlayerMonkey{
 	const float dashPower;
 
 	inline void drawPlayer() {
-		IdlePlayerImage1 = LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png");
-		DrawTexture(LoadTextureFromImage(IdlePlayerImage1), PlayerBox.x, PlayerBox.y + 20, WHITE);
-		//ImageDrawRectangleRec(&IdlePlayerImage1, PlayerBox, WHITE);
 
-		UnloadImage(IdlePlayerImage1);
+
+		DrawTexture(idleTexture, PlayerBox.x, PlayerBox.y + 28, WHITE);
+
 	}
 
 	inline void handleCamera() { this->mainCamera.target.x = { this->PlayerBox.x }; }
