@@ -4,21 +4,28 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 	mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },
 	jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 250.0f }, doubleJumpPower{ 150.0f},
 	dashCooldown{ 0.0f }, dashPower{ 150.0f },
-	//IdlePlayerImage1(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
-	IdlePlayerImage1(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
+	IdlePlayerImage1(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
+	//IdlePlayerImage1(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
 	idleTexture(LoadTextureFromImage(IdlePlayerImage1)),
 	currentMoveSpeed(0), walkSpeed(5.0f), sprintSpeed(10.0f),
 	facingRight(true),
-	health(200.0f), stamina(100.0f), 
+	maxHealth(300.0f),  currHealth(maxHealth), 
+	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(6.0f), regenStamina(true),
 	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
-	healthBar{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 300.0f, 30.0f },
+	healthBar{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, currHealth, 30.0f },
 	staminaBarOutline{ mainCamera.target.x + 680.0f, mainCamera.target.y + 260.0f, 264.0f, 30.0f },
-	staminaBar{ mainCamera.target.x + 680.0f, mainCamera.target.y + 260.0f, 260.0f, 30.0f }
+	staminaBar{ mainCamera.target.x + 680.0f, mainCamera.target.y + 260.0f, currStamina, 30.0f }
 	, TAG{"PLAYER"}
 	{}
 // Handlers
 // Movement handler
 void PlayerMonkey::handleMovement() {
+	if (IsKeyPressed(KEY_MINUS)) {
+		mainCamera.zoom -= 0.5f;
+	}
+	if (IsKeyPressed(KEY_EQUAL)) {
+		mainCamera.zoom += 0.5f;
+	}
 	if (IsKeyDown(KEY_D)) {
 
 		if (!facingRight) {
@@ -47,6 +54,7 @@ void PlayerMonkey::handleMovement() {
 					jumpProgressDoubleJump += doubleJumpPower;
 					// SAME HERE, MAKE SMOOTHER
 				}
+				this->currStamina -= 15.0f;
 				this->PlayerBox.y -= jumpProgress;
 				doubleJumpUsed = true;
 				return;
@@ -57,6 +65,7 @@ void PlayerMonkey::handleMovement() {
 				jumpProgress += jumpPower; // NEEDS TO FIXED LATER
 				// MAKE THE JUMP SMOOTHER 
 			}
+			this->currStamina -= 20.0f;
 			this->PlayerBox.y -= jumpProgress;
 			inAir = true;
 		}
@@ -71,6 +80,7 @@ void PlayerMonkey::handleMovement() {
 				this->PlayerBox.x -= dashPower;
 			}
 			dashCooldown = 0.0f;
+			this->currStamina -= 30.0f;
 		}
 		
 	}else {
@@ -78,9 +88,13 @@ void PlayerMonkey::handleMovement() {
 	}
 
 	if (IsKeyDown(KEY_LEFT_SHIFT)) {
+		regenStamina = false;
 		currentMoveSpeed = sprintSpeed;
+		currStamina -= 5.0f * GetFrameTime();// decrease stamina over time 
+											 // cuss your running
 	}
 	else {
+		regenStamina = true;
 		currentMoveSpeed = walkSpeed;
 	}
 
@@ -103,6 +117,10 @@ void PlayerMonkey::handleBars() {
 	staminaBarOutline.y = mainCamera.target.y + 260.0f;
 	staminaBar.x = mainCamera.target.x + 680.0f;
 	staminaBar.y = mainCamera.target.y + 260.0f;
+	staminaBar.width = currStamina;
+	if (currStamina < maxStamina && regenStamina) 
+		currStamina += staminaRegenRate * GetFrameTime();// regenerate stamina over time
+	
 }
 // Update handler
 void PlayerMonkey::handleUpdates(World world) {// For vars that need to be updated every frame

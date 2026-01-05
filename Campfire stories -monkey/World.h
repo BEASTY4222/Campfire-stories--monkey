@@ -6,18 +6,42 @@ class World {
 	float worldGroundLevel = 1000.0f;
 	float timeInAir = 0.0f;
 	GroundObject mainGround;
+	Image startingSkyImage;
+	Texture2D startingSkyTexture;
+	Image startingForestBackgroundTreesImage;
+	Texture2D startingForestBackgroundTreesTexture;
+	Image startingForestTreesImage;
+	Texture2D startingForestTreesTexture;
+	Image startingForestGroundImage;
+	Texture2D startingForestGroundTexture;
 
 	void drawWorld() const {
 		// Draw random Mountain 
-		DrawRectangle(-10000, -1000, 1920000, 10000, GRAY);
 		// Draw sky
-		DrawRectangle(0, -10000, 19200, 920000, SKYBLUE);
+		float spaceBetween = 0.0f;
+		for (int i = 0; i < 10;i++) {
+			DrawTexture(startingSkyTexture, spaceBetween, 0.0f, WHITE);
+			DrawTexture(startingForestBackgroundTreesTexture, spaceBetween, 0.0f, WHITE);
+			DrawTexture(startingForestTreesTexture, spaceBetween, 0.0f, WHITE);
+			DrawTexture(startingForestGroundTexture, spaceBetween, 680.0f, WHITE);
+			spaceBetween += 990.0f;
+		}
 		// Draw ground
-		mainGround.drawObject();
+		//mainGround.drawObject();
 	}
 	
 public:
-	World() : mainGround(-10000.f, 1000.f, 200000.f, 20000.f, DARKGREEN, "GROUND")
+	World() :
+		startingSkyImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\1.png")),
+		startingForestBackgroundTreesImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\2.png")),
+		startingForestTreesImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\3.png")),
+		startingForestGroundImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\4.png")),
+		startingSkyTexture(LoadTextureFromImage(startingSkyImage)),
+		startingForestBackgroundTreesTexture(LoadTextureFromImage(startingForestBackgroundTreesImage)),
+		startingForestTreesTexture(LoadTextureFromImage(startingForestTreesImage)),
+		startingForestGroundTexture(LoadTextureFromImage(startingForestGroundImage))
+		//mainGround(0.0f, 600.f, 576.f, 200.f, "GROUND", startingForestGroundTexture)
+
 	{}
 	
 	void gravityEffect(Rectangle& entityBox) {

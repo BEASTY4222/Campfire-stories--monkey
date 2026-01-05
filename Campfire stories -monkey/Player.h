@@ -14,10 +14,14 @@ class PlayerMonkey{
 	// Player Textures
 	Texture2D idleTexture; //= LoadTextureFromImage(IdlePlayerImage1);
 	// Player stats
-	float health;
+	float maxHealth;
+	float currHealth;
 	Rectangle healthBar;
 	Rectangle healthBarOutline;
-	float stamina;
+	bool regenStamina;
+	float staminaRegenRate;
+	float maxStamina;
+	float currStamina;
 	Rectangle staminaBar;
 	Rectangle staminaBarOutline;
 	// Direction vars
