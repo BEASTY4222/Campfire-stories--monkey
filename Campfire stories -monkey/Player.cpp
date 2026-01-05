@@ -1,12 +1,19 @@
 #include "Player.h"
 
-PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 120.0f },
+PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 	mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },
 	jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 250.0f }, doubleJumpPower{ 150.0f},
 	dashCooldown{ 0.0f }, dashPower{ 150.0f },
-	IdlePlayerImage1(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
+	//IdlePlayerImage1(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
+	IdlePlayerImage1(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
+	idleTexture(LoadTextureFromImage(IdlePlayerImage1)),
 	currentMoveSpeed(0), walkSpeed(5.0f), sprintSpeed(10.0f),
-	facingRight(true)
+	facingRight(true),
+	health(200.0f), stamina(100.0f), 
+	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
+	healthBar{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 300.0f, 30.0f },
+	staminaBarOutline{ mainCamera.target.x + 680.0f, mainCamera.target.y + 260.0f, 264.0f, 30.0f },
+	staminaBar{ mainCamera.target.x + 680.0f, mainCamera.target.y + 260.0f, 260.0f, 30.0f }
 	, TAG{"PLAYER"}
 	{}
 // Handlers
@@ -85,10 +92,23 @@ void PlayerMonkey::handleMovement() {
 		jumpProgressDoubleJump = 0.0f;
 	}
 }
+// Bars handler
+void PlayerMonkey::handleBars() {
+	healthBarOutline.x = mainCamera.target.x + 640.0f;
+	healthBarOutline.y = mainCamera.target.y + 220.0f;
+	healthBar.x = mainCamera.target.x + 640.0f;
+	healthBar.y = mainCamera.target.y + 220.0f;
+
+	staminaBarOutline.x = mainCamera.target.x + 680.0f;
+	staminaBarOutline.y = mainCamera.target.y + 260.0f;
+	staminaBar.x = mainCamera.target.x + 680.0f;
+	staminaBar.y = mainCamera.target.y + 260.0f;
+}
 // Update handler
 void PlayerMonkey::handleUpdates(World world) {// For vars that need to be updated every frame
 	this->handleMovement();			// heavy on calculations so separated
 	this->handleCamera();
+	this->handleBars();// dependent on the camera x & y
 	this->handleCollisionsGroundObjects(world.getMainGround());
 }
 // Draw handler

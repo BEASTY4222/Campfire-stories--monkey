@@ -9,12 +9,15 @@ int main() {
     const int screenWidth = 1920;
     const int screenHeight = 1080;
 
-	PlayerMonkey Monkey;
-	World gameWorld;
-
     InitWindow(screenWidth, screenHeight, "Campfire stories: Monkey");
 
     SetTargetFPS(60);  // Set the game to run at 60 frames per second
+
+    //INIT ONLY AFTER THE INITS FOR THE WINDOW FOR TEXTURES TO WORK GOOD
+    // SO VRAM RESCOURSEC COULD BE LOADED
+
+    PlayerMonkey Monkey;
+    World gameWorld;
 
     // Main game loop
     while (!WindowShouldClose()) {  // Detect window close button or ESC key

@@ -5,7 +5,6 @@
 #include "GroundObject.h"
 #include "World.h"
 
-
 class PlayerMonkey{
 	// Player properties
 	Rectangle PlayerBox;
@@ -13,8 +12,14 @@ class PlayerMonkey{
 	// Player sprites
 	Image IdlePlayerImage1;
 	// Player Textures
-	Texture2D idleTexture = LoadTextureFromImage(IdlePlayerImage1);
-
+	Texture2D idleTexture; //= LoadTextureFromImage(IdlePlayerImage1);
+	// Player stats
+	float health;
+	Rectangle healthBar;
+	Rectangle healthBarOutline;
+	float stamina;
+	Rectangle staminaBar;
+	Rectangle staminaBarOutline;
 	// Direction vars
 	bool facingRight;
 	// Moving vars
@@ -35,10 +40,19 @@ class PlayerMonkey{
 	const float dashPower;
 
 	inline void drawPlayer() {
+		// Draw bars
+		this->drawBars();
 
 
-		DrawTexture(idleTexture, PlayerBox.x, PlayerBox.y + 28, WHITE);
+		// Draw main character
+		DrawTexture(idleTexture, PlayerBox.x, PlayerBox.y + 10, WHITE);
+	}
+	inline void drawBars() {
+		DrawRectangleRec(healthBar, LIME);// health
+		DrawRectangleLinesEx(healthBarOutline, 4, BLACK);// health outline
 
+		DrawRectangleRec(staminaBar, ORANGE);// stamina
+		DrawRectangleLinesEx(staminaBarOutline, 4, BLACK);// stamina outline
 	}
 
 	inline void handleCamera() { this->mainCamera.target.x = { this->PlayerBox.x }; }
@@ -50,6 +64,7 @@ public:
 	// Handlers
 	void handleUpdates(World world);// for vars that need to be updated every frame
 	void handlePlayer();// visuals
+	void handleBars();// stamina, hp, mana bars...
 
 	// Collision with rectangle objects
 	void CollisionWithRectangle(GroundObject object);
