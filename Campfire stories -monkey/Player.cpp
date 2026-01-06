@@ -4,11 +4,14 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 	mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },
 	jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 250.0f }, doubleJumpPower{ 150.0f},
 	dashCooldown{ 0.0f }, dashPower{ 150.0f },
-	IdlePlayerImage1(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
-	//IdlePlayerImage1(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
-	idleTexture(LoadTextureFromImage(IdlePlayerImage1)),
+	//IdlePlayerImage1(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
+	//IdlePlayerImage2(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle2.png")),
+	idlePlayerImage1(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
+	idlePlayerImage2(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle2.png")),
+	idleArr{ idlePlayerImage1, idlePlayerImage2 },
+	playerTexture(LoadTextureFromImage(idlePlayerImage1)),
 	currentMoveSpeed(0), walkSpeed(5.0f), sprintSpeed(10.0f),
-	facingRight(true),
+	facingRight(true), animTime(0.0f), anim(0),
 	maxHealth(300.0f),  currHealth(maxHealth), 
 	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(6.0f), regenStamina(true),
 	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
@@ -29,8 +32,8 @@ void PlayerMonkey::handleMovement() {
 	if (IsKeyDown(KEY_D)) {
 
 		if (!facingRight) {
-			ImageFlipHorizontal(&IdlePlayerImage1);
-			UpdateTexture(idleTexture, IdlePlayerImage1.data);
+			ImageFlipHorizontal(&idlePlayerImage1);
+			UpdateTexture(playerTexture, idlePlayerImage1.data);
 
 		}
 		this->PlayerBox.x += currentMoveSpeed;
@@ -40,8 +43,8 @@ void PlayerMonkey::handleMovement() {
 	if (IsKeyDown(KEY_A)) {
 
 		if (facingRight) {
-			ImageFlipHorizontal(&IdlePlayerImage1);
-			UpdateTexture(idleTexture, IdlePlayerImage1.data);
+			ImageFlipHorizontal(&idlePlayerImage1);
+			UpdateTexture(playerTexture, idlePlayerImage1.data);
 		}
 		this->PlayerBox.x -= currentMoveSpeed;
 		facingRight = false;
@@ -98,13 +101,15 @@ void PlayerMonkey::handleMovement() {
 		currentMoveSpeed = walkSpeed;
 	}
 
-	// On ground zero all 
-	if (PlayerBox.y == 1000.0f) {
-		inAir = false;
-		doubleJumpUsed = false;
-		jumpProgress = 0.0f;
-		jumpProgressDoubleJump = 0.0f;
+	animTime += GetFrameTime();
+	anim = 0;
+	if (animTime > 0.1f) {
+		UpdateTexture(playerTexture, idleArr[anim].data);
+		anim = 1;
+		animTime = 0.0f;
 	}
+
+
 }
 // Bars handler
 void PlayerMonkey::handleBars() {

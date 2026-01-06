@@ -3,20 +3,20 @@
 
 struct GroundObject {
 	Rectangle groundBox;
-	Color groundColor;// later change to image or texture
 	const std::string TAG;
 	Texture2D groundTexture;
 
 	GroundObject() 
-		: groundBox{0, 0, 0, 0}, groundColor{0, 0, 0, 255}, // Default values
+		: groundBox{0, 0, 0, 0}, // Default values
 		TAG{ "---" }, groundTexture()
 	{}
 
-	GroundObject(float x, float y, float width, float height, std::string tag, Texture2D groundTexture) : groundBox{ x, y, width, height },
-		 TAG{ tag }, groundTexture(groundTexture)
+	GroundObject(const float& x, const float& y, const float& width, const float& height, const std::string& tag, const Texture2D groundTexture)
+		: groundBox{ x, y, width, height }, TAG{ tag }, groundTexture(groundTexture)
 	{}
-	void drawObject() const {
-		DrawTexture(groundTexture, groundBox.x, groundBox.y, WHITE);
+	void drawObject(const float &x)const {
+		//DrawTexture(startingForestGroundTexture, spaceBetween, 680.0f, WHITE);
+		DrawTexture(groundTexture, x, groundBox.y, WHITE);
 	}
 	Rectangle& getRectangle() { return this->groundBox; }
 	std::string getTag() const { return this->TAG; }

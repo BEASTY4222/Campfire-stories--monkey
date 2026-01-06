@@ -5,7 +5,6 @@
 class World {
 	float worldGroundLevel = 1000.0f;
 	float timeInAir = 0.0f;
-	GroundObject mainGround;
 	Image startingSkyImage;
 	Texture2D startingSkyTexture;
 	Image startingForestBackgroundTreesImage;
@@ -14,6 +13,7 @@ class World {
 	Texture2D startingForestTreesTexture;
 	Image startingForestGroundImage;
 	Texture2D startingForestGroundTexture;
+	GroundObject mainGround;
 
 	void drawWorld() const {
 		// Draw random Mountain 
@@ -23,24 +23,26 @@ class World {
 			DrawTexture(startingSkyTexture, spaceBetween, 0.0f, WHITE);
 			DrawTexture(startingForestBackgroundTreesTexture, spaceBetween, 0.0f, WHITE);
 			DrawTexture(startingForestTreesTexture, spaceBetween, 0.0f, WHITE);
-			DrawTexture(startingForestGroundTexture, spaceBetween, 680.0f, WHITE);
-			spaceBetween += 990.0f;
+			mainGround.drawObject(spaceBetween);
+			spaceBetween += 1000.0f;
 		}
-		// Draw ground
-		//mainGround.drawObject();
 	}
 	
 public:
 	World() :
-		startingSkyImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\1.png")),
-		startingForestBackgroundTreesImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\2.png")),
-		startingForestTreesImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\3.png")),
-		startingForestGroundImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\4.png")),
+		//startingSkyImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\1.png")),
+		//startingForestBackgroundTreesImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\2.png")),
+		//startingForestTreesImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\3.png")),
+		//startingForestGroundImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\4.png")),
+		startingForestGroundImage(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\4.png")),
+		startingForestTreesImage(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\3.png")),
+		startingForestBackgroundTreesImage(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\2.png")),
+		startingSkyImage(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\1.png")),
 		startingSkyTexture(LoadTextureFromImage(startingSkyImage)),
 		startingForestBackgroundTreesTexture(LoadTextureFromImage(startingForestBackgroundTreesImage)),
 		startingForestTreesTexture(LoadTextureFromImage(startingForestTreesImage)),
-		startingForestGroundTexture(LoadTextureFromImage(startingForestGroundImage))
-		//mainGround(0.0f, 600.f, 576.f, 200.f, "GROUND", startingForestGroundTexture)
+		startingForestGroundTexture(LoadTextureFromImage(startingForestGroundImage)),
+		mainGround(0.0f, 680.0f, 1000.0f, 0.0f, "GROUND", startingForestGroundTexture)
 
 	{}
 	

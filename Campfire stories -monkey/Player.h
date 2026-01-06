@@ -10,9 +10,13 @@ class PlayerMonkey{
 	Rectangle PlayerBox;
 	Camera2D mainCamera;
 	// Player sprites
-	Image IdlePlayerImage1;
+	float animTime;
+	int anim;
+	Image idlePlayerImage1;
+	Image idlePlayerImage2;
+	Image idleArr[2];
 	// Player Textures
-	Texture2D idleTexture; //= LoadTextureFromImage(IdlePlayerImage1);
+	Texture2D playerTexture;
 	// Player stats
 	float maxHealth;
 	float currHealth;
@@ -49,7 +53,7 @@ class PlayerMonkey{
 
 
 		// Draw main character
-		DrawTexture(idleTexture, PlayerBox.x, PlayerBox.y + 10, WHITE);
+		DrawTexture(playerTexture, PlayerBox.x, PlayerBox.y + 10, WHITE);
 	}
 	inline void drawBars() {
 		DrawRectangleRec(healthBar, LIME);// health
