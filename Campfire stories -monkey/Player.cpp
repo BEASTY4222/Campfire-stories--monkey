@@ -2,16 +2,36 @@
 
 PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 	mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },
-	jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 250.0f }, doubleJumpPower{ 150.0f},
+	jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 250.0f }, doubleJumpPower{ 150.0f },
 	dashCooldown{ 0.0f }, dashPower{ 150.0f },
-	//IdlePlayerImage1(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
-	//IdlePlayerImage2(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle2.png")),
-	idlePlayerImage1(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle1.png")),
-	idlePlayerImage2(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesMonkey\\IdleAnim\\idle2.png")),
-	idleArr{ idlePlayerImage1, idlePlayerImage2 },
-	playerTexture(LoadTextureFromImage(idlePlayerImage1)),
+	idlePlayerImageRight1(LoadImage("spritesMonkey/IdleAnim/right/idleRight1.png")),
+	idlePlayerImageRight2(LoadImage("spritesMonkey/IdleAnim/right/idleRight2.png")),
+	idlePlayerImageLeft1(LoadImage("spritesMonkey/IdleAnim/left/idleLeft1.png")),
+	idlePlayerImageLeft2(LoadImage("spritesMonkey/IdleAnim/left/idleLeft2.png")),
+
+	walkPlayerImageRight1(LoadImage("spritesMonkey/runAnim/runRight/run1.png")),
+	walkPlayerImageRight2(LoadImage("spritesMonkey/runAnim/runRight/run2.png")),
+	walkPlayerImageRight3(LoadImage("spritesMonkey/runAnim/runRight/run3.png")),
+	walkPlayerImageRight4(LoadImage("spritesMonkey/runAnim/runRight/run4.png")),
+	walkPlayerImageRight5(LoadImage("spritesMonkey/runAnim/runRight/run5.png")),
+	walkPlayerImageRight6(LoadImage("spritesMonkey/runAnim/runRight/run6.png")),
+	walkPlayerImageRightArr{ walkPlayerImageRight1, walkPlayerImageRight2, walkPlayerImageRight3,
+								walkPlayerImageRight4,walkPlayerImageRight5,walkPlayerImageRight6 },
+
+	walkPlayerImageLeft1(LoadImage("spritesMonkey/runAnim/runLeft/runLeft1.png")),
+	walkPlayerImageLeft2(LoadImage("spritesMonkey/runAnim/runLeft/runLeft2.png")),
+	walkPlayerImageLeft3(LoadImage("spritesMonkey/runAnim/runLeft/runLeft3.png")),
+	walkPlayerImageLeft4(LoadImage("spritesMonkey/runAnim/runLeft/runLeft4.png")),
+	walkPlayerImageLeft5(LoadImage("spritesMonkey/runAnim/runLeft/runLeft5.png")),
+	walkPlayerImageLeft6(LoadImage("spritesMonkey/runAnim/runLeft/runLeft6.png")),
+	walkPlayerImageLeftArr{ walkPlayerImageLeft1, walkPlayerImageLeft2, walkPlayerImageLeft3,
+								walkPlayerImageLeft4,walkPlayerImageLeft5,walkPlayerImageLeft6 },
+	
+	idleAnimRightArr{ idlePlayerImageRight1, idlePlayerImageRight2 },
+	idleAnimLeftArr{ idlePlayerImageLeft1, idlePlayerImageLeft2 },
+	currPlayerTexture(LoadTextureFromImage(idlePlayerImageRight2)), currPlayerImage(idlePlayerImageRight2),
 	currentMoveSpeed(0), walkSpeed(5.0f), sprintSpeed(10.0f),
-	facingRight(true), animTime(0.0f), anim(0),
+	facingRight(true), animTimeRight(0.0f), animTimeLeft(0.0f), animRight(0), animLeft(0),
 	maxHealth(300.0f),  currHealth(maxHealth), 
 	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(6.0f), regenStamina(true),
 	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
@@ -29,23 +49,42 @@ void PlayerMonkey::handleMovement() {
 	if (IsKeyPressed(KEY_EQUAL)) {
 		mainCamera.zoom += 0.5f;
 	}
+
 	if (IsKeyDown(KEY_D)) {
+		animLeft = 0;
+		animTimeLeft = 0.0f;
 
-		if (!facingRight) {
-			ImageFlipHorizontal(&idlePlayerImage1);
-			UpdateTexture(playerTexture, idlePlayerImage1.data);
-
+		currPlayerImage = walkPlayerImageRightArr[animRight];
+		animTimeRight += GetFrameTime();
+		if (animTimeRight > 0.2f) {
+			animRight++;
+			if (animRight >= 6) animRight = 0;
+			animTimeRight = 0.0f;
 		}
+		
+		
+		UpdateTexture(currPlayerTexture, currPlayerImage.data);
+
+		
 		this->PlayerBox.x += currentMoveSpeed;
 		facingRight = true;
 
 	}
 	if (IsKeyDown(KEY_A)) {
+		animRight = 0;
+		animTimeRight = 0.0f;
 
-		if (facingRight) {
-			ImageFlipHorizontal(&idlePlayerImage1);
-			UpdateTexture(playerTexture, idlePlayerImage1.data);
+		currPlayerImage = walkPlayerImageLeftArr[animLeft];
+		animTimeLeft += GetFrameTime();
+		if (animTimeLeft > 0.2f) {
+			animLeft++;
+			if (animLeft >= 6) animLeft = 0;
+			animTimeLeft = 0.0f;
 		}
+		
+
+		UpdateTexture(currPlayerTexture, currPlayerImage.data);
+		
 		this->PlayerBox.x -= currentMoveSpeed;
 		facingRight = false;
 
@@ -101,13 +140,7 @@ void PlayerMonkey::handleMovement() {
 		currentMoveSpeed = walkSpeed;
 	}
 
-	animTime += GetFrameTime();
-	anim = 0;
-	if (animTime > 0.1f) {
-		UpdateTexture(playerTexture, idleArr[anim].data);
-		anim = 1;
-		animTime = 0.0f;
-	}
+	
 
 
 }

@@ -16,8 +16,6 @@ class World {
 	GroundObject mainGround;
 
 	void drawWorld() const {
-		// Draw random Mountain 
-		// Draw sky
 		float spaceBetween = 0.0f;
 		for (int i = 0; i < 10;i++) {
 			DrawTexture(startingSkyTexture, spaceBetween, 0.0f, WHITE);
@@ -30,14 +28,14 @@ class World {
 	
 public:
 	World() :
-		//startingSkyImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\1.png")),
-		//startingForestBackgroundTreesImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\2.png")),
-		//startingForestTreesImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\3.png")),
-		//startingForestGroundImage(LoadImage("C:\\Users\\IvanSuperPC\\source\\repos\\BEASTY4222\\Campfire-stories--monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\4.png")),
-		startingForestGroundImage(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\4.png")),
-		startingForestTreesImage(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\3.png")),
-		startingForestBackgroundTreesImage(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\2.png")),
-		startingSkyImage(LoadImage("C:\\Users\\USER69\\Desktop\\11B IG\\Informatik\\C++\\Campfire stories -monkey\\Campfire stories -monkey\\spritesWorld\\magicalForest\\forest\\1.png")),
+		startingSkyImage(LoadImage("spritesWorld/magicalForest/forest/1.png")),
+		startingForestBackgroundTreesImage(LoadImage("spritesWorld/magicalForest/forest/2.png")),
+		startingForestTreesImage(LoadImage("spritesWorld/magicalForest/forest/3.png")),
+		startingForestGroundImage(LoadImage("spritesWorld/magicalForest/forest/4.png")),
+		//startingForestGroundImage(LoadImage("spritesWorld/magicalForest/forest/1.png")),
+		//startingForestTreesImage(LoadImage("spritesWorld/magicalForest/forest/3.png")),
+		//startingForestBackgroundTreesImage(LoadImage("spritesWorld/magicalForest/forest/2.png")),
+		//startingSkyImage(LoadImage("spritesWorld/magicalForest/forest/4.png")),
 		startingSkyTexture(LoadTextureFromImage(startingSkyImage)),
 		startingForestBackgroundTreesTexture(LoadTextureFromImage(startingForestBackgroundTreesImage)),
 		startingForestTreesTexture(LoadTextureFromImage(startingForestTreesImage)),

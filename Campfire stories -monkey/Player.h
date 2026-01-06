@@ -10,13 +10,36 @@ class PlayerMonkey{
 	Rectangle PlayerBox;
 	Camera2D mainCamera;
 	// Player sprites
-	float animTime;
-	int anim;
-	Image idlePlayerImage1;
-	Image idlePlayerImage2;
-	Image idleArr[2];
+	Image currPlayerImage;
+	float animTimeRight;
+	float animTimeLeft;
+	int animRight;
+	int animLeft;
+	Image idlePlayerImageRight1;
+	Image idlePlayerImageRight2;
+	Image idlePlayerImageLeft1;
+	Image idlePlayerImageLeft2;
+	Image idleAnimRightArr[2];
+	Image idleAnimLeftArr[2];
+
+	Image walkPlayerImageRight1;
+	Image walkPlayerImageRight2;
+	Image walkPlayerImageRight3;
+	Image walkPlayerImageRight4;
+	Image walkPlayerImageRight5;
+	Image walkPlayerImageRight6;
+	Image walkPlayerImageRightArr[6];
+
+	Image walkPlayerImageLeft1;
+	Image walkPlayerImageLeft2;
+	Image walkPlayerImageLeft3;
+	Image walkPlayerImageLeft4;
+	Image walkPlayerImageLeft5;
+	Image walkPlayerImageLeft6;
+	Image walkPlayerImageLeftArr[6];
+
 	// Player Textures
-	Texture2D playerTexture;
+	Texture2D currPlayerTexture;
 	// Player stats
 	float maxHealth;
 	float currHealth;
@@ -53,7 +76,7 @@ class PlayerMonkey{
 
 
 		// Draw main character
-		DrawTexture(playerTexture, PlayerBox.x, PlayerBox.y + 10, WHITE);
+		DrawTexture(currPlayerTexture, PlayerBox.x, PlayerBox.y + 10, WHITE);
 	}
 	inline void drawBars() {
 		DrawRectangleRec(healthBar, LIME);// health
@@ -81,4 +104,4 @@ public:
 	inline Rectangle& getRectangle() { return PlayerBox; } // Non-const getter
 	inline Camera2D& getCamera() { return mainCamera; } // Non-const getter
 };
-
+ 
