@@ -6,8 +6,6 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 	dashCooldown{ 0.0f }, dashPower{ 150.0f },
 	idlePlayerImageRight1(LoadImage("spritesMonkey/IdleAnim/right/idleRight1.png")),
 	idlePlayerImageRight2(LoadImage("spritesMonkey/IdleAnim/right/idleRight2.png")),
-	idlePlayerImageLeft1(LoadImage("spritesMonkey/IdleAnim/left/idleLeft1.png")),
-	idlePlayerImageLeft2(LoadImage("spritesMonkey/IdleAnim/left/idleLeft2.png")),
 
 	walkPlayerImageRight1(LoadImage("spritesMonkey/runAnim/runRight/run1.png")),
 	walkPlayerImageRight2(LoadImage("spritesMonkey/runAnim/runRight/run2.png")),
@@ -28,10 +26,9 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 								walkPlayerImageLeft4,walkPlayerImageLeft5,walkPlayerImageLeft6 },
 	
 	idleAnimRightArr{ idlePlayerImageRight1, idlePlayerImageRight2 },
-	idleAnimLeftArr{ idlePlayerImageLeft1, idlePlayerImageLeft2 },
 	currPlayerTexture(LoadTextureFromImage(idlePlayerImageRight2)), currPlayerImage(idlePlayerImageRight2),
-	currentMoveSpeed(0), walkSpeed(5.0f), sprintSpeed(10.0f),
-	facingRight(true), animTimeRight(0.0f), animTimeLeft(0.0f), animRight(0), animLeft(0),
+	currentMoveSpeed(0), walkSpeed(5.0f), sprintSpeed(10.0f), curAnimSpeed(0.2f), sprintAnimSpeed(0.1f), walkAnimSpeed(0.2f), notWalking(true),
+	facingRight(true), animTimeRight(0.0f), animTimeLeft(0.0f), idleAnimTime(0.0f), animRight(0), animLeft(0), animIdle(0),
 	maxHealth(300.0f),  currHealth(maxHealth), 
 	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(6.0f), regenStamina(true),
 	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
@@ -56,7 +53,7 @@ void PlayerMonkey::handleMovement() {
 
 		currPlayerImage = walkPlayerImageRightArr[animRight];
 		animTimeRight += GetFrameTime();
-		if (animTimeRight > 0.2f) {
+		if (animTimeRight > curAnimSpeed) {
 			animRight++;
 			if (animRight >= 6) animRight = 0;
 			animTimeRight = 0.0f;
@@ -82,9 +79,8 @@ void PlayerMonkey::handleMovement() {
 			animTimeLeft = 0.0f;
 		}
 		
-
 		UpdateTexture(currPlayerTexture, currPlayerImage.data);
-		
+
 		this->PlayerBox.x -= currentMoveSpeed;
 		facingRight = false;
 
@@ -130,17 +126,35 @@ void PlayerMonkey::handleMovement() {
 	}
 
 	if (IsKeyDown(KEY_LEFT_SHIFT)) {
+		curAnimSpeed = sprintAnimSpeed;
 		regenStamina = false;
 		currentMoveSpeed = sprintSpeed;
 		currStamina -= 5.0f * GetFrameTime();// decrease stamina over time 
 											 // cuss your running
 	}
 	else {
+		curAnimSpeed = walkAnimSpeed;
 		regenStamina = true;
 		currentMoveSpeed = walkSpeed;
 	}
 
-	
+	if (IsKeyUp(KEY_A) && IsKeyUp(KEY_D)) {
+		animRight = 0;
+		animTimeRight = 0.0f;
+		animLeft = 0;
+		animTimeLeft = 0.0f;
+
+		currPlayerImage = idleAnimRightArr[animIdle];
+		idleAnimTime += GetFrameTime();
+ 		if (idleAnimTime > 0.5f) {
+			animIdle++;
+			if (animIdle >= 2) animIdle = 0;
+			idleAnimTime = 0.0f;
+		}
+		UpdateTexture(currPlayerTexture, currPlayerImage.data);
+
+	}
+
 
 
 }

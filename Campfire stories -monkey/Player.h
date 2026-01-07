@@ -13,14 +13,16 @@ class PlayerMonkey{
 	Image currPlayerImage;
 	float animTimeRight;
 	float animTimeLeft;
+	float idleAnimTime;
+	float sprintAnimSpeed;
+	float walkAnimSpeed;
+	float curAnimSpeed;
 	int animRight;
 	int animLeft;
+	int animIdle;
 	Image idlePlayerImageRight1;
 	Image idlePlayerImageRight2;
-	Image idlePlayerImageLeft1;
-	Image idlePlayerImageLeft2;
 	Image idleAnimRightArr[2];
-	Image idleAnimLeftArr[2];
 
 	Image walkPlayerImageRight1;
 	Image walkPlayerImageRight2;
@@ -57,6 +59,7 @@ class PlayerMonkey{
 	float currentMoveSpeed;
 	const float walkSpeed;
 	const float sprintSpeed;
+	bool notWalking;
 	// Jump mechanics
 	bool doubleJumpUsed = false;
 	bool inAir = false;
