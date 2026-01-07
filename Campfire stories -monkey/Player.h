@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <map>
 
 #include "raylib.h"
 #include "GroundObject.h"
@@ -72,11 +73,14 @@ class PlayerMonkey{
 	// Dashig mechanics
 	float dashCooldown;// seconds
 	const float dashPower;
+	// Collison
+	std::map <std::string, Rectangle> currentCollisionTags;
 
 	inline void drawPlayer() {
 		// Draw bars
 		this->drawBars();
 
+		DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the box
 
 		// Draw main character
 		DrawTexture(currPlayerTexture, PlayerBox.x, PlayerBox.y + 10, WHITE);
@@ -106,5 +110,6 @@ public:
 	// getters	
 	inline Rectangle& getRectangle() { return PlayerBox; } // Non-const getter
 	inline Camera2D& getCamera() { return mainCamera; } // Non-const getter
+	inline std::map<std::string, Rectangle> getCurrentCollisionTags() { return currentCollisionTags; } // Non-const getter
 };
  

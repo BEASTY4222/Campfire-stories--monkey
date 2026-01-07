@@ -1,10 +1,15 @@
 #pragma once
+#include <map>
+#include <string>
+
 #include "GroundObject.h"
 #include "Player.h"
 
 class World {
-	float worldGroundLevel = 1000.0f;
+	float worldGroundLevel = 700.0f;
 	float timeInAir = 0.0f;
+	GroundObject mainGround;
+	std::map <std::string, GroundObject> groundObjects;
 	Image startingSkyImage;
 	Texture2D startingSkyTexture;
 	Image startingForestBackgroundTreesImage;
@@ -13,7 +18,6 @@ class World {
 	Texture2D startingForestTreesTexture;
 	Image startingForestGroundImage;
 	Texture2D startingForestGroundTexture;
-	GroundObject mainGround;
 
 	void drawWorld() const {
 		float spaceBetween = 0.0f;
@@ -21,7 +25,7 @@ class World {
 			DrawTexture(startingSkyTexture, spaceBetween, 0.0f, WHITE);
 			DrawTexture(startingForestBackgroundTreesTexture, spaceBetween, 0.0f, WHITE);
 			DrawTexture(startingForestTreesTexture, spaceBetween, 0.0f, WHITE);
-			mainGround.drawObject(spaceBetween);
+			mainGround.drawObject();
 			spaceBetween += 1000.0f;
 		}
 	}
@@ -32,21 +36,19 @@ public:
 		startingForestBackgroundTreesImage(LoadImage("spritesWorld/magicalForest/forest/2.png")),
 		startingForestTreesImage(LoadImage("spritesWorld/magicalForest/forest/3.png")),
 		startingForestGroundImage(LoadImage("spritesWorld/magicalForest/forest/4.png")),
-		//startingForestGroundImage(LoadImage("spritesWorld/magicalForest/forest/1.png")),
-		//startingForestTreesImage(LoadImage("spritesWorld/magicalForest/forest/3.png")),
-		//startingForestBackgroundTreesImage(LoadImage("spritesWorld/magicalForest/forest/2.png")),
-		//startingSkyImage(LoadImage("spritesWorld/magicalForest/forest/4.png")),
+
 		startingSkyTexture(LoadTextureFromImage(startingSkyImage)),
 		startingForestBackgroundTreesTexture(LoadTextureFromImage(startingForestBackgroundTreesImage)),
 		startingForestTreesTexture(LoadTextureFromImage(startingForestTreesImage)),
 		startingForestGroundTexture(LoadTextureFromImage(startingForestGroundImage)),
-		mainGround(0.0f, 680.0f, 1000.0f, 0.0f, "GROUND", startingForestGroundTexture)
+		mainGround(0.0f, 1000.0f, 100000.0f, 100.0f, "MAIN_GROUND", startingForestGroundTexture),
+		groundObjects{ { "MAIN_GROUND", mainGround } }
 
 	{}
 	
-	void gravityEffect(Rectangle& entityBox) {
-		// Simple gravity effect
-		if (entityBox.y + entityBox.height < 1000.0f) { // If player is above ground
+	void gravityEffect(Rectangle& entityBox, std::map <std::string, Rectangle> entityCollisins) {
+		// not Simple gravity effect
+		if (entityBox.y + entityBox.height < groundObjects["MAIN_GROUND"].getRectangle().y) { // If player is above ground
 			timeInAir += GetFrameTime();
 			if (timeInAir < 0.5f)
 				entityBox.y += 1.0f;
@@ -54,18 +56,17 @@ public:
 				entityBox.y += 10.0f; // Apply gravity
 		}
 		else {
-			entityBox.y = 1000.0f - entityBox.height; // Reset to ground level
-			timeInAir = 0.0f;// its 800 cuss of the height of the ground + height of the player
-							// 680 + 120 = 800
+			entityBox.y = groundObjects["MAIN_GROUND"].getRectangle().y - entityBox.height; // Reset to ground level
+			timeInAir = 0.0f;
 		}
 	}
-	void handleWorld(Rectangle& monkey) {
-		gravityEffect(monkey);
+	void handleWorld(Rectangle& entity,std::map <std::string,Rectangle> entityCollisins) {
+		gravityEffect(entity, entityCollisins);          
 		drawWorld();
 	}
 
 	float getGroundLevel() const {
-		return 800.0f;
+		return worldGroundLevel;
 	}
 
 	GroundObject getMainGround()const { return mainGround; }

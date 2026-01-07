@@ -33,7 +33,7 @@ int main() {
 
         BeginMode2D(Monkey.getCamera());
 
-        gameWorld.handleWorld(Monkey.getRectangle());
+        gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags());
         Monkey.handlePlayer();
 
 

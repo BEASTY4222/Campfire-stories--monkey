@@ -73,7 +73,7 @@ void PlayerMonkey::handleMovement() {
 
 		currPlayerImage = walkPlayerImageLeftArr[animLeft];
 		animTimeLeft += GetFrameTime();
-		if (animTimeLeft > 0.2f) {
+		if (animTimeLeft > curAnimSpeed) {
 			animLeft++;
 			if (animLeft >= 6) animLeft = 0;
 			animTimeLeft = 0.0f;
@@ -192,14 +192,24 @@ void PlayerMonkey::handleCollisionsGroundObjects(GroundObject object) {
 }
 
 // Collison methods
+//- You can walk into a platform from the side
+//-You can walk into an enemy from the side unless you add special logic
+//- You can jump up through a platform unless you block upward collisions
+
 void PlayerMonkey::CollisionWithRectangle(GroundObject object) {
 	if (CheckCollisionRecs(this->PlayerBox, object.getRectangle())) {
-		std::string objecttag = object.getTag();
-		if (objecttag == "GROUND") {
-			this->inAir = false;
-			this->doubleJumpUsed = false;
-			this->jumpProgress = 0.0f;
-			this->PlayerBox.y = object.getRectangle().y - this->PlayerBox.height;
+		currentCollisionTags[object.getTag()] = object.getRectangle();
+		for (std::pair<std::string, Rectangle> tag: currentCollisionTags) {
+			if (tag.first == "MAIN_GROUND") {
+				this->inAir = false;
+				this->doubleJumpUsed = false;
+				this->jumpProgress = 0.0f;
+			}
+
+			if (inAir && object.getRectangle().y < PlayerBox.y) {
+				currentCollisionTags.erase(tag.first);
+			}
 		}
+		
 	}
 }
