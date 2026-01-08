@@ -19,15 +19,18 @@ class World {
 	Image startingForestGroundImage;
 	Texture2D startingForestGroundTexture;
 
-	void drawWorld() const {
+
+
+	void drawWorld() {
 		float spaceBetween = 0.0f;
 		for (int i = 0; i < 10;i++) {
 			DrawTexture(startingSkyTexture, spaceBetween, 0.0f, WHITE);
 			DrawTexture(startingForestBackgroundTreesTexture, spaceBetween, 0.0f, WHITE);
 			DrawTexture(startingForestTreesTexture, spaceBetween, 0.0f, WHITE);
-			mainGround.drawObject();
+			DrawTexture(startingForestGroundTexture, spaceBetween, 750.0f, WHITE);
 			spaceBetween += 1000.0f;
 		}
+		//mainGround.drawObject(10);
 	}
 	
 public:
@@ -41,10 +44,12 @@ public:
 		startingForestBackgroundTreesTexture(LoadTextureFromImage(startingForestBackgroundTreesImage)),
 		startingForestTreesTexture(LoadTextureFromImage(startingForestTreesImage)),
 		startingForestGroundTexture(LoadTextureFromImage(startingForestGroundImage)),
-		mainGround(0.0f, 1000.0f, 100000.0f, 100.0f, "MAIN_GROUND", startingForestGroundTexture),
+		mainGround(0.0f, 1000.0f, 100000.0f, 400.0f, "MAIN_GROUND"),
 		groundObjects{ { "MAIN_GROUND", mainGround } }
 
-	{}
+	{
+		mainGround.setTexture(startingForestGroundTexture);
+	}
 	
 	void gravityEffect(Rectangle& entityBox, std::map <std::string, Rectangle> entityCollisins) {
 		// not Simple gravity effect

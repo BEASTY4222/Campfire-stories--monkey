@@ -80,7 +80,7 @@ class PlayerMonkey{
 		// Draw bars
 		this->drawBars();
 
-		DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the box
+		//DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the box
 
 		// Draw main character
 		DrawTexture(currPlayerTexture, PlayerBox.x, PlayerBox.y + 10, WHITE);
