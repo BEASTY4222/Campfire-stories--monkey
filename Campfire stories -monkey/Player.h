@@ -18,28 +18,20 @@ class PlayerMonkey{
 	float sprintAnimSpeed;
 	float walkAnimSpeed;
 	float curAnimSpeed;
+	float animTimeHit1RightTime;
+	float animTimeHit1LeftTime;
 	int animRight;
 	int animLeft;
 	int animIdle;
-	Image idlePlayerImageRight1;
-	Image idlePlayerImageRight2;
+	int animHit1Right;
+	int animHit1Left;
 	Image idleAnimRightArr[2];
 
-	Image walkPlayerImageRight1;
-	Image walkPlayerImageRight2;
-	Image walkPlayerImageRight3;
-	Image walkPlayerImageRight4;
-	Image walkPlayerImageRight5;
-	Image walkPlayerImageRight6;
 	Image walkPlayerImageRightArr[6];
-
-	Image walkPlayerImageLeft1;
-	Image walkPlayerImageLeft2;
-	Image walkPlayerImageLeft3;
-	Image walkPlayerImageLeft4;
-	Image walkPlayerImageLeft5;
-	Image walkPlayerImageLeft6;
 	Image walkPlayerImageLeftArr[6];
+
+	Image hit1PlayerImageRightArr[10];
+	Image hit1PlayerImageLeftArr[10];
 
 	// Player Textures
 	Texture2D currPlayerTexture;
@@ -56,6 +48,7 @@ class PlayerMonkey{
 	Rectangle staminaBarOutline;
 	// Direction vars
 	bool facingRight;
+	bool hitting;
 	// Moving vars
 	float currentMoveSpeed;
 	const float walkSpeed;

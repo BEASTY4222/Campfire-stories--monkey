@@ -4,31 +4,32 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 	mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },
 	jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 250.0f }, doubleJumpPower{ 150.0f },
 	dashCooldown{ 0.0f }, dashPower{ 150.0f },
-	idlePlayerImageRight1(LoadImage("spritesMonkey/IdleAnim/right/idleRight1.png")),
-	idlePlayerImageRight2(LoadImage("spritesMonkey/IdleAnim/right/idleRight2.png")),
+	idleAnimRightArr{ LoadImage("spritesMonkey/IdleAnim/right/idleRight1.png"), LoadImage("spritesMonkey/IdleAnim/right/idleRight2.png") },
 
-	walkPlayerImageRight1(LoadImage("spritesMonkey/runAnim/runRight/run1.png")),
-	walkPlayerImageRight2(LoadImage("spritesMonkey/runAnim/runRight/run2.png")),
-	walkPlayerImageRight3(LoadImage("spritesMonkey/runAnim/runRight/run3.png")),
-	walkPlayerImageRight4(LoadImage("spritesMonkey/runAnim/runRight/run4.png")),
-	walkPlayerImageRight5(LoadImage("spritesMonkey/runAnim/runRight/run5.png")),
-	walkPlayerImageRight6(LoadImage("spritesMonkey/runAnim/runRight/run6.png")),
-	walkPlayerImageRightArr{ walkPlayerImageRight1, walkPlayerImageRight2, walkPlayerImageRight3,
-								walkPlayerImageRight4,walkPlayerImageRight5,walkPlayerImageRight6 },
+	walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), LoadImage("spritesMonkey/runAnim/runRight/run2.png"), 
+								LoadImage("spritesMonkey/runAnim/runRight/run3.png"), LoadImage("spritesMonkey/runAnim/runRight/run4.png"),
+								LoadImage("spritesMonkey/runAnim/runRight/run5.png"),LoadImage("spritesMonkey/runAnim/runRight/run6.png") },
 
-	walkPlayerImageLeft1(LoadImage("spritesMonkey/runAnim/runLeft/runLeft1.png")),
-	walkPlayerImageLeft2(LoadImage("spritesMonkey/runAnim/runLeft/runLeft2.png")),
-	walkPlayerImageLeft3(LoadImage("spritesMonkey/runAnim/runLeft/runLeft3.png")),
-	walkPlayerImageLeft4(LoadImage("spritesMonkey/runAnim/runLeft/runLeft4.png")),
-	walkPlayerImageLeft5(LoadImage("spritesMonkey/runAnim/runLeft/runLeft5.png")),
-	walkPlayerImageLeft6(LoadImage("spritesMonkey/runAnim/runLeft/runLeft6.png")),
-	walkPlayerImageLeftArr{ walkPlayerImageLeft1, walkPlayerImageLeft2, walkPlayerImageLeft3,
-								walkPlayerImageLeft4,walkPlayerImageLeft5,walkPlayerImageLeft6 },
+	walkPlayerImageLeftArr{ LoadImage("spritesMonkey/runAnim/runLeft/runLeft1.png"), LoadImage("spritesMonkey/runAnim/runLeft/runLeft2.png"), 
+								LoadImage("spritesMonkey/runAnim/runLeft/runLeft3.png"),LoadImage("spritesMonkey/runAnim/runLeft/runLeft4.png"), 
+								LoadImage("spritesMonkey/runAnim/runLeft/runLeft5.png"),LoadImage("spritesMonkey/runAnim/runLeft/runLeft6.png") },
 	
-	idleAnimRightArr{ idlePlayerImageRight1, idlePlayerImageRight2 },
-	currPlayerTexture(LoadTextureFromImage(idlePlayerImageRight2)), currPlayerImage(idlePlayerImageRight2),
+	hit1PlayerImageRightArr{ LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight1.png"), LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight2.png"),
+								LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight3.png"), LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight4.png"),
+								LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight5.png"), LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight6.png"),
+								LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight7.png"), LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight8.png"),
+								LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight9.png"), LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight10.png") },
+
+	hit1PlayerImageLeftArr{ LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft1.png"), LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft2.png"),
+								LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft3.png"), LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft4.png"),
+								LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft5.png"), LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft6.png"),
+								LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft7.png"), LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft8.png"),
+								LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft9.png"), LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft10.png") },
+
+	currPlayerTexture(LoadTextureFromImage(idleAnimRightArr[0])), currPlayerImage(idleAnimRightArr[0]),
 	currentMoveSpeed(0), walkSpeed(5.0f), sprintSpeed(10.0f), curAnimSpeed(0.2f), sprintAnimSpeed(0.1f), walkAnimSpeed(0.2f), notWalking(true),
-	facingRight(true), animTimeRight(0.0f), animTimeLeft(0.0f), idleAnimTime(0.0f), animRight(0), animLeft(0), animIdle(0),
+	facingRight(true), hitting(false), animTimeRight(0.0f), animTimeLeft(0.0f), idleAnimTime(0.0f), animTimeHit1RightTime(0.0f), animTimeHit1LeftTime(0.0f),
+	animHit1Left(0), animHit1Right(0), animRight(0), animLeft(0), animIdle(0),
 	maxHealth(300.0f),  currHealth(maxHealth), 
 	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(6.0f), regenStamina(true),
 	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
@@ -48,6 +49,12 @@ void PlayerMonkey::handleMovement() {
 	}
 
 	if (IsKeyDown(KEY_D)) {
+		hitting = false;
+		animHit1Left = 0;
+		animTimeHit1LeftTime = 0.0f;
+		animHit1Right = 0;
+		animTimeHit1RightTime = 0.0f;
+
 		animLeft = 0;
 		animTimeLeft = 0.0f;
 
@@ -68,6 +75,12 @@ void PlayerMonkey::handleMovement() {
 
 	}
 	if (IsKeyDown(KEY_A)) {
+		hitting = false;
+		animHit1Left = 0;
+		animTimeHit1LeftTime = 0.0f;
+		animHit1Right = 0;
+		animTimeHit1RightTime = 0.0f;
+
 		animRight = 0;
 		animTimeRight = 0.0f;
 
@@ -125,6 +138,49 @@ void PlayerMonkey::handleMovement() {
 		dashCooldown += GetFrameTime();
 	}
 
+	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+		animRight = 0;
+		animTimeRight = 0.0f;
+		animLeft = 0;
+		animTimeLeft = 0.0f;
+
+		if (hitting == false) {
+
+		}
+
+		hitting = true;
+		if (facingRight) {
+			currPlayerImage = hit1PlayerImageRightArr[animHit1Right];
+			animTimeHit1RightTime += GetFrameTime();
+			if (animTimeHit1RightTime > 0.1f) {
+				animHit1Right++;
+				if (animHit1Right >= 10) animHit1Right = 0;
+				animTimeHit1RightTime = 0.0f;
+			}
+		}
+		else {
+			currPlayerImage = hit1PlayerImageLeftArr[animHit1Left];
+			animTimeHit1LeftTime += GetFrameTime();
+			if (animTimeHit1LeftTime > 0.1f) {
+				animHit1Left++;
+				if (animHit1Left >= 10) animHit1Left = 0;
+				animTimeHit1LeftTime = 0.0f;
+			}
+		}
+		
+
+		UpdateTexture(currPlayerTexture, currPlayerImage.data);
+	}
+	else {
+		hitting = true;
+		animHit1Left = 0;
+		animTimeHit1LeftTime = 0.0f;
+		animHit1Right = 0;
+		animTimeHit1RightTime = 0.0f;
+	}
+
+
+
 	if (IsKeyDown(KEY_LEFT_SHIFT)) {
 		curAnimSpeed = sprintAnimSpeed;
 		regenStamina = false;
@@ -138,7 +194,7 @@ void PlayerMonkey::handleMovement() {
 		currentMoveSpeed = walkSpeed;
 	}
 
-	if (IsKeyUp(KEY_A) && IsKeyUp(KEY_D)) {
+	if ((IsKeyUp(KEY_A) && IsKeyUp(KEY_D)) && !hitting) {
 		animRight = 0;
 		animTimeRight = 0.0f;
 		animLeft = 0;
