@@ -3,7 +3,7 @@
 PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 	mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },
 	jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 250.0f }, doubleJumpPower{ 150.0f },
-	dashCooldown{ 0.0f }, dashPower{ 150.0f },
+	dashCooldown{ 0.0f }, dashPower{ 150.0f }, dashProgress(0.0f),
 	idleAnimRightArr{ LoadImage("spritesMonkey/IdleAnim/right/idleRight1.png"), LoadImage("spritesMonkey/IdleAnim/right/idleRight2.png") },
 
 	walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), LoadImage("spritesMonkey/runAnim/runRight/run2.png"), 
@@ -27,11 +27,28 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 								LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft9.png"), LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft10.png") },
 
 	currPlayerTexture(LoadTextureFromImage(idleAnimRightArr[0])), currPlayerImage(idleAnimRightArr[0]),
-	currentMoveSpeed(0), walkSpeed(5.0f), sprintSpeed(10.0f), curAnimSpeed(0.2f), sprintAnimSpeed(0.1f), walkAnimSpeed(0.2f), notWalking(true),
+	idleAnimRightTexArr{ LoadTextureFromImage(idleAnimRightArr[0]), LoadTextureFromImage(idleAnimRightArr[1]) },
+	walkPlayerTextureRightArr{ LoadTextureFromImage(walkPlayerImageRightArr[0]), LoadTextureFromImage(walkPlayerImageRightArr[1]),
+								LoadTextureFromImage(walkPlayerImageRightArr[2]), LoadTextureFromImage(walkPlayerImageRightArr[3]),
+								LoadTextureFromImage(walkPlayerImageRightArr[4]), LoadTextureFromImage(walkPlayerImageRightArr[5]) },
+	walkPlayerTextureLeftArr{ LoadTextureFromImage(walkPlayerImageLeftArr[0]), LoadTextureFromImage(walkPlayerImageLeftArr[1]),
+								LoadTextureFromImage(walkPlayerImageLeftArr[2]), LoadTextureFromImage(walkPlayerImageLeftArr[3]),
+								LoadTextureFromImage(walkPlayerImageLeftArr[4]), LoadTextureFromImage(walkPlayerImageLeftArr[5]) },
+	hit1PlayerTextureRightArr{ LoadTextureFromImage(hit1PlayerImageRightArr[0]), LoadTextureFromImage(hit1PlayerImageRightArr[1]),
+								LoadTextureFromImage(hit1PlayerImageRightArr[2]), LoadTextureFromImage(hit1PlayerImageRightArr[3]),
+								LoadTextureFromImage(hit1PlayerImageRightArr[4]), LoadTextureFromImage(hit1PlayerImageRightArr[5]),
+								LoadTextureFromImage(hit1PlayerImageRightArr[6]), LoadTextureFromImage(hit1PlayerImageRightArr[7]),
+								LoadTextureFromImage(hit1PlayerImageRightArr[8]), LoadTextureFromImage(hit1PlayerImageRightArr[9]) },
+	hit1PlayerTextureLeftArr{ LoadTextureFromImage(hit1PlayerImageLeftArr[0]), LoadTextureFromImage(hit1PlayerImageLeftArr[1]),
+								LoadTextureFromImage(hit1PlayerImageLeftArr[2]), LoadTextureFromImage(hit1PlayerImageLeftArr[3]),
+								LoadTextureFromImage(hit1PlayerImageLeftArr[4]), LoadTextureFromImage(hit1PlayerImageLeftArr[5]),
+								LoadTextureFromImage(hit1PlayerImageLeftArr[6]), LoadTextureFromImage(hit1PlayerImageLeftArr[7]),
+								LoadTextureFromImage(hit1PlayerImageLeftArr[8]), LoadTextureFromImage(hit1PlayerImageLeftArr[9]) },
+	currentMoveSpeed(0), hitWalkSpeed(2.5f), walkSpeed(5.0f), sprintSpeed(10.0f), curAnimSpeed(0.2f), sprintAnimSpeed(0.1f), walkAnimSpeed(0.2f), notWalking(true),
 	facingRight(true), hitting(false), animTimeRight(0.0f), animTimeLeft(0.0f), idleAnimTime(0.0f), animTimeHit1RightTime(0.0f), animTimeHit1LeftTime(0.0f),
 	animHit1Left(0), animHit1Right(0), animRight(0), animLeft(0), animIdle(0),
 	maxHealth(300.0f),  currHealth(maxHealth), 
-	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(6.0f), regenStamina(true),
+	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(7.0f), regenStamina(true),
 	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
 	healthBar{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, currHealth, 30.0f },
 	staminaBarOutline{ mainCamera.target.x + 680.0f, mainCamera.target.y + 260.0f, 264.0f, 30.0f },
@@ -41,58 +58,84 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 // Handlers
 // Movement handler
 void PlayerMonkey::handleMovement() {
-	if (IsKeyPressed(KEY_MINUS)) {
-		mainCamera.zoom -= 0.5f;
-	}
-	if (IsKeyPressed(KEY_EQUAL)) {
-		mainCamera.zoom += 0.5f;
-	}
-
-	if (IsKeyDown(KEY_D)) {
-		hitting = false;
-		animHit1Left = 0;
-		animTimeHit1LeftTime = 0.0f;
-		animHit1Right = 0;
-		animTimeHit1RightTime = 0.0f;
-
+	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+		animRight = 0;
+		animTimeRight = 0.0f;
 		animLeft = 0;
 		animTimeLeft = 0.0f;
 
-		currPlayerImage = walkPlayerImageRightArr[animRight];
-		animTimeRight += GetFrameTime();
-		if (animTimeRight > curAnimSpeed) {
-			animRight++;
-			if (animRight >= 6) animRight = 0;
-			animTimeRight = 0.0f;
-		}
-		
-		
-		UpdateTexture(currPlayerTexture, currPlayerImage.data);
 
+
+		hitting = true;
+		if (facingRight) {
+
+			currPlayerImage = hit1PlayerImageRightArr[animHit1Right];
+			currPlayerTexture = hit1PlayerTextureRightArr[animHit1Right];
+
+			animTimeHit1RightTime += GetFrameTime();
+			if (animTimeHit1RightTime > 0.1f) {
+				animHit1Right++;
+				currStamina -= 1.0f;
+				if (animHit1Right >= 10) animHit1Right = 0;
+				animTimeHit1RightTime = 0.0f;
+			}
+		}
+		else {
+
+			currPlayerImage = hit1PlayerImageLeftArr[animHit1Left];
+			currPlayerTexture = hit1PlayerTextureLeftArr[animHit1Left];
+			animTimeHit1LeftTime += GetFrameTime();
+			if (animTimeHit1LeftTime > 0.1f) {
+				animHit1Left++;
+				currStamina -= 1.0f;
+				if (animHit1Left >= 10) animHit1Left = 0;
+				animTimeHit1LeftTime = 0.0f;
+			}
+		}
+
+		if (IsKeyDown(KEY_A) || IsKeyDown(KEY_D)) {
+			currentMoveSpeed = hitWalkSpeed;
+		}
+
+
+	}
+	else {
+		hitting = false;
+	}
+	if (IsKeyDown(KEY_D)) {
+		animLeft = 0;
+		animTimeLeft = 0.0f;
+
+		if (!hitting) {
+			currPlayerImage = walkPlayerImageRightArr[animRight];
+			currPlayerTexture = walkPlayerTextureRightArr[animRight];
+			animTimeRight += GetFrameTime();
+			if (animTimeRight > curAnimSpeed) {
+				animRight++;
+				if (animRight >= 6) animRight = 0;
+				animTimeRight = 0.0f;
+			}
+		}
 		
 		this->PlayerBox.x += currentMoveSpeed;
 		facingRight = true;
 
 	}
 	if (IsKeyDown(KEY_A)) {
-		hitting = false;
-		animHit1Left = 0;
-		animTimeHit1LeftTime = 0.0f;
-		animHit1Right = 0;
-		animTimeHit1RightTime = 0.0f;
-
 		animRight = 0;
 		animTimeRight = 0.0f;
-
-		currPlayerImage = walkPlayerImageLeftArr[animLeft];
-		animTimeLeft += GetFrameTime();
-		if (animTimeLeft > curAnimSpeed) {
-			animLeft++;
-			if (animLeft >= 6) animLeft = 0;
-			animTimeLeft = 0.0f;
+		if (!hitting) {
+			currPlayerImage = walkPlayerImageLeftArr[animLeft];
+			currPlayerTexture = walkPlayerTextureLeftArr[animLeft];
+			animTimeLeft += GetFrameTime();
+			if (animTimeLeft > curAnimSpeed) {
+				animLeft++;
+				if (animLeft >= 6) animLeft = 0;
+				animTimeLeft = 0.0f;
+			}
 		}
 		
-		UpdateTexture(currPlayerTexture, currPlayerImage.data);
+		
 
 		this->PlayerBox.x -= currentMoveSpeed;
 		facingRight = false;
@@ -124,60 +167,22 @@ void PlayerMonkey::handleMovement() {
 	
 	if (IsKeyPressed(KEY_Q)) {
 		if (dashCooldown >= 2.0f) {
-			if (IsKeyDown(KEY_E)) {
+			if (IsKeyDown(KEY_D)) {
 				this->PlayerBox.x += dashPower;
 			}
 			if (IsKeyDown(KEY_A)) {
 				this->PlayerBox.x -= dashPower;
 			}
+			dashProgress = 0;
 			dashCooldown = 0.0f;
-			this->currStamina -= 30.0f;
+			this->currStamina -= 50.0f;
 		}
 		
 	}else {
 		dashCooldown += GetFrameTime();
 	}
 
-	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-		animRight = 0;
-		animTimeRight = 0.0f;
-		animLeft = 0;
-		animTimeLeft = 0.0f;
-
-		if (hitting == false) {
-
-		}
-
-		hitting = true;
-		if (facingRight) {
-			currPlayerImage = hit1PlayerImageRightArr[animHit1Right];
-			animTimeHit1RightTime += GetFrameTime();
-			if (animTimeHit1RightTime > 0.1f) {
-				animHit1Right++;
-				if (animHit1Right >= 10) animHit1Right = 0;
-				animTimeHit1RightTime = 0.0f;
-			}
-		}
-		else {
-			currPlayerImage = hit1PlayerImageLeftArr[animHit1Left];
-			animTimeHit1LeftTime += GetFrameTime();
-			if (animTimeHit1LeftTime > 0.1f) {
-				animHit1Left++;
-				if (animHit1Left >= 10) animHit1Left = 0;
-				animTimeHit1LeftTime = 0.0f;
-			}
-		}
-		
-
-		UpdateTexture(currPlayerTexture, currPlayerImage.data);
-	}
-	else {
-		hitting = true;
-		animHit1Left = 0;
-		animTimeHit1LeftTime = 0.0f;
-		animHit1Right = 0;
-		animTimeHit1RightTime = 0.0f;
-	}
+	
 
 
 
@@ -200,19 +205,30 @@ void PlayerMonkey::handleMovement() {
 		animLeft = 0;
 		animTimeLeft = 0.0f;
 
+		animHit1Left = 0;
+		animTimeHit1LeftTime = 0.0f;
+		animHit1Right = 0;
+		animTimeHit1RightTime = 0.0f;
+
+
 		currPlayerImage = idleAnimRightArr[animIdle];
+		currPlayerTexture = idleAnimRightTexArr[animIdle];
+
 		idleAnimTime += GetFrameTime();
  		if (idleAnimTime > 0.5f) {
 			animIdle++;
 			if (animIdle >= 2) animIdle = 0;
 			idleAnimTime = 0.0f;
 		}
-		UpdateTexture(currPlayerTexture, currPlayerImage.data);
 
 	}
 
-
-
+	if (IsKeyPressed(KEY_MINUS)) {
+		mainCamera.zoom -= 0.5f;
+	}
+	if (IsKeyPressed(KEY_EQUAL)) {
+		mainCamera.zoom += 0.5f;
+	}
 }
 // Bars handler
 void PlayerMonkey::handleBars() {

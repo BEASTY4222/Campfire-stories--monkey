@@ -26,12 +26,18 @@ class PlayerMonkey{
 	int animHit1Right;
 	int animHit1Left;
 	Image idleAnimRightArr[2];
+	Texture2D idleAnimRightTexArr[2];
 
 	Image walkPlayerImageRightArr[6];
+	Texture2D walkPlayerTextureRightArr[6];
 	Image walkPlayerImageLeftArr[6];
+	Texture2D walkPlayerTextureLeftArr[6];
 
 	Image hit1PlayerImageRightArr[10];
+	Texture2D hit1PlayerTextureRightArr[10];
 	Image hit1PlayerImageLeftArr[10];
+	Texture2D hit1PlayerTextureLeftArr[10];
+
 
 	// Player Textures
 	Texture2D currPlayerTexture;
@@ -53,6 +59,7 @@ class PlayerMonkey{
 	float currentMoveSpeed;
 	const float walkSpeed;
 	const float sprintSpeed;
+	const float hitWalkSpeed;
 	bool notWalking;
 	// Jump mechanics
 	bool doubleJumpUsed = false;
@@ -64,6 +71,8 @@ class PlayerMonkey{
 	// TAG
 	const std::string TAG;
 	// Dashig mechanics
+	float dashProgress;
+	float currDashPower;
 	float dashCooldown;// seconds
 	const float dashPower;
 	// Collison
