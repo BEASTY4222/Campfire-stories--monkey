@@ -5,6 +5,9 @@
 #include "raylib.h"
 #include "GroundObject.h"
 #include "World.h"
+#include "Enemy.h"
+
+class Enemy;
 
 class PlayerMonkey{
 	// Player properties
@@ -112,7 +115,7 @@ public:
 	PlayerMonkey();
 
 	// Handlers
-	void handleUpdates(World world, Enemy enemy);// for vars that need to be updated every frame
+	void handleUpdates(World world, Enemy& enemy);// for vars that need to be updated every frame
 	void handlePlayer();// visuals
 	void handleBars();// stamina, hp, mana bars...
 

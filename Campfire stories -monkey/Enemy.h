@@ -21,15 +21,14 @@ class Enemy{
 		DrawRectangleRec(healhBar, LIME);// health
 	}
 	public:
-		Enemy(const float& x, const  float& y, const  float& width, const  float& hegiht, const float& hp, const  float& speed, const  float& damage) :
-			hp(hp), speed(speed), damage(damage), enemyBox{ x, y, width, hegiht }, TAG{ "ENEMY" }
-		{}
+		Enemy(const float& x, const  float& y, const  float& width, const  float& hegiht, const float& hp, const  float& speed, const  float& damage);
 
 		void handleEnemy() {
 			this->DrawEnemy();
 		}
 		void handleUpdates() {
 			healhBar.width = hp;
+			
 
 		}
 
@@ -42,34 +41,8 @@ class Enemy{
 
 		
 
-		void CollisionWithRectangle(GroundObject object) {
-			if (CheckCollisionRecs(this->enemyBox, object.getRectangle())) {
-				currentCollisionTags[object.getTag()] = object.getRectangle();
-				for (std::pair<std::string, Rectangle> tag : currentCollisionTags) {
-					if (tag.first == "MAIN_GROUND") {
-						// no vars to update yet
-					}
-
-					if (object.getRectangle().y < enemyBox.y) {
-						currentCollisionTags.erase(tag.first);
-					}
-				}
-
-			}
-		}
-		void CollisionWithRectangle(PlayerMonkey player) {
-			if (CheckCollisionRecs(this->enemyBox, player.getRectangle())) {
-				currentCollisionTags[player.getTag()] = player.getRectangle();
-				for (std::pair<std::string, Rectangle> tag : currentCollisionTags) {
-					if (tag.first == "PLAYER") {
-						hp -= player.getDamage();
-					}
-
-					
-				}
-
-			}
-		}
+		void CollisionWithRectangle(GroundObject object);
+		void CollisionWithRectangle(PlayerMonkey& player);
 
 		inline std::string getTag() const { return this->TAG; }
 		inline float getDamage() const { return damage; }

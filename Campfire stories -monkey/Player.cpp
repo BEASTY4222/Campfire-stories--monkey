@@ -56,9 +56,9 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 	healthBar{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, currHealth, 30.0f },
 	staminaBarOutline{ mainCamera.target.x + 680.0f, mainCamera.target.y + 260.0f, 264.0f, 30.0f },
 	staminaBar{ mainCamera.target.x + 680.0f, mainCamera.target.y + 260.0f, currStamina, 30.0f }
-	, TAG{"PLAYER"}
+	, TAG{"PLAYER"},
 	// Combat vars
-	, lightAttackHitBox{ 0, 0, 0, 0 }, lightAttackDamage(30.0f)
+	lightAttackHitBox{ 0, 0, 0, 0 }, lightAttackDamage(30.0f)
 	{}
 // Handlers
 // Movement handler
@@ -288,7 +288,7 @@ void PlayerMonkey::handleBars() {
 	
 }
 // Update handler
-void PlayerMonkey::handleUpdates(World world, Enemy enemy) {// For vars that need to be updated every frame
+void PlayerMonkey::handleUpdates(World world, Enemy& enemy) {// For vars that need to be updated every frame
 	this->handleMovement();			// heavy on calculations so separated
 	this->handleCamera();
 	this->handleBars();// dependent on the camera x & y
