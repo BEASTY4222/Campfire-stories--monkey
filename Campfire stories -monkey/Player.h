@@ -26,7 +26,9 @@ class PlayerMonkey{
 	int animHit1Right;
 	int animHit1Left;
 	Image idleAnimRightArr[2];
+	Image idleAnimLeftArr[2];
 	Texture2D idleAnimRightTexArr[2];
+	Texture2D idleAnimLeftTexArr[2];
 
 	Image walkPlayerImageRightArr[6];
 	Texture2D walkPlayerTextureRightArr[6];
@@ -42,6 +44,8 @@ class PlayerMonkey{
 	// Player Textures
 	Texture2D currPlayerTexture;
 	// Player stats
+	float maxInvincibilityTime;
+	float currInvincibilityTime;
 	float maxHealth;
 	float currHealth;
 	Rectangle healthBar;
@@ -77,12 +81,17 @@ class PlayerMonkey{
 	const float dashPower;
 	// Collison
 	std::map <std::string, Rectangle> currentCollisionTags;
+	// Combat vars
+	Rectangle lightAttackHitBox;
+	float lightAttackDamage;
 
 	inline void drawPlayer() {
 		// Draw bars
 		this->drawBars();
 
-		//DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the box
+		//DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
+		//DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
+
 
 		// Draw main character
 		DrawTexture(currPlayerTexture, PlayerBox.x, PlayerBox.y + 10, WHITE);
@@ -97,21 +106,24 @@ class PlayerMonkey{
 
 	inline void handleCamera() { this->mainCamera.target.x = { this->PlayerBox.x }; }
 	void handleMovement();
-	void handleCollisionsGroundObjects(GroundObject object);// Collision 
+	void handleCollisionsGroundObjects(GroundObject object);// Collision with ground objects
+	void handleCollisionsEnemies(Enemy enemy);// Collision with enemies
 public:
 	PlayerMonkey();
 
 	// Handlers
-	void handleUpdates(World world);// for vars that need to be updated every frame
+	void handleUpdates(World world, Enemy enemy);// for vars that need to be updated every frame
 	void handlePlayer();// visuals
 	void handleBars();// stamina, hp, mana bars...
 
 	// Collision with rectangle objects
 	void CollisionWithRectangle(GroundObject object);
-
+	void CollisionWithRectangle(Enemy enemy);
 	// getters	
+	inline float getDamage() const { return lightAttackDamage; }
 	inline Rectangle& getRectangle() { return PlayerBox; } // Non-const getter
 	inline Camera2D& getCamera() { return mainCamera; } // Non-const getter
 	inline std::map<std::string, Rectangle> getCurrentCollisionTags() { return currentCollisionTags; } // Non-const getter
+	inline std::string getTag() const { return this->TAG; }
 };
  

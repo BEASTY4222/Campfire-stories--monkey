@@ -4,6 +4,7 @@
 
 #include "GroundObject.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class World {
 	float worldGroundLevel = 700.0f;
