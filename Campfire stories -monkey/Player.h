@@ -63,6 +63,7 @@ class PlayerMonkey{
 	bool facingRight;
 	bool hitting;
 	// Moving vars
+	float timeInAir;
 	float currentMoveSpeed;
 	const float walkSpeed;
 	const float sprintSpeed;
@@ -123,6 +124,7 @@ public:
 	void CollisionWithRectangle(GroundObject object);
 	void CollisionWithRectangle(Enemy enemy);
 	// getters	
+	inline float& getTimeInAir() { return timeInAir; }
 	inline float getDamage() const { return lightAttackDamage; }
 	inline Rectangle& getRectangle() { return PlayerBox; } // Non-const getter
 	inline Camera2D& getCamera() { return mainCamera; } // Non-const getter

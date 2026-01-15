@@ -7,8 +7,7 @@
 #include "Enemy.h"
 
 class World {
-	float worldGroundLevel = 700.0f;
-	float timeInAir = 0.0f;
+	float worldGroundLevel;
 	GroundObject mainGround;
 	std::map <std::string, GroundObject> groundObjects;
 	Image startingSkyImage;
@@ -35,7 +34,7 @@ class World {
 	}
 	
 public:
-	World() :
+	World() : worldGroundLevel(850.0f),
 		startingSkyImage(LoadImage("spritesWorld/magicalForest/forest/1.png")),
 		startingForestBackgroundTreesImage(LoadImage("spritesWorld/magicalForest/forest/2.png")),
 		startingForestTreesImage(LoadImage("spritesWorld/magicalForest/forest/3.png")),
@@ -52,22 +51,22 @@ public:
 		mainGround.setTexture(startingForestGroundTexture);
 	}
 	
-	void gravityEffect(Rectangle& entityBox, std::map <std::string, Rectangle> entityCollisins) {
+	void gravityEffect(Rectangle& entityBox, std::map <std::string, Rectangle> entityCollisins, float timeInAir) {
 		// not Simple gravity effect
 		if (entityBox.y + entityBox.height < groundObjects["MAIN_GROUND"].getRectangle().y) { // If player is above ground
 			timeInAir += GetFrameTime();
-			if (timeInAir < 0.5f)
-				entityBox.y += 1.0f;
+			if (timeInAir < 0.2f)
+				entityBox.y += 8.0f;
 			else
-				entityBox.y += 10.0f; // Apply gravity
+				entityBox.y += 1.0f; // Apply gravity
 		}
 		else {
 			entityBox.y = groundObjects["MAIN_GROUND"].getRectangle().y - entityBox.height; // Reset to ground level
 			timeInAir = 0.0f;
 		}
 	}
-	void handleWorld(Rectangle& entity,std::map <std::string,Rectangle> entityCollisins) {
-		gravityEffect(entity, entityCollisins);          
+	void handleWorld(Rectangle& entity,std::map <std::string,Rectangle> entityCollisins, float entinysTimeInAir) {
+		gravityEffect(entity, entityCollisins, entinysTimeInAir);          
 		drawWorld();
 	}
 

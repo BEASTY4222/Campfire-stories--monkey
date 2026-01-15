@@ -37,8 +37,8 @@ int main() {
         BeginMode2D(Monkey.getCamera());
 
 
-		gameWorld.handleWorld(enemy1.getRectangle(), enemy1.getCurrentCollisionTags());
-        gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags());
+		//gameWorld.handleWorld(enemy1.getRectangle(), enemy1.getCurrentCollisionTags());
+        gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags(), Monkey.getTimeInAir());
         Monkey.handlePlayer();
 		enemy1.handleEnemy();
 

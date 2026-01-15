@@ -3,7 +3,7 @@
 PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 	mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },
 	jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 250.0f }, doubleJumpPower{ 150.0f },
-	dashCooldown{ 0.0f }, dashPower{ 150.0f }, dashProgress(0.0f),
+	dashCooldown{ 0.0f }, dashPower{ 150.0f }, dashProgress(0.0f), timeInAir(0.0f),
 	idleAnimRightArr{ LoadImage("spritesMonkey/IdleAnim/right/idleRight1.png"), LoadImage("spritesMonkey/IdleAnim/right/idleRight2.png") },
 	idleAnimLeftArr{ LoadImage("spritesMonkey/IdleAnim/left/idleLeft1.png"), LoadImage("spritesMonkey/IdleAnim/left/idleLeft2.png") },
 
@@ -289,7 +289,7 @@ void PlayerMonkey::handleBars() {
 }
 // Update handler
 void PlayerMonkey::handleUpdates(World world, Enemy& enemy) {// For vars that need to be updated every frame
-	this->handleMovement();			// heavy on calculations so separated
+	this->handleMovement();// heavy on calculations so separated
 	this->handleCamera();
 	this->handleBars();// dependent on the camera x & y
 	this->handleCollisionsGroundObjects(world.getMainGround());
