@@ -47,6 +47,7 @@ class PlayerMonkey{
 	// Player Textures
 	Texture2D currPlayerTexture;
 	// Player stats
+	bool alive;
 	float maxInvincibilityTime;
 	float currInvincibilityTime;
 	float maxHealth;
@@ -93,8 +94,8 @@ class PlayerMonkey{
 		// Draw bars
 		this->drawBars();
 
-		//DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
-		//DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
+		DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
+		DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
 
 
 		// Draw main character

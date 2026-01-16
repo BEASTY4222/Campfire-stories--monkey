@@ -6,6 +6,10 @@
 class PlayerMonkey;
 
 class Enemy{
+	// vars
+	Image enemyImage;
+	Texture2D enemyTexture;
+
 	Rectangle enemyBox;
 	Rectangle healhBar;
 	float enemyTimeInAir;

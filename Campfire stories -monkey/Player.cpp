@@ -50,7 +50,7 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 	currentMoveSpeed(0), hitWalkSpeed(2.5f), walkSpeed(5.0f), sprintSpeed(10.0f), curAnimSpeed(0.2f), sprintAnimSpeed(0.1f), walkAnimSpeed(0.2f), notWalking(true),
 	facingRight(true), hitting(false), animTimeRight(0.0f), animTimeLeft(0.0f), idleAnimTime(0.0f), animTimeHit1RightTime(0.0f), animTimeHit1LeftTime(0.0f),
 	animHit1Left(0), animHit1Right(0), animRight(0), animLeft(0), animIdle(0),
-	maxHealth(300.0f), currHealth(maxHealth), maxInvincibilityTime(2.0f), currInvincibilityTime(0.0f),
+	maxHealth(300.0f), currHealth(maxHealth), maxInvincibilityTime(2.0f), currInvincibilityTime(0.0f), alive(true),
 	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(7.0f), regenStamina(true),
 	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
 	healthBar{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, currHealth, 30.0f },
@@ -63,7 +63,11 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },
 // Handlers
 // Movement handler
 void PlayerMonkey::handleMovement() {
-	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+	if (currHealth <= 0) {
+		alive = false;
+	}
+
+	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && currStamina > 0) {
 		animRight = 0;
 		animTimeRight = 0.0f;
 		animLeft = 0;
@@ -96,7 +100,7 @@ void PlayerMonkey::handleMovement() {
 				animTimeHit1LeftTime = 0.0f;
 			}
 		}
-		if ((animHit1Right >= 4 && animHit1Right <= 6) || (animHit1Left >= 4 && animHit1Left <= 6)) {
+		if ((animHit1Right >= 5 && animHit1Right <= 6) || (animHit1Left >= 5 && animHit1Left <= 6)) {
 			if (facingRight) {
 				lightAttackHitBox.x = this->PlayerBox.x + this->PlayerBox.width;
 				lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
@@ -110,6 +114,12 @@ void PlayerMonkey::handleMovement() {
 				lightAttackHitBox.height = 80.0f;
 			}
 			
+		}
+		else {
+			lightAttackHitBox.x = 0.0f;
+			lightAttackHitBox.y = 0.0f;
+			lightAttackHitBox.width = 0.0f;
+			lightAttackHitBox.height = 0.0f;
 		}
 
 		if (IsKeyDown(KEY_A) || IsKeyDown(KEY_D)) {
@@ -162,7 +172,7 @@ void PlayerMonkey::handleMovement() {
 		facingRight = false;
 
 	}
-	if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_SPACE)) {
+	if ((IsKeyPressed(KEY_W) || IsKeyPressed(KEY_SPACE)) && currStamina > 0) {
 		if (inAir) {
 			if (!doubleJumpUsed) {
 				if (jumpProgress != doubleJumpPower) {
@@ -186,7 +196,7 @@ void PlayerMonkey::handleMovement() {
 		}
 	}
 	
-	if (IsKeyPressed(KEY_Q)) {
+	if (IsKeyPressed(KEY_Q) && currStamina > 0) {
 		if (dashCooldown >= 2.0f) {
 			if (IsKeyDown(KEY_D)) {
 				this->PlayerBox.x += dashPower;
@@ -207,7 +217,7 @@ void PlayerMonkey::handleMovement() {
 
 
 
-	if (IsKeyDown(KEY_LEFT_SHIFT)) {
+	if (IsKeyDown(KEY_LEFT_SHIFT) && currStamina > 0) {
 		curAnimSpeed = sprintAnimSpeed;
 		regenStamina = false;
 		currentMoveSpeed = sprintSpeed;
@@ -216,7 +226,7 @@ void PlayerMonkey::handleMovement() {
 	}
 	else {
 		curAnimSpeed = walkAnimSpeed;
-		regenStamina = true;
+		regenStamina = false;
 		currentMoveSpeed = walkSpeed;
 	}
 
@@ -283,7 +293,7 @@ void PlayerMonkey::handleBars() {
 	staminaBar.x = mainCamera.target.x + 680.0f;
 	staminaBar.y = mainCamera.target.y + 260.0f;
 	staminaBar.width = currStamina;
-	if (currStamina < maxStamina && regenStamina) 
+	if ((currStamina < maxStamina) && regenStamina) 
 		currStamina += staminaRegenRate * GetFrameTime();// regenerate stamina over time
 	
 }

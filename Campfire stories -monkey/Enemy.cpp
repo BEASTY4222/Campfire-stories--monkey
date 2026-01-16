@@ -38,6 +38,7 @@ void Enemy::CollisionWithRectangle(PlayerMonkey& player) {
 		for (std::pair<std::string, Rectangle> tag : currentCollisionTags) {
 			if (tag.first == "PLAYER" && inlvincibilityTime > maxInvincibilityTime) {
 				hp -= player.getDamage();
+				inlvincibilityTime = 0.0f;
 			}
 
 
