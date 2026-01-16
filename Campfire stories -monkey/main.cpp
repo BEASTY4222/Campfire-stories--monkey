@@ -20,7 +20,7 @@ int main() {
 
     PlayerMonkey Monkey;
     //          hp(hp), speed(speed), damage(damage), enemyBox{ x, y, width, hegiht }
-	Enemy enemy1(150.0f, 600.0f, 80.0f, 150.0f, 100.0f, 2.0f, 10.0f);
+	Enemy enemy1(1500.0f, 600.0f, 80.0f, 150.0f, 100.0f, 2.0f, 10.0f);
     World gameWorld;
 
     // Main game loop
@@ -29,7 +29,7 @@ int main() {
         // Update variables here
 
 		Monkey.handleUpdates(gameWorld, enemy1);
-		//enemy1.handleUpdates(gameWorld);
+		enemy1.handleUpdates(Monkey, gameWorld);
 
         // Draw
         BeginDrawing();
@@ -37,7 +37,7 @@ int main() {
         BeginMode2D(Monkey.getCamera());
 
 
-		//gameWorld.handleWorld(enemy1.getRectangle(), enemy1.getCurrentCollisionTags());
+		gameWorld.handleWorld(enemy1.getRectangle(), enemy1.getCurrentCollisionTags(), enemy1.getAirTime());
         gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags(), Monkey.getTimeInAir());
         Monkey.handlePlayer();
 		enemy1.handleEnemy();

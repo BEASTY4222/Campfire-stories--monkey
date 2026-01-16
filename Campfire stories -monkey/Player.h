@@ -4,8 +4,8 @@
 
 #include "raylib.h"
 #include "GroundObject.h"
-#include "World.h"
 #include "Enemy.h"
+#include "World.h"
 
 class Enemy;
 
@@ -126,6 +126,7 @@ public:
 	// getters	
 	inline float& getTimeInAir() { return timeInAir; }
 	inline float getDamage() const { return lightAttackDamage; }
+	inline Rectangle getLightAttackHitBox()const { return lightAttackHitBox; } // Non-const getter
 	inline Rectangle& getRectangle() { return PlayerBox; } // Non-const getter
 	inline Camera2D& getCamera() { return mainCamera; } // Non-const getter
 	inline std::map<std::string, Rectangle> getCurrentCollisionTags() { return currentCollisionTags; } // Non-const getter
