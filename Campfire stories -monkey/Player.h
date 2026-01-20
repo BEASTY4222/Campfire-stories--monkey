@@ -18,8 +18,8 @@ class PlayerMonkey{
 	float animTimeRight;
 	float animTimeLeft;
 	float idleAnimTime;
-	float sprintAnimSpeed;
-	float walkAnimSpeed;
+	const float sprintAnimSpeed;
+	const float walkAnimSpeed;
 	float curAnimSpeed;
 	float animTimeHit1RightTime;
 	float animTimeHit1LeftTime;
@@ -94,8 +94,8 @@ class PlayerMonkey{
 		// Draw bars
 		this->drawBars();
 
-		DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
-		DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
+		//DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
+		//DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
 
 
 		// Draw main character
@@ -110,15 +110,19 @@ class PlayerMonkey{
 	}
 
 	inline void handleCamera() { this->mainCamera.target.x = { this->PlayerBox.x }; }
+	void handlePlayerActions();
+	void handleHitting();
 	void handleMovement();
+	void handleIdle();
 	void handleCollisionsGroundObjects(GroundObject object);// Collision with ground objects
 	void handleCollisionsEnemies(Enemy enemy);// Collision with enemies
+	void staminaHandler(float amount, bool regen);
 public:
 	PlayerMonkey();
 
 	// Handlers
 	void handleUpdates(World world, Enemy& enemy);// for vars that need to be updated every frame
-	void handlePlayer();// visuals
+	void handlePlayerVisuals();// visuals
 	void handleBars();// stamina, hp, mana bars...
 
 	// Collision with rectangle objects

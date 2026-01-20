@@ -39,7 +39,7 @@ int main() {
 
 		gameWorld.handleWorld(enemy1.getRectangle(), enemy1.getCurrentCollisionTags(), enemy1.getAirTime());
         gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags(), Monkey.getTimeInAir());
-        Monkey.handlePlayer();
+        Monkey.handlePlayerVisuals();
 		enemy1.handleEnemy();
 
 
