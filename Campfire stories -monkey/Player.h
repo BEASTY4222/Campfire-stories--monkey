@@ -23,6 +23,10 @@ class PlayerMonkey{
 	float curAnimSpeed;
 	float animTimeHit1RightTime;
 	float animTimeHit1LeftTime;
+	float jumpAnimTime;
+	float dashAnimTime;
+	int animDashRight;
+	int animRightJump;
 	int animRight;
 	int animLeft;
 	int animIdle;
@@ -42,6 +46,12 @@ class PlayerMonkey{
 	Texture2D hit1PlayerTextureRightArr[10];
 	Image hit1PlayerImageLeftArr[10];
 	Texture2D hit1PlayerTextureLeftArr[10];
+
+	Image jumpPlayerImageRightArr[1];
+	Texture2D jumpPlayerTextureRightArr[1];
+
+	Image dashPlayerImageRightArr[3];
+	Texture2D dashPlayerTextureRightArr[3];
 
 
 	// Player Textures
@@ -64,6 +74,7 @@ class PlayerMonkey{
 	bool facingRight;
 	bool hitting;
 	// Moving vars
+	bool running;
 	float timeInAir;
 	float currentMoveSpeed;
 	const float walkSpeed;
@@ -84,6 +95,8 @@ class PlayerMonkey{
 	float currDashPower;
 	float dashCooldown;// seconds
 	const float dashPower;
+	bool isDashing;
+	float timeDashing;
 	// Collison
 	std::map <std::string, Rectangle> currentCollisionTags;
 	// Combat vars
