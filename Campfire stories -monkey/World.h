@@ -56,7 +56,7 @@ public:
 		if (entityBox.y + entityBox.height < groundObjects["MAIN_GROUND"].getRectangle().y) { // If player is above ground
 			timeInAir += GetFrameTime();
 			if (timeInAir <= 0.2f)
-				entityBox.y += 7.0f;
+				entityBox.y += 8.0f;
 			else
 				entityBox.y += 1.0f; // Apply gravity
 		}

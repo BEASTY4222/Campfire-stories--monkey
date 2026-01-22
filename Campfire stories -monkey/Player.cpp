@@ -1,21 +1,21 @@
 #include "Player.h"
 
 PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },// Player rectangle
-	mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },// Camera
-	jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 1200.0f }, doubleJumpPower{ 800.0f }, timeInAir(0.0f),// Jumping vars
-	dashCooldown{ 0.0f }, dashPower{ 500.0f }, dashProgress(0.0f), isDashing(false), timeDashing(0.0f),// Dash vars
-	// PLAYER IMAGE SPRITES
-	idleAnimRightArr{ LoadImage("spritesMonkey/IdleAnim/right/idleRight1.png"), LoadImage("spritesMonkey/IdleAnim/right/idleRight2.png") },
-	idleAnimLeftArr{ LoadImage("spritesMonkey/IdleAnim/left/idleLeft1.png"), LoadImage("spritesMonkey/IdleAnim/left/idleLeft2.png") },
+mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },// Camera
+jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 1200.0f }, doubleJumpPower{ 800.0f }, timeInAir(0.0f),// Jumping vars
+dashCooldown{ 2.0f }, dashPower{ 1000.0f }, dashProgress(0.0f), isDashing(false), timeDashing(0.0f),// Dash vars
+// PLAYER IMAGE SPRITES
+idleAnimRightArr{ LoadImage("spritesMonkey/IdleAnim/right/idleRight1.png"), LoadImage("spritesMonkey/IdleAnim/right/idleRight2.png") },
+idleAnimLeftArr{ LoadImage("spritesMonkey/IdleAnim/left/idleLeft1.png"), LoadImage("spritesMonkey/IdleAnim/left/idleLeft2.png") },
 
-	walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), LoadImage("spritesMonkey/runAnim/runRight/run2.png"), 
-								LoadImage("spritesMonkey/runAnim/runRight/run3.png"), LoadImage("spritesMonkey/runAnim/runRight/run4.png"),
-								LoadImage("spritesMonkey/runAnim/runRight/run5.png"),LoadImage("spritesMonkey/runAnim/runRight/run6.png") },
+walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), LoadImage("spritesMonkey/runAnim/runRight/run2.png"),
+							LoadImage("spritesMonkey/runAnim/runRight/run3.png"), LoadImage("spritesMonkey/runAnim/runRight/run4.png"),
+							LoadImage("spritesMonkey/runAnim/runRight/run5.png"),LoadImage("spritesMonkey/runAnim/runRight/run6.png") },
 
-	walkPlayerImageLeftArr{ LoadImage("spritesMonkey/runAnim/runLeft/runLeft1.png"), LoadImage("spritesMonkey/runAnim/runLeft/runLeft2.png"), 
-								LoadImage("spritesMonkey/runAnim/runLeft/runLeft3.png"),LoadImage("spritesMonkey/runAnim/runLeft/runLeft4.png"), 
+	walkPlayerImageLeftArr{ LoadImage("spritesMonkey/runAnim/runLeft/runLeft1.png"), LoadImage("spritesMonkey/runAnim/runLeft/runLeft2.png"),
+								LoadImage("spritesMonkey/runAnim/runLeft/runLeft3.png"),LoadImage("spritesMonkey/runAnim/runLeft/runLeft4.png"),
 								LoadImage("spritesMonkey/runAnim/runLeft/runLeft5.png"),LoadImage("spritesMonkey/runAnim/runLeft/runLeft6.png") },
-	
+
 	hit1PlayerImageRightArr{ LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight1.png"), LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight2.png"),
 								LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight3.png"), LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight4.png"),
 								LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight5.png"), LoadImage("spritesMonkey/hitAnim/hit1/right/lightComboRight6.png"),
@@ -28,9 +28,12 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },// Pla
 								LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft7.png"), LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft8.png"),
 								LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft9.png"), LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft10.png") },
 	jumpPlayerImageRightArr{ LoadImage("spritesMonkey/jumpAnim/jumpRight/jumpRight1.png") },
+	jumpPlayerImageLeftArr{ LoadImage("spritesMonkey/jumpAnim/jumpLeft/jumpLeft1.png") },
 
 	dashPlayerImageRightArr{ LoadImage("spritesMonkey/dashAnim/dashRight/dashRight1.png"), LoadImage("spritesMonkey/dashAnim/dashRight/dashRight2.png"),
 								LoadImage("spritesMonkey/dashAnim/dashRight/dashRight3.png") },
+	dashPlayerImageLeftArr{ LoadImage("spritesMonkey/dashAnim/dashLeft/dashLeft1.png"), LoadImage("spritesMonkey/dashAnim/dashLeft/dashLeft2.png"),
+								LoadImage("spritesMonkey/dashAnim/dashLeft/dashLeft3.png") },
 	currPlayerTexture(LoadTextureFromImage(idleAnimRightArr[0])), currPlayerImage(idleAnimRightArr[0]),// CURR PLAYER TEXTURE & IMAGE
 
 	//PLAYER TEXTURE ARRAYS
@@ -55,9 +58,15 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },// Pla
 								LoadTextureFromImage(hit1PlayerImageLeftArr[4]), LoadTextureFromImage(hit1PlayerImageLeftArr[5]),
 								LoadTextureFromImage(hit1PlayerImageLeftArr[6]), LoadTextureFromImage(hit1PlayerImageLeftArr[7]),
 								LoadTextureFromImage(hit1PlayerImageLeftArr[8]), LoadTextureFromImage(hit1PlayerImageLeftArr[9]) },
+	// Jumping left & right
 	jumpPlayerTextureRightArr{ LoadTextureFromImage(jumpPlayerImageRightArr[0]) },
+	jumpPlayerTextureLeftArr{ LoadTextureFromImage(jumpPlayerImageLeftArr[0]) },
+
+	// Dashing left & right
 	dashPlayerTextureRightArr{ LoadTextureFromImage(dashPlayerImageRightArr[0]), LoadTextureFromImage(dashPlayerImageRightArr[1]),
 								LoadTextureFromImage(dashPlayerImageRightArr[2]) },
+	dashPlayerTextureLeftArr{ LoadTextureFromImage(dashPlayerImageLeftArr[0]), LoadTextureFromImage(dashPlayerImageLeftArr[1]),
+								LoadTextureFromImage(dashPlayerImageLeftArr[2]) },
 
 	// Movement vars															// Sprinting vars
 	currentMoveSpeed(0), hitWalkSpeed(2.5f), walkSpeed(5.0f), walkAnimSpeed(0.2f), sprintSpeed(10.0f), curAnimSpeed(0.2f), sprintAnimSpeed(0.1f),
@@ -65,10 +74,10 @@ PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },// Pla
 	facingRight(true),  // Facing direction vars
 	// Animation time vars
 	animTimeRight(0.0f), animTimeLeft(0.0f), idleAnimTime(0.0f), animTimeHit1RightTime(0.0f), animTimeHit1LeftTime(0.0f),
-	animHit1Left(0), animHit1Right(0), animRight(0), animLeft(0), animIdle(0), animDashRight(0), animRightJump(0), jumpAnimTime(0.0f),
-	dashAnimTime(0.0f),
+	animHit1Left(0), animHit1Right(0), animRight(0), animLeft(0), animIdle(0), animDashRight(0), animRightJump(0), animJumpTime(0.0f),
+	animDashTime(0.0f), animDashLeft(0), animLeftJump(0),
 	// Player stats
-	maxHealth(300.0f), currHealth(maxHealth), maxInvincibilityTime(2.0f), currInvincibilityTime(0.0f), alive(true),
+	maxHealth(300.0f), currHealth(maxHealth), maxInvincibilityTime(2.0f), currInvincibilityTime(0.0f), lastInvincibilityTime(0.0f), alive(true),
 	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(7.0f), regenStamina(true),
 	// Bars Initalization
 	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
@@ -190,6 +199,7 @@ void PlayerMonkey::handleMovement() {
 	if (IsKeyDown(KEY_A)) {
 		animRight = 0;
 		animTimeRight = 0.0f;
+
 		if (!hitting) {
 			currPlayerImage = walkPlayerImageLeftArr[animLeft];
 			currPlayerTexture = walkPlayerTextureLeftArr[animLeft];
@@ -224,8 +234,14 @@ void PlayerMonkey::handleMovement() {
 		}
 	}
 	if (inAir) {
-		currPlayerImage = jumpPlayerImageRightArr[0];
-		currPlayerTexture = jumpPlayerTextureRightArr[0];//need to resize the image
+		if (facingRight) {
+			currPlayerImage = jumpPlayerImageRightArr[0];
+			currPlayerTexture = jumpPlayerTextureRightArr[0];
+		}
+		else {
+			currPlayerImage = jumpPlayerImageLeftArr[0];
+			currPlayerTexture = jumpPlayerTextureLeftArr[0];
+		}
 		jumpProgress -= 1000.0f * GetFrameTime();
 
 		this->PlayerBox.y -= jumpProgress * GetFrameTime();
@@ -235,8 +251,8 @@ void PlayerMonkey::handleMovement() {
 
 	if (IsKeyPressed(KEY_Q) && currStamina > 50.0f) {
 		if (dashCooldown >= 2.0f) {
-			if (IsKeyDown(KEY_D)) { dashProgress += dashPower; }
 			if (IsKeyDown(KEY_A)) { dashProgress -= dashPower; }
+			if (IsKeyDown(KEY_D)) { dashProgress += dashPower; }
 
 			isDashing = true;
 			dashCooldown = 0.0f;
@@ -245,34 +261,45 @@ void PlayerMonkey::handleMovement() {
 	}
 	else if (isDashing) {
 		timeDashing += GetFrameTime();
-		dashAnimTime += GetFrameTime();
+		animDashTime += GetFrameTime();
 
-		currPlayerImage = dashPlayerImageRightArr[animDashRight];
-		currPlayerTexture = dashPlayerTextureRightArr[animDashRight];
-		if (dashAnimTime > 0.1f) {
-			animDashRight++;
-			dashAnimTime = 0.0f;
-		}
+		lastInvincibilityTime = currInvincibilityTime;
+		currInvincibilityTime = 0.0f;// invincibility while dashing
 
 		if (dashProgress > 0) {
 			currPlayerImage = dashPlayerImageRightArr[animDashRight];
 			currPlayerTexture = dashPlayerTextureRightArr[animDashRight];
-			if (dashAnimTime > 0.1f) {
+			if (animDashTime > 0.1f) {
 				animDashRight++;
-				dashAnimTime = 0.0f;
+				if (animDashTime >= 3) animDashRight = 0;
+				animDashTime = 0.0f;
 			}
 
-			dashProgress -= 1000.0f * GetFrameTime();
+			dashProgress -= 800.0f * GetFrameTime();
 			this->PlayerBox.x += dashProgress * GetFrameTime();
 		}
 		else {
-			dashProgress += 1000.0f * GetFrameTime();
-			this->PlayerBox.x -= dashProgress * GetFrameTime();
+			currPlayerImage = dashPlayerImageLeftArr[animDashLeft];
+			currPlayerTexture = dashPlayerTextureLeftArr[animDashLeft];
+			if (animDashTime > 0.1f) {
+				animDashLeft++;
+				if (animDashTime >= 3) animDashLeft = 0;
+				animDashTime = 0.0f;
+			}
+
+			dashProgress += 800.0f * GetFrameTime();
+			this->PlayerBox.x += dashProgress * GetFrameTime();
 		}
 
 		if (timeDashing > 0.3f) {
+			dashProgress = 0.0f;
 			isDashing = false;
 			timeDashing = 0.0f;
+			animDashRight = 0;
+			animDashLeft = 0;
+			animDashTime = 0.0f;
+
+			currInvincibilityTime = lastInvincibilityTime;
 		}
 	}
 	dashCooldown += GetFrameTime();
@@ -292,7 +319,7 @@ void PlayerMonkey::handleMovement() {
 	}
 }
 void PlayerMonkey::handleIdle() {
-	if ((IsKeyUp(KEY_A) && IsKeyUp(KEY_D)) && !hitting) {
+	if ((IsKeyUp(KEY_A) && IsKeyUp(KEY_D) && !inAir )&& !hitting) {
 		animRight = 0;
 		animTimeRight = 0.0f;
 		animLeft = 0;

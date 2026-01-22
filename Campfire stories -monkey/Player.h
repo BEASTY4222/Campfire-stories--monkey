@@ -13,7 +13,7 @@ class PlayerMonkey{
 	// Player properties
 	Rectangle PlayerBox;
 	Camera2D mainCamera;
-	// Player sprites
+	// Player sprites & animations
 	Image currPlayerImage;
 	float animTimeRight;
 	float animTimeLeft;
@@ -23,10 +23,12 @@ class PlayerMonkey{
 	float curAnimSpeed;
 	float animTimeHit1RightTime;
 	float animTimeHit1LeftTime;
-	float jumpAnimTime;
-	float dashAnimTime;
+	float animJumpTime;
+	float animDashTime;
 	int animDashRight;
+	int animDashLeft;
 	int animRightJump;
+	int animLeftJump;
 	int animRight;
 	int animLeft;
 	int animIdle;
@@ -49,9 +51,13 @@ class PlayerMonkey{
 
 	Image jumpPlayerImageRightArr[1];
 	Texture2D jumpPlayerTextureRightArr[1];
+	Image jumpPlayerImageLeftArr[1];
+	Texture2D jumpPlayerTextureLeftArr[1];
 
 	Image dashPlayerImageRightArr[3];
 	Texture2D dashPlayerTextureRightArr[3];
+	Image dashPlayerImageLeftArr[3];
+	Texture2D dashPlayerTextureLeftArr[3];
 
 
 	// Player Textures
@@ -60,6 +66,7 @@ class PlayerMonkey{
 	bool alive;
 	float maxInvincibilityTime;
 	float currInvincibilityTime;
+	float lastInvincibilityTime;
 	float maxHealth;
 	float currHealth;
 	Rectangle healthBar;
