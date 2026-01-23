@@ -22,7 +22,11 @@ class PlayerMonkey{
 	const float walkAnimSpeed;
 	float curAnimSpeed;
 	float animTimeHit1RightTime;
+	float animTimeHit2RightTime;
+	float animTimeHit3RightTime;
 	float animTimeHit1LeftTime;
+	float animTimeHit2LeftTime;
+	float animTimeHit3LeftTime;
 	float animJumpTime;
 	float animDashTime;
 	int animDashRight;
@@ -33,7 +37,12 @@ class PlayerMonkey{
 	int animLeft;
 	int animIdle;
 	int animHit1Right;
+	int animHit2Right;
+	int animHit3Right;
 	int animHit1Left;
+	int animHit2Left;
+	int animHit3Left;
+
 	Image idleAnimRightArr[2];
 	Image idleAnimLeftArr[2];
 	Texture2D idleAnimRightTexArr[2];
@@ -48,6 +57,16 @@ class PlayerMonkey{
 	Texture2D hit1PlayerTextureRightArr[10];
 	Image hit1PlayerImageLeftArr[10];
 	Texture2D hit1PlayerTextureLeftArr[10];
+
+	Image hit2PlayerImageRightArr[10];
+	Texture2D hit2PlayerTextureRightArr[10];
+	Image hit2PlayerImageLeftArr[10];
+	Texture2D hit2PlayerTextureLeftArr[10];
+
+	Image hit3PlayerImageRightArr[4];
+	Texture2D hit3PlayerTextureRightArr[4];
+	Image hit3PlayerImageLeftArr[4];
+	Texture2D hit3PlayerTextureLeftArr[4];
 
 	Image jumpPlayerImageRightArr[1];
 	Texture2D jumpPlayerTextureRightArr[1];
@@ -109,13 +128,16 @@ class PlayerMonkey{
 	// Combat vars
 	Rectangle lightAttackHitBox;
 	float lightAttackDamage;
+	bool lightAttack1Used;
+	bool lightAttack2Used;
+	bool lightAttack3Used;
 
 	inline void drawPlayer() {
 		// Draw bars
 		this->drawBars();
 
-		//DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
-		//DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
+		DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
+		DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
 
 
 		// Draw main character

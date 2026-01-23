@@ -27,6 +27,19 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 								LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft5.png"), LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft6.png"),
 								LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft7.png"), LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft8.png"),
 								LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft9.png"), LoadImage("spritesMonkey/hitAnim/hit1/left/lightComboLeft10.png") },
+
+	hit2PlayerImageRightArr{ LoadImage("spritesMonkey/hitAnim/hit2/right/lightComboRight1.png"), LoadImage("spritesMonkey/hitAnim/hit2/right/lightComboRight2.png"),
+								LoadImage("spritesMonkey/hitAnim/hit2/right/lightComboRight3.png"), LoadImage("spritesMonkey/hitAnim/hit2/right/lightComboRight4.png"),
+								LoadImage("spritesMonkey/hitAnim/hit2/right/lightComboRight5.png"), LoadImage("spritesMonkey/hitAnim/hit2/right/lightComboRight6.png"),
+								LoadImage("spritesMonkey/hitAnim/hit2/right/lightComboRight7.png"), LoadImage("spritesMonkey/hitAnim/hit2/right/lightComboRight8.png"),
+								LoadImage("spritesMonkey/hitAnim/hit2/right/lightComboRight9.png"), LoadImage("spritesMonkey/hitAnim/hit2/right/lightComboRight10.png") },
+	hit3PlayerImageRightArr{ LoadImage("spritesMonkey/hitAnim/hit3/right/lightComboRight1.png"), LoadImage("spritesMonkey/hitAnim/hit3/right/lightComboRight2.png"),
+								LoadImage("spritesMonkey/hitAnim/hit3/right/lightComboRight3.png"), LoadImage("spritesMonkey/hitAnim/hit3/right/lightComboRight4.png"), },
+	
+	
+	
+	
+	
 	jumpPlayerImageRightArr{ LoadImage("spritesMonkey/jumpAnim/jumpRight/jumpRight1.png") },
 	jumpPlayerImageLeftArr{ LoadImage("spritesMonkey/jumpAnim/jumpLeft/jumpLeft1.png") },
 
@@ -58,6 +71,14 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 								LoadTextureFromImage(hit1PlayerImageLeftArr[4]), LoadTextureFromImage(hit1PlayerImageLeftArr[5]),
 								LoadTextureFromImage(hit1PlayerImageLeftArr[6]), LoadTextureFromImage(hit1PlayerImageLeftArr[7]),
 								LoadTextureFromImage(hit1PlayerImageLeftArr[8]), LoadTextureFromImage(hit1PlayerImageLeftArr[9]) },
+	hit2PlayerTextureRightArr{ LoadTextureFromImage(hit2PlayerImageRightArr[0]), LoadTextureFromImage(hit2PlayerImageRightArr[1]),
+								LoadTextureFromImage(hit2PlayerImageRightArr[2]), LoadTextureFromImage(hit2PlayerImageRightArr[3]),
+								LoadTextureFromImage(hit2PlayerImageRightArr[4]), LoadTextureFromImage(hit2PlayerImageRightArr[5]),
+								LoadTextureFromImage(hit2PlayerImageRightArr[6]), LoadTextureFromImage(hit2PlayerImageRightArr[7]),
+								LoadTextureFromImage(hit2PlayerImageRightArr[8]), LoadTextureFromImage(hit2PlayerImageRightArr[9]) },
+	hit3PlayerTextureRightArr{ LoadTextureFromImage(hit3PlayerImageRightArr[0]), LoadTextureFromImage(hit3PlayerImageRightArr[1]),
+								LoadTextureFromImage(hit3PlayerImageRightArr[2]), LoadTextureFromImage(hit3PlayerImageRightArr[3]) },
+
 	// Jumping left & right
 	jumpPlayerTextureRightArr{ LoadTextureFromImage(jumpPlayerImageRightArr[0]) },
 	jumpPlayerTextureLeftArr{ LoadTextureFromImage(jumpPlayerImageLeftArr[0]) },
@@ -75,7 +96,8 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 	// Animation time vars
 	animTimeRight(0.0f), animTimeLeft(0.0f), idleAnimTime(0.0f), animTimeHit1RightTime(0.0f), animTimeHit1LeftTime(0.0f),
 	animHit1Left(0), animHit1Right(0), animRight(0), animLeft(0), animIdle(0), animDashRight(0), animRightJump(0), animJumpTime(0.0f),
-	animDashTime(0.0f), animDashLeft(0), animLeftJump(0),
+	animDashTime(0.0f), animDashLeft(0), animLeftJump(0), animHit2Right(0), animHit2Left(0), animHit3Right(0), animHit3Left(0),
+	animTimeHit2RightTime(0.0f), animTimeHit3RightTime(0.0f), animTimeHit2LeftTime(0.0f), animTimeHit3LeftTime(0.0f),
 	// Player stats
 	maxHealth(300.0f), currHealth(maxHealth), maxInvincibilityTime(2.0f), currInvincibilityTime(0.0f), lastInvincibilityTime(0.0f), alive(true),
 	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(7.0f), regenStamina(true),
@@ -86,7 +108,7 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 	staminaBar{ mainCamera.target.x + 680.0f, mainCamera.target.y + 260.0f, currStamina, 30.0f }
 	, TAG{ "PLAYER" },// Tag
 	// Combat vars
-	lightAttackHitBox{ 0, 0, 0, 0 }, lightAttackDamage(30.0f), hitting(false)
+	lightAttackHitBox{ 0, 0, 0, 0 }, lightAttackDamage(30.0f), hitting(false), lightAttack1Used(false), lightAttack2Used(false), lightAttack3Used(false)
 	{}
 // Handlers
 // Movement handler
@@ -118,64 +140,111 @@ void PlayerMonkey::handleHitting() {
 
 		hitting = true;
 		if (facingRight) {
+			if (!lightAttack1Used) {
+				currPlayerImage = hit1PlayerImageRightArr[animHit1Right];
+				currPlayerTexture = hit1PlayerTextureRightArr[animHit1Right];
 
-			currPlayerImage = hit1PlayerImageRightArr[animHit1Right];
-			currPlayerTexture = hit1PlayerTextureRightArr[animHit1Right];
-
-			animTimeHit1RightTime += GetFrameTime();
-			if (animTimeHit1RightTime > 0.1f) {
-				animHit1Right++;
-				staminaHandler(1.0f, !running);
-				if (animHit1Right >= 10) animHit1Right = 0;
-				animTimeHit1RightTime = 0.0f;
+				animTimeHit1RightTime += GetFrameTime();
+				if (animTimeHit1RightTime > 0.1f) {
+					if (animHit1Right >= 9) {
+						if (animTimeHit1RightTime > 0.3f) {
+							animHit1Right = 0;
+							animTimeHit1RightTime = 0.0f;
+							lightAttack1Used = true;
+						}
+					}
+					else {
+						animHit1Right++;
+						animTimeHit1RightTime = 0.0f;
+					}
+				}
 			}
-		}
-		else {
+			else if (!lightAttack2Used) {
+				currPlayerImage = hit2PlayerImageRightArr[animHit2Right];
+				currPlayerTexture = hit2PlayerTextureRightArr[animHit2Right];
 
-			currPlayerImage = hit1PlayerImageLeftArr[animHit1Left];
-			currPlayerTexture = hit1PlayerTextureLeftArr[animHit1Left];
-			animTimeHit1LeftTime += GetFrameTime();
-			if (animTimeHit1LeftTime > 0.1f) {
-				animHit1Left++;
-				staminaHandler(1.0f, !running);
-				if (animHit1Left >= 10) animHit1Left = 0;
-				animTimeHit1LeftTime = 0.0f;
-			}
-		}
-		if ((animHit1Right >= 5 && animHit1Right <= 6) || (animHit1Left >= 5 && animHit1Left <= 6)) {
-			if (facingRight) {
-				lightAttackHitBox.x = this->PlayerBox.x + this->PlayerBox.width;
-				lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
-				lightAttackHitBox.width = 60.0f;
-				lightAttackHitBox.height = 80.0f;
+				animTimeHit2RightTime += GetFrameTime();
+				if (animTimeHit2RightTime > 0.1f) {
+					if (animHit2Right >= 9) {
+						if (animTimeHit2RightTime > 0.2f) {
+							animHit2Right = 0;
+							animTimeHit2RightTime = 0.0f;
+							lightAttack2Used = true;
+						}
+					}
+					else {
+						animHit2Right++;
+						animTimeHit2RightTime = 0.0f;
+					}
+				}
+
 			}
 			else {
-				lightAttackHitBox.x = this->PlayerBox.x - this->PlayerBox.width;
-				lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
-				lightAttackHitBox.width = 60.0f;
-				lightAttackHitBox.height = 80.0f;
+				if (!lightAttack1Used) {
+					currPlayerImage = hit1PlayerImageLeftArr[animHit1Left];
+					currPlayerTexture = hit1PlayerTextureLeftArr[animHit1Left];
+					animTimeHit1LeftTime += GetFrameTime();
+					if (animTimeHit1LeftTime > 0.1f) {
+						staminaHandler(1.0f, !running);
+						if (animHit1Left >= 9) {
+							if (animTimeHit1LeftTime > 0.3f) {
+								animHit1Left = 0;
+								animTimeHit1LeftTime = 0.0f;
+								lightAttack1Used = true;
+							}
+						}
+						else {
+							animHit1Left++;
+							animTimeHit1LeftTime = 0.0f;
+						}
+
+					}
+				}
+				else if (!lightAttack2Used) {
+
+				}
+				else if (!lightAttack3Used) {
+
+				}
+
+			}
+			if ((animHit1Right >= 5 && animHit1Right <= 6) || (animHit1Left >= 5 && animHit1Left <= 6)) {
+				if (facingRight) {
+					lightAttackHitBox.x = this->PlayerBox.x + this->PlayerBox.width;
+					lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
+					lightAttackHitBox.width = 60.0f;
+					lightAttackHitBox.height = 80.0f;
+				}
+				else {
+					lightAttackHitBox.x = this->PlayerBox.x - this->PlayerBox.width;
+					lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
+					lightAttackHitBox.width = 60.0f;
+					lightAttackHitBox.height = 80.0f;
+				}
+
+			}
+			else {
+				lightAttackHitBox.x = 0.0f;
+				lightAttackHitBox.y = 0.0f;
+				lightAttackHitBox.width = 0.0f;
+				lightAttackHitBox.height = 0.0f;
 			}
 
+			if (IsKeyDown(KEY_A) || IsKeyDown(KEY_D)) {
+				currentMoveSpeed = hitWalkSpeed;
+			}
 		}
 		else {
+			hitting = false;
 			lightAttackHitBox.x = 0.0f;
 			lightAttackHitBox.y = 0.0f;
 			lightAttackHitBox.width = 0.0f;
 			lightAttackHitBox.height = 0.0f;
 		}
-
-		if (IsKeyDown(KEY_A) || IsKeyDown(KEY_D)) {
-			currentMoveSpeed = hitWalkSpeed;
-		}
 	}
-	else {
-		hitting = false;
-		lightAttackHitBox.x = 0.0f;
-		lightAttackHitBox.y = 0.0f;
-		lightAttackHitBox.width = 0.0f;
-		lightAttackHitBox.height = 0.0f;
-	}
+	
 }
+
 void PlayerMonkey::handleMovement() {
 	if (IsKeyDown(KEY_D)) {
 		animLeft = 0;
@@ -329,6 +398,11 @@ void PlayerMonkey::handleIdle() {
 		animTimeHit1LeftTime = 0.0f;
 		animHit1Right = 0;
 		animTimeHit1RightTime = 0.0f;
+
+		lightAttack1Used = false;
+		lightAttack2Used = false;
+		lightAttack3Used = false;
+
 
 		if (facingRight) {
 			currPlayerImage = idleAnimRightArr[animIdle];
