@@ -19,6 +19,8 @@ class Enemy{
 	std::string TAG;
 	float inlvincibilityTime;
 	float maxInvincibilityTime;
+	int nHitsBeforeInvcincibility;
+	bool hit;
 
 	std::map <std::string, Rectangle> currentCollisionTags;
 

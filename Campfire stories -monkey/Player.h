@@ -136,8 +136,8 @@ class PlayerMonkey{
 		// Draw bars
 		this->drawBars();
 
-		DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
-		DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
+		//DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
+		//DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
 
 
 		// Draw main character

@@ -6,7 +6,7 @@ Enemy::Enemy(const float& x, const  float& y, const  float& width, const  float&
 	hp(hp),
 	speed(speed),
 	damage(damage), maxInvincibilityTime(2.0f), inlvincibilityTime(0.0f),
-	TAG{ "ENEMY" }, enemyTimeInAir(0.0f)
+	TAG{ "ENEMY" }, enemyTimeInAir(0.0f), nHitsBeforeInvcincibility(3), hit(false)
 	{}
 
 void Enemy::handleUpdates(PlayerMonkey player, World world) {
@@ -35,14 +35,23 @@ void Enemy::CollisionWithRectangle(GroundObject object) {
 void Enemy::CollisionWithRectangle(PlayerMonkey& player) {
 	if (CheckCollisionRecs(this->enemyBox, player.getLightAttackHitBox())) {
 		currentCollisionTags[player.getTag()] = player.getRectangle();
-		for (std::pair<std::string, Rectangle> tag : currentCollisionTags) {
-			if (tag.first == "PLAYER" && inlvincibilityTime > maxInvincibilityTime) {
-				hp -= player.getDamage();
-				inlvincibilityTime = 0.0f;
+		if (!hit) {
+			for (std::pair<std::string, Rectangle> tag : currentCollisionTags) {
+				if (tag.first == "PLAYER" && inlvincibilityTime > maxInvincibilityTime) {
+					hp -= player.getDamage();
+					if (nHitsBeforeInvcincibility == 0 || inlvincibilityTime >= 100.0f) {
+						inlvincibilityTime = 0.0f;
+						nHitsBeforeInvcincibility = 2;
+					}
+					else {
+						nHitsBeforeInvcincibility--;
+						hit = true;
+					}
+
+				}
+
 			}
-
-
 		}
-
 	}
+	else hit = false;
 }
