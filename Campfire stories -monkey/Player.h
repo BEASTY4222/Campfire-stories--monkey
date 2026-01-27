@@ -21,12 +21,6 @@ class PlayerMonkey{
 	const float sprintAnimSpeed;
 	const float walkAnimSpeed;
 	float curAnimSpeed;
-	float animTimeHit1RightTime;
-	float animTimeHit2RightTime;
-	float animTimeHit3RightTime;
-	float animTimeHit1LeftTime;
-	float animTimeHit2LeftTime;
-	float animTimeHit3LeftTime;
 	float animJumpTime;
 	float animDashTime;
 	int animDashRight;
@@ -36,12 +30,8 @@ class PlayerMonkey{
 	int animRight;
 	int animLeft;
 	int animIdle;
-	int animHit1Right;
-	int animHit2Right;
-	int animHit3Right;
-	int animHit1Left;
-	int animHit2Left;
-	int animHit3Left;
+	int animHit;
+	float animTimeHit;
 
 	Image idleAnimRightArr[2];
 	Image idleAnimLeftArr[2];
@@ -77,7 +67,6 @@ class PlayerMonkey{
 	Texture2D dashPlayerTextureRightArr[3];
 	Image dashPlayerImageLeftArr[3];
 	Texture2D dashPlayerTextureLeftArr[3];
-
 
 	// Player Textures
 	Texture2D currPlayerTexture;
@@ -137,7 +126,7 @@ class PlayerMonkey{
 		this->drawBars();
 
 		//DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
-		//DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
+		DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
 
 
 		// Draw main character
@@ -154,6 +143,8 @@ class PlayerMonkey{
 	inline void handleCamera() { this->mainCamera.target.x = { this->PlayerBox.x }; }
 	void handlePlayerActions();
 	void handleHitting();
+	void hittingLogic();
+	void hittingHitbox();
 	void handleMovement();
 	void handleIdle();
 	void handleCollisionsGroundObjects(GroundObject object);// Collision with ground objects
