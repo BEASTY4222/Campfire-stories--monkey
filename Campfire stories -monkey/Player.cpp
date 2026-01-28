@@ -43,6 +43,26 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 								LoadImage("spritesMonkey/hitAnim/hit3/right/lightComboRight3.png"), LoadImage("spritesMonkey/hitAnim/hit3/right/lightComboRight4.png"), },
 	hit3PlayerImageLeftArr{ LoadImage("spritesMonkey/hitAnim/hit3/left/lightComboLeft1.png"), LoadImage("spritesMonkey/hitAnim/hit3/left/lightComboLeft2.png"),
 								LoadImage("spritesMonkey/hitAnim/hit3/left/lightComboLeft3.png"), LoadImage("spritesMonkey/hitAnim/hit3/left/lightComboLeft4.png"), },
+
+	hit4PlayerImageRightArr{ LoadImage("spritesMonkey/hitAnim/hit4/right/lightComboRight1.png"), LoadImage("spritesMonkey/hitAnim/hit4/right/lightComboRight2.png"),
+								LoadImage("spritesMonkey/hitAnim/hit4/right/lightComboRight3.png"), LoadImage("spritesMonkey/hitAnim/hit4/right/lightComboRight4.png"),
+								LoadImage("spritesMonkey/hitAnim/hit4/right/lightComboRight5.png"), LoadImage("spritesMonkey/hitAnim/hit4/right/lightComboRight6.png"),
+								LoadImage("spritesMonkey/hitAnim/hit4/right/lightComboRight7.png"), LoadImage("spritesMonkey/hitAnim/hit4/right/lightComboRight8.png"), },
+	hit4PlayerImageLeftArr{ LoadImage("spritesMonkey/hitAnim/hit4/left/lightComboLeft1.png"), LoadImage("spritesMonkey/hitAnim/hit4/left/lightComboLeft2.png"),
+								LoadImage("spritesMonkey/hitAnim/hit4/left/lightComboLeft3.png"), LoadImage("spritesMonkey/hitAnim/hit4/left/lightComboLeft4.png"),
+								LoadImage("spritesMonkey/hitAnim/hit4/left/lightComboLeft5.png"), LoadImage("spritesMonkey/hitAnim/hit4/left/lightComboLeft6.png"),
+								LoadImage("spritesMonkey/hitAnim/hit4/left/lightComboLeft7.png"), LoadImage("spritesMonkey/hitAnim/hit4/left/lightComboLeft8.png"), },
+	
+	hit5PlayerImageRightArr{ LoadImage("spritesMonkey/hitAnim/hit5/right/lightComboRight1.png"), LoadImage("spritesMonkey/hitAnim/hit5/right/lightComboRight2.png"),
+								LoadImage("spritesMonkey/hitAnim/hit5/right/lightComboRight3.png"), LoadImage("spritesMonkey/hitAnim/hit5/right/lightComboRight4.png"), },
+	hit5PlayerImageLeftArr{ LoadImage("spritesMonkey/hitAnim/hit5/left/lightComboLeft1.png"), LoadImage("spritesMonkey/hitAnim/hit5/left/lightComboLeft2.png"),
+								LoadImage("spritesMonkey/hitAnim/hit5/left/lightComboLeft3.png"), LoadImage("spritesMonkey/hitAnim/hit5/left/lightComboLeft4.png"), },
+
+	hit6PlayerImageRightArr{ LoadImage("spritesMonkey/hitAnim/hit6/right/lightComboRight1.png"), LoadImage("spritesMonkey/hitAnim/hit6/right/lightComboRight2.png"),
+								LoadImage("spritesMonkey/hitAnim/hit6/right/lightComboRight3.png"), LoadImage("spritesMonkey/hitAnim/hit6/right/lightComboRight4.png"),
+								LoadImage("spritesMonkey/hitAnim/hit6/right/lightComboRight5.png"), LoadImage("spritesMonkey/hitAnim/hit6/right/lightComboRight6.png"),
+								LoadImage("spritesMonkey/hitAnim/hit6/right/lightComboRight7.png"), LoadImage("spritesMonkey/hitAnim/hit6/right/lightComboRight8.png"),
+								LoadImage("spritesMonkey/hitAnim/hit6/right/lightComboRight9.png"), LoadImage("spritesMonkey/hitAnim/hit6/right/lightComboRight10.png") },
 	
 	
 	
@@ -96,6 +116,27 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 	hit3PlayerTextureLeftArr{ LoadTextureFromImage(hit3PlayerImageLeftArr[0]), LoadTextureFromImage(hit3PlayerImageLeftArr[1]),
 								LoadTextureFromImage(hit3PlayerImageLeftArr[2]), LoadTextureFromImage(hit3PlayerImageLeftArr[3]) },
 
+	hit4PlayerTextureRightArr{ LoadTextureFromImage(hit4PlayerImageRightArr[0]), LoadTextureFromImage(hit4PlayerImageRightArr[1]),
+								LoadTextureFromImage(hit4PlayerImageRightArr[2]), LoadTextureFromImage(hit4PlayerImageRightArr[3]),
+								LoadTextureFromImage(hit4PlayerImageRightArr[4]), LoadTextureFromImage(hit4PlayerImageRightArr[5]),
+								LoadTextureFromImage(hit4PlayerImageRightArr[6]), LoadTextureFromImage(hit4PlayerImageRightArr[7]), },
+	hit4PlayerTextureLeftArr{ LoadTextureFromImage(hit4PlayerImageLeftArr[0]), LoadTextureFromImage(hit4PlayerImageLeftArr[1]),
+								LoadTextureFromImage(hit4PlayerImageLeftArr[2]), LoadTextureFromImage(hit4PlayerImageLeftArr[3]),
+								LoadTextureFromImage(hit4PlayerImageLeftArr[4]), LoadTextureFromImage(hit4PlayerImageLeftArr[5]),
+								LoadTextureFromImage(hit4PlayerImageLeftArr[6]), LoadTextureFromImage(hit4PlayerImageLeftArr[7]), },
+
+	hit5PlayerTextureRightArr{ LoadTextureFromImage(hit5PlayerImageRightArr[0]), LoadTextureFromImage(hit5PlayerImageRightArr[1]),
+								LoadTextureFromImage(hit5PlayerImageRightArr[2]), LoadTextureFromImage(hit5PlayerImageRightArr[3]) },
+	hit5PlayerTextureLeftArr{ LoadTextureFromImage(hit5PlayerImageLeftArr[0]), LoadTextureFromImage(hit5PlayerImageLeftArr[1]),
+								LoadTextureFromImage(hit5PlayerImageLeftArr[2]), LoadTextureFromImage(hit5PlayerImageLeftArr[3]) },
+
+	hit6PlayerTextureRightArr{ LoadTextureFromImage(hit6PlayerImageRightArr[0]), LoadTextureFromImage(hit6PlayerImageRightArr[1]),
+								LoadTextureFromImage(hit6PlayerImageRightArr[2]), LoadTextureFromImage(hit6PlayerImageRightArr[3]),
+								LoadTextureFromImage(hit6PlayerImageRightArr[4]), LoadTextureFromImage(hit6PlayerImageRightArr[5]),
+								LoadTextureFromImage(hit6PlayerImageRightArr[6]), LoadTextureFromImage(hit6PlayerImageRightArr[7]),
+								LoadTextureFromImage(hit6PlayerImageRightArr[8]), LoadTextureFromImage(hit6PlayerImageRightArr[9]) },
+
+
 
 	// Jumping left & right
 	jumpPlayerTextureRightArr{ LoadTextureFromImage(jumpPlayerImageRightArr[0]) },
@@ -125,7 +166,8 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 	staminaBar{ mainCamera.target.x + 680.0f, mainCamera.target.y + 260.0f, currStamina, 30.0f }
 	, TAG{ "PLAYER" },// Tag
 	// Combat vars
-	lightAttackHitBox{ 0, 0, 0, 0 }, lightAttackDamage(30.0f), hitting(false), lightAttack1Used(false), lightAttack2Used(false), lightAttack3Used(false)
+	lightAttackHitBox{ 0, 0, 0, 0 }, lightAttackDamage(30.0f), hitting(false), 
+	lightAttack1Used(false), lightAttack2Used(false), lightAttack3Used(false), lightAttack4Used(false), lightAttack5Used(false), lightAttack6Used(false)
 		{}
 // Handlers
 // Movement handler
@@ -259,6 +301,90 @@ void::PlayerMonkey::hittingLogic() {
 		// Hitbox handling
 		hittingHitbox();
 	}
+	else if (!lightAttack4Used) {
+		if (facingRight) {
+			currPlayerImage = hit4PlayerImageRightArr[animHit];
+			currPlayerTexture = hit4PlayerTextureRightArr[animHit];
+		}
+		else {
+			currPlayerImage = hit4PlayerImageLeftArr[animHit];
+			currPlayerTexture = hit4PlayerTextureLeftArr[animHit];
+		}
+
+
+		animTimeHit += GetFrameTime();
+		if (animTimeHit > 0.1f) {
+			if (animHit >= 7) {
+				if (animTimeHit > 0.2f) {
+					animHit = 0;
+					animTimeHit = 0.0f;
+					lightAttack4Used = true;
+				}
+			}
+			else {
+				animHit++;
+				animTimeHit = 0.0f;
+			}
+		}
+		// Hitbox handling
+		hittingHitbox();
+	}
+	else if (!lightAttack5Used) {
+		if (facingRight) {
+			currPlayerImage = hit5PlayerImageRightArr[animHit];
+			currPlayerTexture = hit5PlayerTextureRightArr[animHit];
+		}
+		else {
+			currPlayerImage = hit5PlayerImageLeftArr[animHit];
+			currPlayerTexture = hit5PlayerTextureLeftArr[animHit];
+		}
+
+
+		animTimeHit += GetFrameTime();
+		if (animTimeHit > 0.1f) {
+			if (animHit >= 3) {
+				if (animTimeHit > 0.2f) {
+					animHit = 0;
+					animTimeHit = 0.0f;
+					lightAttack5Used = true;
+				}
+			}
+			else {
+				animHit++;
+				animTimeHit = 0.0f;
+			}
+		}
+		// Hitbox handling
+		hittingHitbox();
+	}
+	else if (!lightAttack6Used) {
+		if (facingRight) {
+			currPlayerImage = hit6PlayerImageRightArr[animHit];
+			currPlayerTexture = hit6PlayerTextureRightArr[animHit];
+		}
+		else {
+			currPlayerImage = hit6PlayerImageLeftArr[animHit];
+			currPlayerTexture = hit6PlayerTextureLeftArr[animHit];
+		}
+
+
+		animTimeHit += GetFrameTime();
+		if (animTimeHit > 0.1f) {
+			if (animHit >= 9) {
+				if (animTimeHit > 0.3f) {
+					animHit = 0;
+					animTimeHit = 0.0f;
+					lightAttack6Used = true;
+				}
+			}
+			else {
+				animHit++;
+				animTimeHit = 0.0f;
+			}
+		}
+		// Hitbox handling
+		hittingHitbox();
+	}
 }
 void PlayerMonkey::hittingHitbox() {
 	if (!lightAttack1Used) {
@@ -316,6 +442,64 @@ void PlayerMonkey::hittingHitbox() {
 			}
 			else {
 				lightAttackHitBox.x = this->PlayerBox.x - this->PlayerBox.width;
+				lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
+				lightAttackHitBox.width = 60.0f;
+				lightAttackHitBox.height = 80.0f;
+			}
+		}
+		else {
+			lightAttackHitBox.x = 0.0f;
+			lightAttackHitBox.y = 0.0f;
+			lightAttackHitBox.width = 0.0f;
+			lightAttackHitBox.height = 0.0f;
+		}
+	}
+	else if (!lightAttack4Used) {
+		if (animHit >= 1 && animHit <= 3) {
+			if (facingRight) {
+				lightAttackHitBox.x = this->PlayerBox.x + this->PlayerBox.width;
+				lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
+				lightAttackHitBox.width = 60.0f;
+				lightAttackHitBox.height = 80.0f;
+			}
+			else {
+				lightAttackHitBox.x = this->PlayerBox.x - this->PlayerBox.width;
+				lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
+				lightAttackHitBox.width = 60.0f;
+				lightAttackHitBox.height = 80.0f;
+			}
+		}
+		else if (animHit == 7) {
+			if (facingRight) {
+				lightAttackHitBox.x = this->PlayerBox.x + this->PlayerBox.width;
+				lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
+				lightAttackHitBox.width = 60.0f;
+				lightAttackHitBox.height = 80.0f;
+			}
+			else {
+				lightAttackHitBox.x = this->PlayerBox.x - this->PlayerBox.width;
+				lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
+				lightAttackHitBox.width = 60.0f;
+				lightAttackHitBox.height = 80.0f;
+			}
+		}
+		else {
+			lightAttackHitBox.x = 0.0f;
+			lightAttackHitBox.y = 0.0f;
+			lightAttackHitBox.width = 0.0f;
+			lightAttackHitBox.height = 0.0f;
+		}
+	}
+	else if (!lightAttack5Used) {
+		if (animHit >= 0 && animHit <= 1) {
+			if (facingRight) {
+				lightAttackHitBox.x = this->PlayerBox.x - this->PlayerBox.width;
+				lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
+				lightAttackHitBox.width = 60.0f;
+				lightAttackHitBox.height = 80.0f;
+			}
+			else {
+				lightAttackHitBox.x = this->PlayerBox.x + this->PlayerBox.width;
 				lightAttackHitBox.y = this->PlayerBox.y + 50.0f;
 				lightAttackHitBox.width = 60.0f;
 				lightAttackHitBox.height = 80.0f;
@@ -493,6 +677,8 @@ void PlayerMonkey::handleIdle() {
 		lightAttack1Used = false;
 		lightAttack2Used = false;
 		lightAttack3Used = false;
+		lightAttack4Used = false;
+		lightAttack5Used = false;
 
 
 		if (facingRight) {
