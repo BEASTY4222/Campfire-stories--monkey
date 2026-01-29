@@ -20,7 +20,7 @@ int main() {
 
     PlayerMonkey Monkey;
     //          hp(hp), speed(speed), damage(damage), enemyBox{ x, y, width, hegiht }
-	Enemy enemy1(1500.0f, 600.0f, 80.0f, 150.0f, 100.0f, 2.0f, 10.0f);
+	Enemy enemy1(1500.0f, 600.0f, 80.0f, 150.0f, 400.0f, 2.0f, 10.0f);
     World gameWorld;
 
     // Main game loop
