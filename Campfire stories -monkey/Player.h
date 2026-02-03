@@ -78,6 +78,11 @@ class PlayerMonkey{
 	Image hit7PlayerImageLeftArr[11];
 	Texture2D hit7PlayerTextureLeftArr[11];
 
+	Image hit8PlayerImageRightArr[9];
+	Texture2D hit8PlayerTextureRightArr[9];
+	Image hit8PlayerImageLeftArr[9];
+	Texture2D hit8PlayerTextureLeftArr[9];
+
 	Image jumpPlayerImageRightArr[1];
 	Texture2D jumpPlayerTextureRightArr[1];
 	Image jumpPlayerImageLeftArr[1];
@@ -137,7 +142,7 @@ class PlayerMonkey{
 	// Combat vars
 	Rectangle lightAttackHitBox;
 	float lightAttackDamage;
-	bool lightAttack1Used, lightAttack2Used, lightAttack3Used, lightAttack4Used, lightAttack5Used, lightAttack6Used, lightAttack7Used;
+	bool lightAttack1Used, lightAttack2Used, lightAttack3Used, lightAttack4Used, lightAttack5Used, lightAttack6Used, lightAttack7Used, lightAttack8Used;
 
 	inline void drawPlayer() {
 		// Draw bars
