@@ -2,16 +2,33 @@
 
 Enemy::Enemy(const float& x, const  float& y, const  float& width, const  float& height, const float& hp, const  float& speed, const  float& damage) :
 	enemyBox{ x, y, width, height },
-	healhBar{ x, y - 20.0f, width, 10.0f },
+	healthBar{ x, y - 20.0f, width, 10.0f },
 	hp(hp),
 	speed(speed),
 	damage(damage), maxInvincibilityTime(2.0f), inlvincibilityTime(0.0f),
-	TAG{ "ENEMY" }, enemyTimeInAir(0.0f), nHitsBeforeInvcincibility(3), hit(false)
+	TAG{ "ENEMY" }, enemyTimeInAir(0.0f), nHitsBeforeInvcincibility(3), hit(false), facingRight(true),
+	animLeft(0), animRight(0), animTimeLeft(0.0f), animTimeRight(0.0f), standing(true), standTime(0.0f)
 	{}
 
+void Enemy::movement() {
+	// Basic left-right patrol movement (can be overridden in derived classes)
+	if (facingRight) {
+		enemyBox.x += speed;
+		if (enemyBox.x > 800.0f) // Example boundary
+			facingRight = false;
+	}
+	else {
+		enemyBox.x -= speed;
+		if (enemyBox.x < 200.0f) // Example boundary
+			facingRight = true;
+	}
+}
+
 void Enemy::handleUpdates(PlayerMonkey player, World world) {
-	healhBar.width = hp;
-	healhBar.y = enemyBox.y - 20.0f;
+	this->movement();
+	healthBar.width = hp;
+	healthBar.y = enemyBox.y - 20.0f;
+	healthBar.x = enemyBox.x - 150.0;
 	this->CollisionWithRectangle(world.getMainGround());
 	this->CollisionWithRectangle(player);
 	inlvincibilityTime += GetFrameTime();

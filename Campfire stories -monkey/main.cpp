@@ -3,7 +3,9 @@
 #include "raylib.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "EnemyGoblinBrute.h"
 #include "World.h"
+
 
 int main() {
     // Initialization
@@ -20,7 +22,7 @@ int main() {
 
     PlayerMonkey Monkey;
     //          hp(hp), speed(speed), damage(damage), enemyBox{ x, y, width, hegiht }
-	Enemy enemy1(1500.0f, 600.0f, 80.0f, 150.0f, 400.0f, 2.0f, 10.0f);
+    EnemyGoblinBrute goblin(1500.0f, 600.0f, 80.0f, 200.0f, 400.0f, 3.0f, 100.0f);
     World gameWorld;
 
     // Main game loop
@@ -28,8 +30,8 @@ int main() {
         // Update
         // Update variables here
 
-		Monkey.handleUpdates(gameWorld, enemy1);
-		enemy1.handleUpdates(Monkey, gameWorld);
+		Monkey.handleUpdates(gameWorld, goblin);
+        goblin.handleUpdates(Monkey, gameWorld);
 
         // Draw
         BeginDrawing();
@@ -37,10 +39,10 @@ int main() {
         BeginMode2D(Monkey.getCamera());
 
 
-		gameWorld.handleWorld(enemy1.getRectangle(), enemy1.getCurrentCollisionTags(), enemy1.getAirTime());
+		gameWorld.handleWorld(goblin.getRectangle(), goblin.getCurrentCollisionTags(), goblin.getAirTime());
         gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags(), Monkey.getTimeInAir());
         Monkey.handlePlayerVisuals();
-		enemy1.handleEnemy();
+        goblin.handleEnemy();
 
 
         EndMode2D();

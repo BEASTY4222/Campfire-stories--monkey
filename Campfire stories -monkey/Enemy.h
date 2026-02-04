@@ -5,13 +5,28 @@
 #include <map>
 class PlayerMonkey;
 
-class Enemy{
+class Enemy {
 	// vars
-	Image enemyImage;
-	Texture2D enemyTexture;
+protected:
+	Image imageWalkRightArr[6];
+	Image imageWalkLeftArr[6];
+	Texture2D textureWalkRightArr[6];
+	Texture2D textureWalkLeftArr[6];
+
+	Image imageHitRightArr[4];
+	Image imageHitLeftArr[4];
+	Texture2D textureHitRightArr[4];
+	Texture2D textureHitLeftArr[4];
+
+	Image imageIdleRightArr[5];
+	Image imageIdleLeftArr[5];
+	Texture2D textureIdleRightArr[5];
+	Texture2D textureIdleLeftArr[5];
+
+	Texture2D currentTexture;
 
 	Rectangle enemyBox;
-	Rectangle healhBar;
+	Rectangle healthBar;
 	float enemyTimeInAir;
 	float hp;
 	float speed;
@@ -21,34 +36,42 @@ class Enemy{
 	float maxInvincibilityTime;
 	int nHitsBeforeInvcincibility;
 	bool hit;
+	bool facingRight;
+	int animLeft;
+	int animRight;
+	float animTimeLeft;
+	float animTimeRight;
+	bool standing;
+	float standTime;
 
 	std::map <std::string, Rectangle> currentCollisionTags;
 
-	void DrawEnemy() {
+	virtual void DrawEnemy() {
 		DrawRectangleRec(enemyBox, RED);
 
-		DrawRectangleRec(healhBar, LIME);// health
+		DrawRectangleRec(healthBar, LIME);// health
 	}
-	public:
-		Enemy(const float& x, const  float& y, const  float& width, const  float& hegiht, const float& hp, const  float& speed, const  float& damage);
+public:
+	Enemy(const float& x, const  float& y, const  float& width, const  float& hegiht, const float& hp, const  float& speed, const  float& damage);
 
-		void handleEnemy() {
-			this->DrawEnemy();
-		}
-		void handleUpdates(PlayerMonkey player, World world);
+	void handleEnemy() { this->DrawEnemy(); }
+	void handleUpdates(PlayerMonkey player, World world);
 
-		void handleCollisionsGroundObjects(GroundObject object) {CollisionWithRectangle(object);}
-		void handleCollisionsPlayer(PlayerMonkey& player) { CollisionWithRectangle(player); }
+	void handleCollisionsGroundObjects(GroundObject object) { CollisionWithRectangle(object); }
+	void handleCollisionsPlayer(PlayerMonkey& player) { CollisionWithRectangle(player); }
 
-		
+	virtual void movement();
 
-		void CollisionWithRectangle(GroundObject object);
-		void CollisionWithRectangle(PlayerMonkey& player);
+	void CollisionWithRectangle(GroundObject object);
+	void CollisionWithRectangle(PlayerMonkey& player);
 
-		inline float& getAirTime() { return enemyTimeInAir; }
-		inline std::string getTag() const { return this->TAG; }
-		inline float getDamage() const { return damage; }
-		inline float getHp() const { return hp; }
-		inline Rectangle& getRectangle() { return enemyBox; } // Non-const getter
-		inline std::map<std::string, Rectangle> getCurrentCollisionTags() { return currentCollisionTags; } // Non-const getter
+	inline float& getAirTime() { return enemyTimeInAir; }
+	inline std::string getTag() const { return this->TAG; }
+	inline float getDamage() const { return damage; }
+	inline float getHp() const { return hp; }
+	inline Rectangle& getRectangle() { return enemyBox; } // Non-const getter
+	inline std::map<std::string, Rectangle> getCurrentCollisionTags() { return currentCollisionTags; } // Non-const getter
+	inline Rectangle getHealhBar() const { return healthBar; }
+
 };
+
