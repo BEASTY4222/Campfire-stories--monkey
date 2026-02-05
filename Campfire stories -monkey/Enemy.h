@@ -37,12 +37,15 @@ protected:
 	int nHitsBeforeInvcincibility;
 	bool hit;
 	bool facingRight;
+	int animIdle;
 	int animLeft;
 	int animRight;
 	float animTimeLeft;
 	float animTimeRight;
+	float animIdleTime;
 	bool standing;
 	float standTime;
+
 
 	std::map <std::string, Rectangle> currentCollisionTags;
 

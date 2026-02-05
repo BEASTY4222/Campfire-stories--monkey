@@ -93,50 +93,64 @@ void EnemyGoblinBrute::DrawEnemy() {
 
 void EnemyGoblinBrute::movement() {
 	if (standing) {
+		animLeft = 0;
+		animRight = 0;
+		animTimeLeft = 0.0f;
+		animTimeRight = 0.0f;
+
+		currentTexture = facingRight ? textureIdleRightArr[animIdle] : textureIdleLeftArr[animIdle];
 		standTime += GetFrameTime();
+		animIdleTime += GetFrameTime();
+		if (animIdleTime > 0.15f) {
+			animIdle++;
+			if (animIdle >= 5) animIdle = 0;
+			animIdleTime = 0.0f;
+		}
+
 		if (standTime > 2.0f) {
 			facingRight = !facingRight;
 			standing = false;
 			standTime = 0.0f;
+			animIdle = 0;
 		}
 	}
 	
-	if (facingRight) {
-		animRight = 0;
-		animTimeRight = 0.0f;
+	if (facingRight && !standing) {
+		animLeft = 0;
+		animTimeLeft = 0.0f;
 
 		currentTexture = textureWalkRightArr[animRight];
 		animTimeRight += GetFrameTime();
-		if (animTimeRight > 0.1f) {
+		if (animTimeRight > 0.2f) {
 			animRight++;
 			if (animRight >= 6) animRight = 0;
 			animTimeRight = 0.0f;
 		}
-		if (enemyBox.x > 1600.0f) {
+		if (enemyBox.x > 2600.0f) {
 			standing = true;
 		}else{
 			standing = false;
 			this->enemyBox.x += speed;
 		}
 	}
-	else {
-		animLeft = 0;
-		animTimeLeft = 0.0f;
+	else if(!facingRight && !standing) {
+		animRight = 0;
+		animTimeRight = 0.0f;
 
 		currentTexture = textureWalkLeftArr[animLeft];
 		animTimeLeft += GetFrameTime();
-		if (animTimeLeft > 0.1f) {
+		if (animTimeLeft > 0.2f) {
 			animLeft++;
 			if (animLeft >= 6) animLeft = 0;
 			animTimeLeft = 0.0f;
 		}
 
 
-		if (enemyBox.x < 600.0f) {
-			standing = false;
+		if (enemyBox.x < 1600.0f) {
+			standing = true;
 		}
 		else {
-			standing = true;
+			standing = false;
 			this->enemyBox.x -= speed;
 		}
 	}
