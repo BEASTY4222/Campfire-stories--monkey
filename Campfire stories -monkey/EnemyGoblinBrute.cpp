@@ -91,7 +91,7 @@ void EnemyGoblinBrute::DrawEnemy() {
 	DrawRectangleRec(this->getHealhBar(), LIME);// health
 }
 
-void EnemyGoblinBrute::movement() {
+void EnemyGoblinBrute::movement(PlayerMonkey player) {
 	if (standing) {
 		animLeft = 0;
 		animRight = 0;
@@ -114,8 +114,14 @@ void EnemyGoblinBrute::movement() {
 			animIdle = 0;
 		}
 	}
-	
+
 	if (facingRight && !standing) {
+		if (enemyBox.x - player.getRectangle().x< 100) {
+			distanceToPlayer = player.getRectangle().x - enemyBox.x;
+			walkingDistanceLeft = distanceToPlayer;
+		}
+		else { walkingDistanceLeft = 2600.0f; }
+
 		animLeft = 0;
 		animTimeLeft = 0.0f;
 
@@ -126,7 +132,7 @@ void EnemyGoblinBrute::movement() {
 			if (animRight >= 6) animRight = 0;
 			animTimeRight = 0.0f;
 		}
-		if (enemyBox.x > 2600.0f) {
+		if (enemyBox.x > walkingDistanceRight) {
 			standing = true;
 		}else{
 			standing = false;
@@ -134,6 +140,12 @@ void EnemyGoblinBrute::movement() {
 		}
 	}
 	else if(!facingRight && !standing) {
+		if (enemyBox.x - player.getRectangle().x > 100) {
+			distanceToPlayer = player.getRectangle().x - enemyBox.x;
+			walkingDistanceLeft = distanceToPlayer;
+		}
+		else { walkingDistanceLeft = 1600.0f; }
+		
 		animRight = 0;
 		animTimeRight = 0.0f;
 
@@ -146,7 +158,7 @@ void EnemyGoblinBrute::movement() {
 		}
 
 
-		if (enemyBox.x < 1600.0f) {
+		if (enemyBox.x < walkingDistanceLeft) {
 			standing = true;
 		}
 		else {

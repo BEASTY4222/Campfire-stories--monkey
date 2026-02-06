@@ -45,6 +45,9 @@ protected:
 	float animIdleTime;
 	bool standing;
 	float standTime;
+	float distanceToPlayer;
+	float walkingDistanceRight;
+	float walkingDistanceLeft;
 
 
 	std::map <std::string, Rectangle> currentCollisionTags;
@@ -64,6 +67,7 @@ public:
 	void handleCollisionsPlayer(PlayerMonkey& player) { CollisionWithRectangle(player); }
 
 	virtual void movement();
+	virtual void movement(PlayerMonkey player); // Overloaded movement for enemies that react to player position
 
 	void CollisionWithRectangle(GroundObject object);
 	void CollisionWithRectangle(PlayerMonkey& player);

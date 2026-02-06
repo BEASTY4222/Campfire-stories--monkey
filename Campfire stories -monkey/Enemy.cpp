@@ -7,8 +7,8 @@ Enemy::Enemy(const float& x, const  float& y, const  float& width, const  float&
 	speed(speed),
 	damage(damage), maxInvincibilityTime(2.0f), inlvincibilityTime(0.0f),
 	TAG{ "ENEMY" }, enemyTimeInAir(0.0f), nHitsBeforeInvcincibility(3), hit(false), facingRight(true),
-	animLeft(0), animRight(0), animTimeLeft(0.0f), animTimeRight(0.0f), standing(true), standTime(0.0f),
-	animIdle(0), animIdleTime(0.0f)
+	animLeft(0), animRight(0), animTimeLeft(0.0f), animTimeRight(0.0f), standing(false), standTime(0.0f),
+	animIdle(0), animIdleTime(0.0f), distanceToPlayer(0.0f), walkingDistanceRight(2600.0f), walkingDistanceLeft(1600.0f)
 	{}
 
 void Enemy::movement() {
@@ -25,9 +25,13 @@ void Enemy::movement() {
 	}
 }
 
-void Enemy::handleUpdates(PlayerMonkey player, World world) {
-	this->DrawEnemy();
+void Enemy::movement(PlayerMonkey player) {
+	// Default movement does not react to player
 	this->movement();
+}
+
+void Enemy::handleUpdates(PlayerMonkey player, World world) {
+	this->movement(player);
 	healthBar.width = hp;
 	healthBar.y = enemyBox.y - 20.0f;
 	healthBar.x = enemyBox.x - 150.0;

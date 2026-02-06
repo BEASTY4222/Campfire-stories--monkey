@@ -9,5 +9,5 @@ public:
 	
 	void DrawEnemy() override;
 
-	void movement() override;
+	void movement(PlayerMonkey player) override;
 };
