@@ -48,7 +48,13 @@ protected:
 	float distanceToPlayer;
 	float walkingDistanceRight;
 	float walkingDistanceLeft;
-
+	Rectangle hitbox;
+	bool hitting;
+	int animHitRight;
+	float animHitTimeRight;
+	int animHitLeft;
+	float animHitTimeLeft;
+	bool playerSeen;
 
 	std::map <std::string, Rectangle> currentCollisionTags;
 

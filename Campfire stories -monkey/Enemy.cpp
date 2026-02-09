@@ -8,7 +8,9 @@ Enemy::Enemy(const float& x, const  float& y, const  float& width, const  float&
 	damage(damage), maxInvincibilityTime(2.0f), inlvincibilityTime(0.0f),
 	TAG{ "ENEMY" }, enemyTimeInAir(0.0f), nHitsBeforeInvcincibility(3), hit(false), facingRight(true),
 	animLeft(0), animRight(0), animTimeLeft(0.0f), animTimeRight(0.0f), standing(false), standTime(0.0f),
-	animIdle(0), animIdleTime(0.0f), distanceToPlayer(0.0f), walkingDistanceRight(2600.0f), walkingDistanceLeft(1600.0f)
+	animIdle(0), animIdleTime(0.0f), distanceToPlayer(0.0f), walkingDistanceRight(2600.0f), walkingDistanceLeft(1600.0f),
+	hitbox{ 0,0,0,0 }, hitting(false), animHitRight(0), animHitTimeRight(0.0f), animHitLeft(0), animHitTimeLeft(0.0f),
+	playerSeen(false)
 	{}
 
 void Enemy::movement() {

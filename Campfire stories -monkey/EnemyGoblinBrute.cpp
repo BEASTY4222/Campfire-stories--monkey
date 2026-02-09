@@ -98,6 +98,8 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		animTimeLeft = 0.0f;
 		animTimeRight = 0.0f;
 
+		
+		
 		currentTexture = facingRight ? textureIdleRightArr[animIdle] : textureIdleLeftArr[animIdle];
 		standTime += GetFrameTime();
 		animIdleTime += GetFrameTime();
@@ -106,6 +108,9 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 			if (animIdle >= 5) animIdle = 0;
 			animIdleTime = 0.0f;
 		}
+
+		
+		
 
 		if (standTime > 2.0f) {
 			facingRight = !facingRight;
@@ -116,9 +121,13 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 	}
 
 	if (facingRight && !standing) {
-		if (enemyBox.x - player.getRectangle().x< 100) {
-			distanceToPlayer = player.getRectangle().x - enemyBox.x;
-			walkingDistanceLeft = distanceToPlayer;
+		if (enemyBox.x - player.getRectangle().x < 100 || playerSeen) {
+			playerSeen = true;
+			//distanceToPlayer = player.getRectangle().x - enemyBox.x;
+			//walkingDistanceLeft = distanceToPlayer;
+		}
+		else if (enemyBox.x - player.getRectangle().x > 100) {
+			playerSeen = false;
 		}
 		else { walkingDistanceLeft = 2600.0f; }
 
@@ -140,9 +149,12 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		}
 	}
 	else if(!facingRight && !standing) {
-		if (enemyBox.x - player.getRectangle().x > 100) {
-			distanceToPlayer = player.getRectangle().x - enemyBox.x;
-			walkingDistanceLeft = distanceToPlayer;
+		if (enemyBox.x - player.getRectangle().x > 100 || playerSeen) {
+			//distanceToPlayer = player.getRectangle().x - enemyBox.x;
+			//walkingDistanceLeft = distanceToPlayer;
+		}
+		else if (enemyBox.x - player.getRectangle().x < 100) {
+			playerSeen = false;
 		}
 		else { walkingDistanceLeft = 1600.0f; }
 		
@@ -167,5 +179,57 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		}
 	}
 
+	if (hitting) {
+		if (!facingRight) {
+			currentTexture = textureHitLeftArr[animHitLeft];
+			animHitTimeLeft += GetFrameTime();
+			if (animHitTimeLeft > 0.2f) {
+				animHitLeft++;
+				if (animHitLeft >= 5) { animHitLeft = 0, hitting = false; }
+			
+				animHitTimeLeft = 0.0f;
+			}
+
+			if (animHitRight == 4) {
+				hitbox.x = enemyBox.x - 50.0f;
+				hitbox.y = enemyBox.y + 20.0f;
+				hitbox.width = 50.0f;
+				hitbox.height = 20.0f;
+			}
+		}
+		else {
+			currentTexture = textureHitRightArr[animHitRight];
+			animHitTimeRight += GetFrameTime();
+			if (animHitTimeRight > 0.2f) {
+				animHitRight++;
+				if (animHitRight >= 5) { animHitRight = 0, hitting = false; }
+				animHitTimeRight = 0.0f;
+			}
+
+			if (animHitRight == 4) {
+				hitbox.x = enemyBox.x + 50.0f;
+				hitbox.y = enemyBox.y + 20.0f;
+				hitbox.width = 50.0f;
+				hitbox.height = 20.0f;
+			}
+		}
+		
+	}
 	
+	
+	if (playerSeen) {
+		if (facingRight) {
+			walkingDistanceRight = walkingDistanceRight = player.getRectangle().x - enemyBox.width - 10;
+		}
+		else {
+			walkingDistanceLeft = walkingDistanceRight = player.getRectangle().x + enemyBox.width + 10;
+		}
+	
+		if ((enemyBox.x == walkingDistanceRight) || enemyBox.x == walkingDistanceLeft) {
+			hitting = true;
+		}
+		else {
+			hitting = false;
+		}
+	}
 }
