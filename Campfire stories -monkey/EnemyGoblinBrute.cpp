@@ -92,7 +92,44 @@ void EnemyGoblinBrute::DrawEnemy() {
 }
 
 void EnemyGoblinBrute::movement(PlayerMonkey player) {
-	if (standing) {
+
+	if (hitting) {
+		if (!facingRight) {
+			currentTexture = textureHitLeftArr[animHitLeft];
+			animHitTimeLeft += GetFrameTime();
+			if (animHitTimeLeft > 0.2f) {
+				animHitLeft++;
+				if (animHitLeft >= 5) { 
+					animHitLeft = 0;
+					hitting = false; 
+				}
+
+				animHitTimeLeft = 0.0f;
+			}
+		}
+		else {
+			currentTexture = textureHitRightArr[animHitRight];
+			animHitTimeRight += GetFrameTime();
+			if (animHitTimeRight > 0.2f) {
+				animHitRight++;
+				if (animHitRight >= 5) { 
+					animHitRight = 0;
+					hitting = false;
+				}
+				animHitTimeRight = 0.0f;
+			}
+		}
+
+		if (animHitRight == 4) {
+			hitbox.x = enemyBox.x - 50.0f;
+			hitbox.y = enemyBox.y + 20.0f;
+			hitbox.width = 50.0f;
+			hitbox.height = 20.0f;
+		}
+
+	}
+
+	if (standing && !hitting) {
 		animLeft = 0;
 		animRight = 0;
 		animTimeLeft = 0.0f;
@@ -120,8 +157,26 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		}
 	}
 
+	if (playerSeen) {
+		if (facingRight) {
+			walkingDistanceRight = walkingDistanceRight = player.getRectangle().x - enemyBox.width - 80;
+		}
+		else {
+			walkingDistanceLeft = walkingDistanceRight = player.getRectangle().x + enemyBox.width + 80;
+		}
+
+		closeDistanceToPlayer = abs((player.getRectangle().x - enemyBox.x) - 80);
+
+		if (closeDistanceToPlayer < 80) {
+			hitting = true;
+		}
+		else {
+			hitting = false;
+		}
+	}
+
 	if (facingRight && !standing) {
-		if (enemyBox.x - player.getRectangle().x < 100 || playerSeen) {
+		if (enemyBox.x - player.getRectangle().x < 200 || playerSeen) {
 			playerSeen = true;
 			//distanceToPlayer = player.getRectangle().x - enemyBox.x;
 			//walkingDistanceLeft = distanceToPlayer;
@@ -141,7 +196,7 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 			if (animRight >= 6) animRight = 0;
 			animTimeRight = 0.0f;
 		}
-		if (enemyBox.x > walkingDistanceRight) {
+		if (enemyBox.x > walkingDistanceRight && !hitting) {
 			standing = true;
 		}else{
 			standing = false;
@@ -149,7 +204,7 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		}
 	}
 	else if(!facingRight && !standing) {
-		if (enemyBox.x - player.getRectangle().x > 100 || playerSeen) {
+		if (enemyBox.x - player.getRectangle().x > 200 || playerSeen) {
 			//distanceToPlayer = player.getRectangle().x - enemyBox.x;
 			//walkingDistanceLeft = distanceToPlayer;
 		}
@@ -170,7 +225,7 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		}
 
 
-		if (enemyBox.x < walkingDistanceLeft) {
+		if (enemyBox.x < walkingDistanceLeft && !hitting) {
 			standing = true;
 		}
 		else {
@@ -179,57 +234,8 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		}
 	}
 
-	if (hitting) {
-		if (!facingRight) {
-			currentTexture = textureHitLeftArr[animHitLeft];
-			animHitTimeLeft += GetFrameTime();
-			if (animHitTimeLeft > 0.2f) {
-				animHitLeft++;
-				if (animHitLeft >= 5) { animHitLeft = 0, hitting = false; }
-			
-				animHitTimeLeft = 0.0f;
-			}
 
-			if (animHitRight == 4) {
-				hitbox.x = enemyBox.x - 50.0f;
-				hitbox.y = enemyBox.y + 20.0f;
-				hitbox.width = 50.0f;
-				hitbox.height = 20.0f;
-			}
-		}
-		else {
-			currentTexture = textureHitRightArr[animHitRight];
-			animHitTimeRight += GetFrameTime();
-			if (animHitTimeRight > 0.2f) {
-				animHitRight++;
-				if (animHitRight >= 5) { animHitRight = 0, hitting = false; }
-				animHitTimeRight = 0.0f;
-			}
-
-			if (animHitRight == 4) {
-				hitbox.x = enemyBox.x + 50.0f;
-				hitbox.y = enemyBox.y + 20.0f;
-				hitbox.width = 50.0f;
-				hitbox.height = 20.0f;
-			}
-		}
-		
-	}
 	
 	
-	if (playerSeen) {
-		if (facingRight) {
-			walkingDistanceRight = walkingDistanceRight = player.getRectangle().x - enemyBox.width - 10;
-		}
-		else {
-			walkingDistanceLeft = walkingDistanceRight = player.getRectangle().x + enemyBox.width + 10;
-		}
 	
-		if ((enemyBox.x == walkingDistanceRight) || enemyBox.x == walkingDistanceLeft) {
-			hitting = true;
-		}
-		else {
-			hitting = false;
-		}
-	}
 }
