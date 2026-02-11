@@ -92,18 +92,30 @@ void EnemyGoblinBrute::DrawEnemy() {
 }
 
 void EnemyGoblinBrute::movement(PlayerMonkey player) {
+	if (playerSeen) {
+		walkingDistanceRight = player.getRectangle().x - enemyBox.width + 60;
+		walkingDistanceLeft = player.getRectangle().x + enemyBox.width - 60;
 
-	if (hitting) {
+		closeDistanceToPlayer = abs(player.getRectangle().x - enemyBox.x + 60);
+
+		if (closeDistanceToPlayer <= 80) {
+			hitting = true;
+		}
+		else {
+			hitting = false;
+		}
+	}
+
+	if (hitting && attackCD >= 1.0f) {
 		if (!facingRight) {
 			currentTexture = textureHitLeftArr[animHitLeft];
 			animHitTimeLeft += GetFrameTime();
 			if (animHitTimeLeft > 0.2f) {
 				animHitLeft++;
-				if (animHitLeft >= 5) { 
+				if (animHitLeft >= 4) { 
 					animHitLeft = 0;
-					hitting = false; 
+					attackCD = 0.0f;
 				}
-
 				animHitTimeLeft = 0.0f;
 			}
 		}
@@ -112,9 +124,9 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 			animHitTimeRight += GetFrameTime();
 			if (animHitTimeRight > 0.2f) {
 				animHitRight++;
-				if (animHitRight >= 5) { 
+				if (animHitRight >= 4) { 
 					animHitRight = 0;
-					hitting = false;
+					attackCD = 0.0f;
 				}
 				animHitTimeRight = 0.0f;
 			}
@@ -126,7 +138,12 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 			hitbox.width = 50.0f;
 			hitbox.height = 20.0f;
 		}
+	}
+	else if (hitting && attackCD < 1.0f){
+		hitting = false;
+		standing = true;
 
+		hitbox = { 0,0,0,0 };
 	}
 
 	if (standing && !hitting) {
@@ -135,8 +152,6 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		animTimeLeft = 0.0f;
 		animTimeRight = 0.0f;
 
-		
-		
 		currentTexture = facingRight ? textureIdleRightArr[animIdle] : textureIdleLeftArr[animIdle];
 		standTime += GetFrameTime();
 		animIdleTime += GetFrameTime();
@@ -146,9 +161,6 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 			animIdleTime = 0.0f;
 		}
 
-		
-		
-
 		if (standTime > 2.0f) {
 			facingRight = !facingRight;
 			standing = false;
@@ -157,29 +169,9 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		}
 	}
 
-	if (playerSeen) {
-		if (facingRight) {
-			walkingDistanceRight = walkingDistanceRight = player.getRectangle().x - enemyBox.width - 80;
-		}
-		else {
-			walkingDistanceLeft = walkingDistanceRight = player.getRectangle().x + enemyBox.width + 80;
-		}
-
-		closeDistanceToPlayer = abs((player.getRectangle().x - enemyBox.x) - 80);
-
-		if (closeDistanceToPlayer < 80) {
-			hitting = true;
-		}
-		else {
-			hitting = false;
-		}
-	}
-
-	if (facingRight && !standing) {
+	if (facingRight && !standing && !hitting) {
 		if (enemyBox.x - player.getRectangle().x < 200 || playerSeen) {
 			playerSeen = true;
-			//distanceToPlayer = player.getRectangle().x - enemyBox.x;
-			//walkingDistanceLeft = distanceToPlayer;
 		}
 		else if (enemyBox.x - player.getRectangle().x > 100) {
 			playerSeen = false;
@@ -198,15 +190,15 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		}
 		if (enemyBox.x > walkingDistanceRight && !hitting) {
 			standing = true;
-		}else{
+		}
+		else if(!hitting){
 			standing = false;
 			this->enemyBox.x += speed;
 		}
 	}
-	else if(!facingRight && !standing) {
+	else if(!facingRight && !standing && !hitting) {
 		if (enemyBox.x - player.getRectangle().x > 200 || playerSeen) {
-			//distanceToPlayer = player.getRectangle().x - enemyBox.x;
-			//walkingDistanceLeft = distanceToPlayer;
+			playerSeen = true;
 		}
 		else if (enemyBox.x - player.getRectangle().x < 100) {
 			playerSeen = false;
@@ -228,14 +220,9 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		if (enemyBox.x < walkingDistanceLeft && !hitting) {
 			standing = true;
 		}
-		else {
+		else if(!hitting){
 			standing = false;
 			this->enemyBox.x -= speed;
 		}
 	}
-
-
-	
-	
-	
 }

@@ -22,7 +22,7 @@ int main() {
 
     PlayerMonkey Monkey;
     //          hp(hp), speed(speed), damage(damage), enemyBox{ x, y, width, hegiht }
-    EnemyGoblinBrute goblin(1500.0f, 600.0f, 80.0f, 200.0f, 400.0f, 3.0f, 100.0f);
+    EnemyGoblinBrute goblin(1500.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 100.0f);
     World gameWorld;
 
     // Main game loop

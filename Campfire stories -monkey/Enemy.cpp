@@ -10,7 +10,7 @@ Enemy::Enemy(const float& x, const  float& y, const  float& width, const  float&
 	animLeft(0), animRight(0), animTimeLeft(0.0f), animTimeRight(0.0f), standing(false), standTime(0.0f),
 	animIdle(0), animIdleTime(0.0f), distanceToPlayer(0.0f), walkingDistanceRight(2600.0f), walkingDistanceLeft(1600.0f),
 	hitbox{ 0,0,0,0 }, hitting(false), animHitRight(0), animHitTimeRight(0.0f), animHitLeft(0), animHitTimeLeft(0.0f),
-	playerSeen(false), closeDistanceToPlayer(0)
+	playerSeen(false), closeDistanceToPlayer(0), attackCD(1.0f)
 	{}
 
 void Enemy::movement() {
@@ -36,10 +36,13 @@ void Enemy::handleUpdates(PlayerMonkey player, World world) {
 	this->movement(player);
 	healthBar.width = hp;
 	healthBar.y = enemyBox.y - 20.0f;
-	healthBar.x = enemyBox.x - 150.0;
+	healthBar.x = enemyBox.x - 25.0;
 	this->CollisionWithRectangle(world.getMainGround());
 	this->CollisionWithRectangle(player);
 	inlvincibilityTime += GetFrameTime();
+	if(attackCD < 1.0f && !hitting){ 
+		attackCD += GetFrameTime(); 
+	}
 }
 
 void Enemy::CollisionWithRectangle(GroundObject object) {

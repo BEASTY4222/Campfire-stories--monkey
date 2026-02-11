@@ -56,6 +56,7 @@ protected:
 	float animHitTimeLeft;
 	bool playerSeen;
 	int closeDistanceToPlayer;
+	float attackCD;
 
 	std::map <std::string, Rectangle> currentCollisionTags;
 
