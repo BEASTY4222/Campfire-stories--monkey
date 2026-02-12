@@ -57,6 +57,7 @@ protected:
 	bool playerSeen;
 	int closeDistanceToPlayer;
 	float attackCD;
+	bool rotate;
 
 	std::map <std::string, Rectangle> currentCollisionTags;
 
