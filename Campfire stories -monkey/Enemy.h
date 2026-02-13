@@ -58,6 +58,8 @@ protected:
 	int closeDistanceToPlayer;
 	float attackCD;
 	bool rotate;
+	float viewDistanceFoward;
+	float viewDistanceBackwards;
 
 	std::map <std::string, Rectangle> currentCollisionTags;
 
@@ -66,6 +68,10 @@ protected:
 
 		DrawRectangleRec(healthBar, LIME);// health
 	}
+	virtual void playerSeenFunc(PlayerMonkey player);
+
+	virtual void handleAttacking();
+	virtual void handleStanding();
 public:
 	Enemy(const float& x, const  float& y, const  float& width, const  float& hegiht, const float& hp, const  float& speed, const  float& damage);
 

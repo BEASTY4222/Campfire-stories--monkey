@@ -127,6 +127,7 @@
     <ClCompile Include="EnemyGoblinBrute.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Village.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -136,6 +137,7 @@
     <ClInclude Include="EnemyGoblinBrute.h" />
     <ClInclude Include="GroundObject.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Village.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

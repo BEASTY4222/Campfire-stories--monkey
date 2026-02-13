@@ -27,6 +27,9 @@
     <ClCompile Include="EnemyGoblinBrute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Village.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EnemyGoblinBrute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Village.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

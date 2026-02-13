@@ -10,8 +10,18 @@ Enemy::Enemy(const float& x, const  float& y, const  float& width, const  float&
 	animLeft(0), animRight(0), animTimeLeft(0.0f), animTimeRight(0.0f), standing(false), standTime(0.0f),
 	animIdle(0), animIdleTime(0.0f), distanceToPlayer(0.0f), walkingDistanceRight(2600.0f), walkingDistanceLeft(1600.0f),
 	hitbox{ 0,0,0,0 }, hitting(false), animHitRight(0), animHitTimeRight(0.0f), animHitLeft(0), animHitTimeLeft(0.0f),
-	playerSeen(false), closeDistanceToPlayer(0), attackCD(1.0f), rotate(true)
+	playerSeen(false), closeDistanceToPlayer(0), attackCD(1.0f), rotate(true), viewDistanceFoward(200.0f), viewDistanceBackwards(100.0f)
 	{}
+
+void Enemy::playerSeenFunc(PlayerMonkey player) {
+	// Default implementation does nothing, can be overridden in derived classes
+}
+void Enemy::handleAttacking() {
+	// Default implementation does nothing, can be overridden in derived classes
+}
+void Enemy::handleStanding() {
+	// Default implementation does nothing, can be overridden in derived classes
+}
 
 void Enemy::movement() {
 	// Basic left-right patrol movement (can be overridden in derived classes)
