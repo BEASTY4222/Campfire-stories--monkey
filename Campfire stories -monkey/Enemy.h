@@ -60,7 +60,7 @@ protected:
 	bool rotate;
 	float viewDistanceFoward;
 	float viewDistanceBackwards;
-	bool standingAnim;
+	bool inCombat;
 
 	std::map <std::string, Rectangle> currentCollisionTags;
 

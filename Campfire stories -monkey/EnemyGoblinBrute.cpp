@@ -93,22 +93,25 @@ void EnemyGoblinBrute::DrawEnemy() {
 
 void EnemyGoblinBrute::playerSeenFunc(PlayerMonkey player) {
 	if (playerSeen) {
-		walkingDistanceRight = player.getRectangle().x - enemyBox.width;
-		walkingDistanceLeft = player.getRectangle().x + enemyBox.width - 10;
+		walkingDistanceRight = player.getRectangle().x - enemyBox.width - 70;
+		walkingDistanceLeft = player.getRectangle().x + enemyBox.width + 150;
 
-		closeDistanceToPlayer = abs(player.getRectangle().x - enemyBox.x);
+		closeDistanceToPlayer = abs(player.getRectangle().x - enemyBox.x - 70);
 
-		if (closeDistanceToPlayer <= 100) {
+		if (closeDistanceToPlayer <= 80 || animHitLeft > 0 || animHitRight > 0) {
 			hitting = true;
+			inCombat = true;
+			standTime = 0.0f;
 		}
 		else {
 			hitting = false;
+			inCombat = false;
 		}
 	}
 }
 
 void EnemyGoblinBrute::handleAttacking() {
-	if (hitting && attackCD >= 1.0f) {
+	if (hitting && attackCD >= 2.0f) {
 		if (!facingRight) {
 			currentTexture = textureHitLeftArr[animHitLeft];
 			animHitTimeLeft += GetFrameTime();
@@ -141,9 +144,12 @@ void EnemyGoblinBrute::handleAttacking() {
 			hitbox.height = 20.0f;
 		}
 	}
-	else if (hitting && attackCD < 1.0f) {
+	else if (hitting && attackCD < 2.0f) {
 		hitting = false;
-		standingAnim = true;
+		standing = true;
+		animHitLeft = 0;
+		animHitRight = 0;
+
 
 		hitbox = { 0,0,0,0 };
 	}
@@ -155,16 +161,7 @@ void EnemyGoblinBrute::handleStanding() {
 		animRight = 0;
 		animTimeLeft = 0.0f;
 		animTimeRight = 0.0f;
-	
-		if (standTime > 2.0f) {
-			facingRight = !facingRight;
-			standing = false;
-			standTime = 0.0f;
-			animIdle = 0;
-		}
-	}
 
-	if (standing || standingAnim) {
 		currentTexture = facingRight ? textureIdleRightArr[animIdle] : textureIdleLeftArr[animIdle];
 		standTime += GetFrameTime();
 		animIdleTime += GetFrameTime();
@@ -173,6 +170,14 @@ void EnemyGoblinBrute::handleStanding() {
 			if (animIdle >= 5) animIdle = 0;
 			animIdleTime = 0.0f;
 		}
+	
+		if (standTime > 2.0f && !inCombat) {
+			facingRight = !facingRight;
+			standing = false;
+			standTime = 0.0f;
+			animIdle = 0;
+		}
+		
 	}
 }
 
@@ -183,9 +188,11 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 
 	handleStanding();
 
-	if (facingRight && !standing && !hitting && !standingAnim) {
+	if (facingRight && !standing && !hitting) {
 		if (player.getRectangle().x - enemyBox.x <= viewDistanceFoward && player.getRectangle().x - enemyBox.x >= viewDistanceBackwards) {
 			playerSeen = true;
+			viewDistanceFoward = 500.0f;
+			viewDistanceBackwards = 150.0f;
 		}
 		else { 
 			walkingDistanceRight = 2600.0f; 
@@ -211,9 +218,11 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 			this->enemyBox.x += speed;
 		}
 	}
-	else if(!facingRight && !standing && !hitting && !standingAnim) {
+	else if(!facingRight && !standing && !hitting) {
 		if (player.getRectangle().x - enemyBox.x <= viewDistanceFoward && player.getRectangle().x - enemyBox.x >= viewDistanceBackwards) {
 			playerSeen = true;
+			viewDistanceFoward = 500.0f;
+			viewDistanceBackwards = 150.0f;
 		}
 		else { 
 			walkingDistanceLeft = 1600.0f; 
