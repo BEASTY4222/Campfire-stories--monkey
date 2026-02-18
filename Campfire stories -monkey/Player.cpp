@@ -1,4 +1,5 @@
 #include "Player.h"
+#include"iostream"
 
 PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },// Player rectangle
 mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },// Camera
@@ -104,7 +105,12 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 								LoadImage("spritesMonkey/dashAnim/dashRight/dashRight3.png") },
 	dashPlayerImageLeftArr{ LoadImage("spritesMonkey/dashAnim/dashLeft/dashLeft1.png"), LoadImage("spritesMonkey/dashAnim/dashLeft/dashLeft2.png"),
 								LoadImage("spritesMonkey/dashAnim/dashLeft/dashLeft3.png") },
+
 	currPlayerTexture(LoadTextureFromImage(idleAnimRightArr[0])), currPlayerImage(idleAnimRightArr[0]),// CURR PLAYER TEXTURE & IMAGE
+
+	// Sounds & music
+	lightAttackSound{ LoadSound("spritesMonkey/hitAnim/hitSound.mp3") },
+	soundPlayed(false),
 
 	//PLAYER TEXTURE ARRAYS
 	// Idle left & right
@@ -226,7 +232,10 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 	lightAttackHitBox{ 0, 0, 0, 0 }, lightAttackDamage(30.0f), hitting(false), 
 	lightAttack1Used(false), lightAttack2Used(false), lightAttack3Used(false), lightAttack4Used(false),
 	lightAttack5Used(false), lightAttack6Used(false), lightAttack7Used(false), lightAttack8Used(false)
-		{}
+	{
+		SetSoundVolume(lightAttackSound, 0.5f);
+	
+	}
 // Handlers
 // Movement handler
 void PlayerMonkey::handlePlayerActions() {
@@ -283,8 +292,12 @@ void::PlayerMonkey::hittingLogic() {
 		else {
 			currPlayerImage = hit1PlayerImageLeftArr[animHit];
 			currPlayerTexture = hit1PlayerTextureLeftArr[animHit];
+		}		
+
+		if (!soundPlayed) {
+			PlaySound(lightAttackSound);
+			soundPlayed = true;
 		}
-		
 
 		animTimeHit += GetFrameTime();
 		if (animTimeHit > 0.1f) {
@@ -293,6 +306,7 @@ void::PlayerMonkey::hittingLogic() {
 					animHit = 0;
 					animTimeHit = 0.0f;
 					lightAttack1Used = true;
+					soundPlayed = false;
 				}
 			}
 			else {
@@ -313,6 +327,10 @@ void::PlayerMonkey::hittingLogic() {
 			currPlayerTexture = hit2PlayerTextureLeftArr[animHit];
 		}
 		
+		if (!soundPlayed) {
+			PlaySound(lightAttackSound);
+			soundPlayed = true;
+		}
 
 		animTimeHit += GetFrameTime();
 		if (animTimeHit > 0.1f) {
@@ -321,6 +339,7 @@ void::PlayerMonkey::hittingLogic() {
 					animHit = 0;
 					animTimeHit = 0.0f;
 					lightAttack2Used = true;
+					soundPlayed = false;
 				}
 			}
 			else {
@@ -341,6 +360,10 @@ void::PlayerMonkey::hittingLogic() {
 			currPlayerTexture = hit3PlayerTextureLeftArr[animHit];
 		}
 		
+		if (!soundPlayed) {
+			PlaySound(lightAttackSound);
+			soundPlayed = true;
+		}
 
 		animTimeHit += GetFrameTime();
 		if (animTimeHit > 0.15f) {
@@ -349,6 +372,7 @@ void::PlayerMonkey::hittingLogic() {
 					animHit = 0;
 					animTimeHit = 0.0f;
 					lightAttack3Used = true;
+					soundPlayed = false;
 				}
 			}
 			else {
@@ -369,6 +393,10 @@ void::PlayerMonkey::hittingLogic() {
 			currPlayerTexture = hit4PlayerTextureLeftArr[animHit];
 		}
 
+		if (!soundPlayed) {
+			PlaySound(lightAttackSound);
+			soundPlayed = true;
+		}
 
 		animTimeHit += GetFrameTime();
 		if (animTimeHit > 0.1f) {
@@ -377,6 +405,7 @@ void::PlayerMonkey::hittingLogic() {
 					animHit = 0;
 					animTimeHit = 0.0f;
 					lightAttack4Used = true;
+					soundPlayed = false;
 				}
 			}
 			else {
@@ -397,6 +426,10 @@ void::PlayerMonkey::hittingLogic() {
 			currPlayerTexture = hit5PlayerTextureLeftArr[animHit];
 		}
 
+		if (!soundPlayed) {
+			PlaySound(lightAttackSound);
+			soundPlayed = true;
+		}
 
 		animTimeHit += GetFrameTime();
 		if (animTimeHit > 0.1f) {
@@ -405,6 +438,7 @@ void::PlayerMonkey::hittingLogic() {
 					animHit = 0;
 					animTimeHit = 0.0f;
 					lightAttack5Used = true;
+					soundPlayed = false;
 				}
 			}
 			else {
@@ -425,6 +459,10 @@ void::PlayerMonkey::hittingLogic() {
 			currPlayerTexture = hit6PlayerTextureLeftArr[animHit];
 		}
 
+		if (!soundPlayed) {
+			PlaySound(lightAttackSound);
+			soundPlayed = true;
+		}
 
 		animTimeHit += GetFrameTime();
 		if (animTimeHit > 0.1f) {
@@ -433,6 +471,7 @@ void::PlayerMonkey::hittingLogic() {
 					animHit = 0;
 					animTimeHit = 0.0f;
 					lightAttack6Used = true;
+					soundPlayed = false;
 				}
 			}
 			else {
@@ -453,6 +492,10 @@ void::PlayerMonkey::hittingLogic() {
 			currPlayerTexture = hit7PlayerTextureLeftArr[animHit];
 		}
 
+		if (!soundPlayed) {
+			PlaySound(lightAttackSound);
+			soundPlayed = true;
+		}
 
 		animTimeHit += GetFrameTime();
 		if (animTimeHit > 0.1f) {
@@ -461,6 +504,7 @@ void::PlayerMonkey::hittingLogic() {
 					animHit = 0;
 					animTimeHit = 0.0f;
 					lightAttack7Used = true;
+					soundPlayed = false;
 				}
 			}
 			else {
@@ -481,6 +525,10 @@ void::PlayerMonkey::hittingLogic() {
 			currPlayerTexture = hit8PlayerTextureLeftArr[animHit];
 		}
 
+		if (!soundPlayed) {
+			PlaySound(lightAttackSound);
+			soundPlayed = true;
+		}
 
 		animTimeHit += GetFrameTime();
 		if (animTimeHit > 0.1f) {
@@ -489,6 +537,7 @@ void::PlayerMonkey::hittingLogic() {
 					animHit = 0;
 					animTimeHit = 0.0f;
 					lightAttack8Used = true;
+					soundPlayed = false;
 				}
 			}
 			else {
@@ -971,11 +1020,14 @@ void PlayerMonkey::CollisionWithRectangle(Enemy enemy) {
 				if (currInvincibilityTime >= 2.0f) {
 					currHealth -= enemy.getDamage();
 					currInvincibilityTime = 0.0f;
-				}
-					
+				}	
 			}
-			
 		}
-
+	}
+	else if (CheckCollisionRecs(this->PlayerBox, enemy.getHitbox())) {
+		if (currInvincibilityTime >= 2.0f) {
+			currHealth -= enemy.getDamage();
+			currInvincibilityTime = 0.0f;
+		}
 	}
 }

@@ -95,6 +95,7 @@ public:
 	inline Rectangle& getRectangle() { return enemyBox; } // Non-const getter
 	inline std::map<std::string, Rectangle> getCurrentCollisionTags() { return currentCollisionTags; } // Non-const getter
 	inline Rectangle getHealhBar() const { return healthBar; }
+	inline Rectangle getHitbox() const { return hitbox; }
 
 };
 

@@ -89,6 +89,9 @@ EnemyGoblinBrute::EnemyGoblinBrute(const float& x, const float& y, const float& 
 void EnemyGoblinBrute::DrawEnemy() {
 	DrawTexture(currentTexture, enemyBox.x, enemyBox.y + 10, WHITE);
 	DrawRectangleRec(this->getHealhBar(), LIME);// health
+
+	//attack hitbox for testing
+	//DrawRectangleRec(hitbox, BLUE);
 }
 
 void EnemyGoblinBrute::playerSeenFunc(PlayerMonkey player) {
@@ -123,6 +126,13 @@ void EnemyGoblinBrute::handleAttacking() {
 				}
 				animHitTimeLeft = 0.0f;
 			}
+
+			if (animHitLeft == 3) {
+				hitbox.x = enemyBox.x - 50.0f;
+				hitbox.y = enemyBox.y + 20.0f;
+				hitbox.width = 50.0f;
+				hitbox.height = 20.0f;
+			}
 		}
 		else {
 			currentTexture = textureHitRightArr[animHitRight];
@@ -135,14 +145,16 @@ void EnemyGoblinBrute::handleAttacking() {
 				}
 				animHitTimeRight = 0.0f;
 			}
+
+			if (animHitRight == 3) {
+				hitbox.x = enemyBox.x + 130.0f;
+				hitbox.y = enemyBox.y + 30.0f;
+				hitbox.width = 80.0f;
+				hitbox.height = 120.0f;
+			}
 		}
 
-		if (animHitRight == 4) {
-			hitbox.x = enemyBox.x - 50.0f;
-			hitbox.y = enemyBox.y + 20.0f;
-			hitbox.width = 50.0f;
-			hitbox.height = 20.0f;
-		}
+		
 	}
 	else if (hitting && attackCD < 2.0f) {
 		hitting = false;

@@ -140,6 +140,8 @@ class PlayerMonkey{
 	// Collison
 	std::map <std::string, Rectangle> currentCollisionTags;
 	// Combat vars
+	Sound lightAttackSound;
+	bool soundPlayed;
 	Rectangle lightAttackHitBox;
 	float lightAttackDamage;
 	bool lightAttack1Used, lightAttack2Used, lightAttack3Used, lightAttack4Used, lightAttack5Used, lightAttack6Used, lightAttack7Used, lightAttack8Used;

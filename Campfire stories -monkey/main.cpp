@@ -14,6 +14,7 @@ int main() {
     const int screenHeight = 1080;
 
     InitWindow(screenWidth, screenHeight, "Campfire stories: Monkey");
+    InitAudioDevice();
 
     SetTargetFPS(60);  // Set the game to run at 60 frames per second
 
@@ -22,7 +23,7 @@ int main() {
 
     PlayerMonkey Monkey;
     //          hp(hp), speed(speed), damage(damage), enemyBox{ x, y, width, hegiht }
-    EnemyGoblinBrute goblin(1500.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 100.0f);
+    EnemyGoblinBrute goblin(1500.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f);
     World gameWorld;
 
     // Main game loop
