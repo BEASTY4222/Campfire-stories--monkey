@@ -5,6 +5,7 @@
 #include "Enemy.h"
 #include "EnemyGoblinBrute.h"
 #include "World.h"
+#include "Village.h"
 
 
 int main() {
@@ -23,16 +24,19 @@ int main() {
 
     PlayerMonkey Monkey;
     //          hp(hp), speed(speed), damage(damage), enemyBox{ x, y, width, hegiht }
-    EnemyGoblinBrute goblin(1500.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f);
+    EnemyGoblinBrute goblinFront(7400.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f);
+	EnemyGoblinBrute goblinMiddle(8000.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f);
+	EnemyGoblinBrute goblinBack(8600.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f);
     World gameWorld;
+	Village village;
 
     // Main game loop
     while (!WindowShouldClose()) {  // Detect window close button or ESC key
         // Update
         // Update variables here
 
-		Monkey.handleUpdates(gameWorld, goblin);
-        goblin.handleUpdates(Monkey, gameWorld);
+		Monkey.handleUpdates(gameWorld, goblinFront);
+        goblinFront.handleUpdates(Monkey, gameWorld);
 
         // Draw
         BeginDrawing();
@@ -40,10 +44,12 @@ int main() {
         BeginMode2D(Monkey.getCamera());
 
 
-		gameWorld.handleWorld(goblin.getRectangle(), goblin.getCurrentCollisionTags(), goblin.getAirTime());
+		gameWorld.handleWorld(goblinFront.getRectangle(), goblinFront.getCurrentCollisionTags(), goblinFront.getAirTime());
         gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags(), Monkey.getTimeInAir());
+        village.DrawVillageBackHouses();
         Monkey.handlePlayerVisuals();
         goblin.handleEnemy();
+        village.DrawVillageFrontHouses();
 
 
         EndMode2D();

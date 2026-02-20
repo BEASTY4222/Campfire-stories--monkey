@@ -1,7 +1,7 @@
 #include "Player.h"
 #include"iostream"
 
-PlayerMonkey::PlayerMonkey() : PlayerBox{ 1000.0f, 800.0f,80.0f, 150.0f },// Player rectangle
+PlayerMonkey::PlayerMonkey() : PlayerBox{ 10000.0f, 800.0f,80.0f, 150.0f },// Player rectangle
 mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },// Camera
 jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 1200.0f }, doubleJumpPower{ 800.0f }, timeInAir(0.0f),// Jumping vars
 dashCooldown{ 2.0f }, dashPower{ 1000.0f }, dashProgress(0.0f), isDashing(false), timeDashing(0.0f),// Dash vars

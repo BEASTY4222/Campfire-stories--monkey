@@ -14,5 +14,6 @@ private:
 
 public:
 	Village();
-	void DrawVillage();
+	void DrawVillageBackHouses();
+	void DrawVillageFrontHouses();
 };

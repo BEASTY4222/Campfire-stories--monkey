@@ -23,14 +23,13 @@ class World {
 
 	void drawWorld() {
 		float spaceBetween = 0.0f;
-		for (int i = 0; i < 10;i++) {
+		for (int i = 0; i < 15;i++) {
 			DrawTexture(startingSkyTexture, spaceBetween, 0.0f, WHITE);
 			DrawTexture(startingForestBackgroundTreesTexture, spaceBetween, 0.0f, WHITE);
 			DrawTexture(startingForestTreesTexture, spaceBetween, 0.0f, WHITE);
 			DrawTexture(startingForestGroundTexture, spaceBetween, 750.0f, WHITE);
 			spaceBetween += 1000.0f;
 		}
-		//mainGround.drawObject(10);
 	}
 	
 public:

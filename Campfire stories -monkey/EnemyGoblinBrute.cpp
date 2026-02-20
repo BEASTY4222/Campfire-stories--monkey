@@ -207,7 +207,7 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 			viewDistanceBackwards = 150.0f;
 		}
 		else { 
-			walkingDistanceRight = 2600.0f; 
+			walkingDistanceRight = 7500.0f; 
 			playerSeen = false;
 		}
 
@@ -237,7 +237,7 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 			viewDistanceBackwards = 150.0f;
 		}
 		else { 
-			walkingDistanceLeft = 1600.0f; 
+			walkingDistanceLeft = 7000.0f; 
 			playerSeen = false;
 		}
 		
