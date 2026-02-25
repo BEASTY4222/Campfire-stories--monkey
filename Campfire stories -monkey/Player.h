@@ -166,7 +166,6 @@ class PlayerMonkey{
 	}
 
 	inline void handleCamera() { this->mainCamera.target.x = { this->PlayerBox.x }; }
-	void handlePlayerActions();
 	void handleHitting();
 	void hittingLogic();
 	void hittingHitbox();
@@ -179,6 +178,7 @@ public:
 	PlayerMonkey();
 
 	// Handlers
+	void handlePlayerActions();// for handling player actions like movement, hitting, etc
 	void handleUpdates(World world, Enemy& enemy);// for vars that need to be updated every frame
 	void handlePlayerVisuals();// visuals
 	void handleBars();// stamina, hp, mana bars...

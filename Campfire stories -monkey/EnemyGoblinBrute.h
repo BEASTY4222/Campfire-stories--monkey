@@ -7,10 +7,12 @@ class EnemyGoblinBrute : public Enemy {
 	void handleAttacking() override;
 	void handleStanding() override;
 public:
-	EnemyGoblinBrute(const float& x, const float& y, const float& width, const float& hegiht, const float& hp, const float& speed, const float& damage);
+	EnemyGoblinBrute(const float& x, const float& y, const float& width, const float& hegiht, const float& hp, const float& speed, const float& damage, const float& walkingDistanceRight, const float& walkingDistanceLeft);
 
 	void DrawEnemy() override;
 
 	void movement(PlayerMonkey player) override;
+
+	~Enemy() override;
 
 };

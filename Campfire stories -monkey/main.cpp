@@ -24,9 +24,9 @@ int main() {
 
     PlayerMonkey Monkey;
     //          hp(hp), speed(speed), damage(damage), enemyBox{ x, y, width, hegiht }
-    EnemyGoblinBrute goblinFront(7400.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f);
-	EnemyGoblinBrute goblinMiddle(8000.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f);
-	EnemyGoblinBrute goblinBack(8600.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f);
+    EnemyGoblinBrute goblinFront(7400.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f,7000.0f, 7500.0f);
+	EnemyGoblinBrute goblinMiddle(8000.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f, 7600.0f, 8100.0f);
+	EnemyGoblinBrute goblinBack(8600.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f, 8200.0f, 8700.0f);
     World gameWorld;
 	Village village;
 
@@ -34,9 +34,15 @@ int main() {
     while (!WindowShouldClose()) {  // Detect window close button or ESC key
         // Update
         // Update variables here
+		Monkey.handlePlayerActions();
 
 		Monkey.handleUpdates(gameWorld, goblinFront);
+        Monkey.handleUpdates(gameWorld, goblinMiddle);
+		Monkey.handleUpdates(gameWorld, goblinBack);
+
         goblinFront.handleUpdates(Monkey, gameWorld);
+		goblinMiddle.handleUpdates(Monkey, gameWorld);
+		goblinBack.handleUpdates(Monkey, gameWorld);
 
         // Draw
         BeginDrawing();
@@ -45,10 +51,18 @@ int main() {
 
 
 		gameWorld.handleWorld(goblinFront.getRectangle(), goblinFront.getCurrentCollisionTags(), goblinFront.getAirTime());
+		gameWorld.handleWorld(goblinMiddle.getRectangle(), goblinMiddle.getCurrentCollisionTags(), goblinMiddle.getAirTime());
+		gameWorld.handleWorld(goblinBack.getRectangle(), goblinBack.getCurrentCollisionTags(), goblinBack.getAirTime());
+
         gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags(), Monkey.getTimeInAir());
+
         village.DrawVillageBackHouses();
+
         Monkey.handlePlayerVisuals();
-        goblin.handleEnemy();
+        goblinFront.handleEnemy();
+		goblinMiddle.handleEnemy();
+		goblinBack.handleEnemy();
+
         village.DrawVillageFrontHouses();
 
 

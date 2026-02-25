@@ -1,7 +1,7 @@
 #include "EnemyGoblinBrute.h"
 
-EnemyGoblinBrute::EnemyGoblinBrute(const float& x, const float& y, const float& width, const float& hegiht, const float& hp, const float& speed, const float& damage)
-	: Enemy(x, y, width, hegiht, hp, speed, damage)
+EnemyGoblinBrute::EnemyGoblinBrute(const float& x, const float& y, const float& width, const float& hegiht, const float& hp, const float& speed, const float& damage, const float& walkingDistanceRight, const float& walkingDistanceLeft)
+	: Enemy(x, y, width, hegiht, hp, speed, damage, walkingDistanceLeft, walkingDistanceRight)
 	
 {
 	// Assign images to the inherited array in the constructor body
@@ -207,7 +207,7 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 			viewDistanceBackwards = 150.0f;
 		}
 		else { 
-			walkingDistanceRight = 7500.0f; 
+			walkingDistanceRight = MaxWalkingDistanceRight; 
 			playerSeen = false;
 		}
 
@@ -237,7 +237,7 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 			viewDistanceBackwards = 150.0f;
 		}
 		else { 
-			walkingDistanceLeft = 7000.0f; 
+			walkingDistanceLeft = MaxWalkingDistanceLeft; 
 			playerSeen = false;
 		}
 		
@@ -261,8 +261,34 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 			this->enemyBox.x -= speed;
 		}
 	}
+}
 
+Enemy::~Enemy() {
+	UnloadTexture(currentTexture);
 
+	for (int i = 0;i < 6;i++) {
+		UnloadTexture(textureWalkRightArr[i]);
+		UnloadTexture(textureWalkLeftArr[i]);
 
+		UnloadImage(imageWalkRightArr[i]);
+		UnloadImage(imageWalkLeftArr[i]);
+	}
 
+	for (int i = 0;i < 4;i++) {
+		UnloadTexture(textureHitRightArr[i]);
+		UnloadTexture(textureHitLeftArr[i]);
+
+		UnloadImage(imageHitRightArr[i]);
+		UnloadImage(imageHitLeftArr[i]);
+	}
+
+	for (int i = 0;i < 5;i++) {
+		UnloadTexture(textureIdleRightArr[i]);
+		UnloadTexture(textureIdleLeftArr[i]);
+
+		UnloadImage(imageIdleRightArr[i]);
+		UnloadImage(imageIdleLeftArr[i]);
+	}
+
+	enemyBox = { 0, 0, 0, 0 };
 }

@@ -48,6 +48,8 @@ protected:
 	float distanceToPlayer;
 	float walkingDistanceRight;
 	float walkingDistanceLeft;
+	const float MaxWalkingDistanceRight;
+	const float MaxWalkingDistanceLeft;
 	Rectangle hitbox;
 	bool hitting;
 	int animHitRight;
@@ -61,20 +63,23 @@ protected:
 	float viewDistanceFoward;
 	float viewDistanceBackwards;
 	bool inCombat;
+	bool alive;
 
 	std::map <std::string, Rectangle> currentCollisionTags;
 
 	virtual void DrawEnemy() {
-		DrawRectangleRec(enemyBox, RED);
+		if (alive) {
+			DrawRectangleRec(enemyBox, RED);
 
-		DrawRectangleRec(healthBar, LIME);// health
+			DrawRectangleRec(healthBar, LIME);// health
+		}
 	}
 	virtual void playerSeenFunc(PlayerMonkey player);
 
 	virtual void handleAttacking();
 	virtual void handleStanding();
 public:
-	Enemy(const float& x, const  float& y, const  float& width, const  float& hegiht, const float& hp, const  float& speed, const  float& damage);
+	Enemy(const float& x, const  float& y, const  float& width, const  float& hegiht, const float& hp, const  float& speed, const  float& damage, const float& walkingDistanceRight,const float &walkingDistanceLeft);
 
 	void handleEnemy() { this->DrawEnemy(); }
 	void handleUpdates(PlayerMonkey player, World world);
@@ -96,6 +101,8 @@ public:
 	inline std::map<std::string, Rectangle> getCurrentCollisionTags() { return currentCollisionTags; } // Non-const getter
 	inline Rectangle getHealhBar() const { return healthBar; }
 	inline Rectangle getHitbox() const { return hitbox; }
+
+ 	virtual ~Enemy() = default;
 
 };
 

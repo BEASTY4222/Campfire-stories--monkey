@@ -1,17 +1,19 @@
 #include "Enemy.h"
 
-Enemy::Enemy(const float& x, const  float& y, const  float& width, const  float& height, const float& hp, const  float& speed, const  float& damage) :
+Enemy::Enemy(const float& x, const  float& y, const  float& width, const  float& height, const float& hp, const  float& speed, const  float& damage, const float& walkingDistanceRight, const float& walkingDistanceLeft) :
 	enemyBox{ x, y, width, height },
 	healthBar{ x, y - 20.0f, width, 10.0f },
 	hp(hp),
 	speed(speed),
-	damage(damage), maxInvincibilityTime(2.0f), inlvincibilityTime(0.0f),
+	damage(damage),
+	maxInvincibilityTime(2.0f), inlvincibilityTime(0.0f),
 	TAG{ "ENEMY" }, enemyTimeInAir(0.0f), nHitsBeforeInvcincibility(8), hit(false), facingRight(true),
 	animLeft(0), animRight(0), animTimeLeft(0.0f), animTimeRight(0.0f), standing(false), standTime(0.0f),
-	animIdle(0), animIdleTime(0.0f), distanceToPlayer(0.0f), walkingDistanceRight(2600.0f), walkingDistanceLeft(1600.0f),
+	animIdle(0), animIdleTime(0.0f), distanceToPlayer(0.0f), walkingDistanceRight(walkingDistanceRight), walkingDistanceLeft(walkingDistanceLeft),
 	hitbox{ 0,0,0,0 }, hitting(false), animHitRight(0), animHitTimeRight(0.0f), animHitLeft(0), animHitTimeLeft(0.0f),
 	playerSeen(false), closeDistanceToPlayer(0), attackCD(1.0f), rotate(true), viewDistanceFoward(300.0f), 
-	viewDistanceBackwards(100.0f), inCombat(false)
+	viewDistanceBackwards(100.0f), inCombat(false), MaxWalkingDistanceLeft(walkingDistanceLeft), MaxWalkingDistanceRight(walkingDistanceRight), 
+	alive(true)
 	{}
 
 void Enemy::playerSeenFunc(PlayerMonkey player) {
@@ -44,15 +46,24 @@ void Enemy::movement(PlayerMonkey player) {
 }
 
 void Enemy::handleUpdates(PlayerMonkey player, World world) {
-	this->movement(player);
-	healthBar.width = hp;
-	healthBar.y = enemyBox.y - 20.0f;
-	healthBar.x = enemyBox.x - 25.0;
-	this->CollisionWithRectangle(world.getMainGround());
-	this->CollisionWithRectangle(player);
-	inlvincibilityTime += GetFrameTime();
-	if(attackCD < 2.0f && !hitting){ 
-		attackCD += GetFrameTime(); 
+	if (hp <= 0) {
+		alive = false;
+	}
+
+	if (alive) {
+		this->movement(player);
+		healthBar.width = hp;
+		healthBar.y = enemyBox.y - 20.0f;
+		healthBar.x = enemyBox.x - 25.0;
+		this->CollisionWithRectangle(world.getMainGround());
+		this->CollisionWithRectangle(player);
+		inlvincibilityTime += GetFrameTime();
+		if (attackCD < 2.0f && !hitting) {
+			attackCD += GetFrameTime();
+		}
+	}
+	else {
+		Enemy::~Enemy();
 	}
 }
 
@@ -94,3 +105,5 @@ void Enemy::CollisionWithRectangle(PlayerMonkey& player) {
 	}
 	else hit = false;
 }
+
+

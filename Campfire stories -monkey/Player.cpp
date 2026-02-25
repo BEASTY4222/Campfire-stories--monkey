@@ -238,7 +238,7 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 	}
 // Handlers
 // Movement handler
-void PlayerMonkey::handlePlayerActions() {
+void PlayerMonkey::handlePlayerActions() { // heavy on calculations so separated
 	if (currHealth <= 0) {
 		alive = false;
 	}
@@ -972,7 +972,6 @@ void PlayerMonkey::handleBars() {
 }
 // Update handler
 void PlayerMonkey::handleUpdates(World world, Enemy& enemy) {// For vars that need to be updated every frame
-	this->handlePlayerActions();// heavy on calculations so separated
 	this->handleCamera();
 	this->handleBars();// dependent on the camera x & y
 	this->handleCollisionsGroundObjects(world.getMainGround());
