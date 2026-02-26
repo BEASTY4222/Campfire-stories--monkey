@@ -46,25 +46,19 @@ void Enemy::movement(PlayerMonkey player) {
 }
 
 void Enemy::handleUpdates(PlayerMonkey player, World world) {
-	if (hp <= 0) {
-		alive = false;
+	this->movement(player);
+	healthBar.width = hp;
+	healthBar.y = enemyBox.y - 20.0f;
+	healthBar.x = enemyBox.x - 25.0;
+	this->CollisionWithRectangle(world.getMainGround());
+	this->CollisionWithRectangle(player);
+	inlvincibilityTime += GetFrameTime();
+	if (attackCD < 2.0f && !hitting) {
+		attackCD += GetFrameTime();
 	}
-
-	if (alive) {
-		this->movement(player);
-		healthBar.width = hp;
-		healthBar.y = enemyBox.y - 20.0f;
-		healthBar.x = enemyBox.x - 25.0;
-		this->CollisionWithRectangle(world.getMainGround());
-		this->CollisionWithRectangle(player);
-		inlvincibilityTime += GetFrameTime();
-		if (attackCD < 2.0f && !hitting) {
-			attackCD += GetFrameTime();
-		}
-	}
-	else {
-		Enemy::~Enemy();
-	}
+		
+	
+	
 }
 
 void Enemy::CollisionWithRectangle(GroundObject object) {
@@ -75,8 +69,14 @@ void Enemy::CollisionWithRectangle(GroundObject object) {
 				// no vars to update yet
 			}
 
-			if (object.getRectangle().y < enemyBox.y) {
-				currentCollisionTags.erase(tag.first);
+			std::vector<std::string> keysToRemove;
+			for (const auto& tag : currentCollisionTags) {
+				if (object.getRectangle().y < enemyBox.y) {
+					keysToRemove.push_back(tag.first);
+				}
+			}
+			for (const auto& key : keysToRemove) {
+				currentCollisionTags.erase(key);
 			}
 		}
 

@@ -3,6 +3,7 @@
 #include "World.h"
 #include <string>
 #include <map>
+#include <vector>
 class PlayerMonkey;
 
 class Enemy {
@@ -82,7 +83,7 @@ public:
 	Enemy(const float& x, const  float& y, const  float& width, const  float& hegiht, const float& hp, const  float& speed, const  float& damage, const float& walkingDistanceRight,const float &walkingDistanceLeft);
 
 	void handleEnemy() { this->DrawEnemy(); }
-	void handleUpdates(PlayerMonkey player, World world);
+	virtual void handleUpdates(PlayerMonkey player, World world);
 
 	void handleCollisionsGroundObjects(GroundObject object) { CollisionWithRectangle(object); }
 	void handleCollisionsPlayer(PlayerMonkey& player) { CollisionWithRectangle(player); }
@@ -102,7 +103,7 @@ public:
 	inline Rectangle getHealhBar() const { return healthBar; }
 	inline Rectangle getHitbox() const { return hitbox; }
 
- 	virtual ~Enemy() = default;
+ 	~Enemy() = default;
 
 };
 

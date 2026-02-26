@@ -113,6 +113,28 @@ void EnemyGoblinBrute::playerSeenFunc(PlayerMonkey player) {
 	}
 }
 
+void EnemyGoblinBrute::handleUpdates(PlayerMonkey player, World world) {
+	if (hp <= 0) {
+		alive = false;
+	}
+
+	if (alive) {
+		this->movement(player);
+		healthBar.width = hp;
+		healthBar.y = enemyBox.y - 20.0f;
+		healthBar.x = enemyBox.x - 25.0;
+		this->CollisionWithRectangle(world.getMainGround());
+		this->CollisionWithRectangle(player);
+		inlvincibilityTime += GetFrameTime();
+		if (attackCD < 2.0f && !hitting) {
+			attackCD += GetFrameTime();
+		}
+	}
+	else {
+		EnemyGoblinBrute::~EnemyGoblinBrute();
+	}
+}
+
 void EnemyGoblinBrute::handleAttacking() {
 	if (hitting && attackCD >= 2.0f) {
 		if (!facingRight) {
@@ -263,7 +285,7 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 	}
 }
 
-Enemy::~Enemy() {
+EnemyGoblinBrute::~EnemyGoblinBrute() {
 	UnloadTexture(currentTexture);
 
 	for (int i = 0;i < 6;i++) {

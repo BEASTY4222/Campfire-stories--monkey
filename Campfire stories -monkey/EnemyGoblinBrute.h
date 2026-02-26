@@ -11,8 +11,9 @@ public:
 
 	void DrawEnemy() override;
 
+	void handleUpdates(PlayerMonkey player, World world) override;
+
 	void movement(PlayerMonkey player) override;
 
-	~Enemy() override;
-
+	~EnemyGoblinBrute();
 };
