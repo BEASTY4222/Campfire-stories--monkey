@@ -87,9 +87,10 @@ EnemyGoblinBrute::EnemyGoblinBrute(const float& x, const float& y, const float& 
 }
 
 void EnemyGoblinBrute::DrawEnemy() {
-	DrawTexture(currentTexture, enemyBox.x, enemyBox.y + 10, WHITE);
-	DrawRectangleRec(this->getHealhBar(), LIME);// health
-
+	if (alive) {
+		DrawTexture(currentTexture, enemyBox.x, enemyBox.y + 10, WHITE);
+		DrawRectangleRec(this->getHealhBar(), LIME);// health
+	}
 	//attack hitbox for testing
 	//DrawRectangleRec(hitbox, BLUE);
 }
@@ -116,6 +117,7 @@ void EnemyGoblinBrute::playerSeenFunc(PlayerMonkey player) {
 void EnemyGoblinBrute::handleUpdates(PlayerMonkey player, World world) {
 	if (hp <= 0) {
 		alive = false;
+		enemyBox = { 0,0,0,0 };
 	}
 
 	if (alive) {
@@ -129,9 +131,6 @@ void EnemyGoblinBrute::handleUpdates(PlayerMonkey player, World world) {
 		if (attackCD < 2.0f && !hitting) {
 			attackCD += GetFrameTime();
 		}
-	}
-	else {
-		EnemyGoblinBrute::~EnemyGoblinBrute();
 	}
 }
 

@@ -174,6 +174,7 @@ class PlayerMonkey{
 	void handleCollisionsGroundObjects(GroundObject object);// Collision with ground objects
 	void handleCollisionsEnemies(Enemy enemy);// Collision with enemies
 	void staminaHandler(float amount, bool regen);
+	void deathScreen();
 public:
 	PlayerMonkey();
 

@@ -1030,3 +1030,7 @@ void PlayerMonkey::CollisionWithRectangle(Enemy enemy) {
 		}
 	}
 }
+// Death handler
+void PlayerMonkey::deathScreen() {
+
+}
