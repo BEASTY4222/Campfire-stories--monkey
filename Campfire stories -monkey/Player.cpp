@@ -1,8 +1,8 @@
 #include "Player.h"
-#include"iostream"
-
-PlayerMonkey::PlayerMonkey() : PlayerBox{ 10000.0f, 800.0f,80.0f, 150.0f },// Player rectangle
-mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.75f }, 0.0f, 1.0f },// Camera
+#include"iostream"						
+										//  x,      y,    width, height
+PlayerMonkey::PlayerMonkey() : PlayerBox{ 4000.0f, 800.0f,80.0f, 150.0f },// Player rectangle
+mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.72f }, 0.0f, 1.0f },// Camera
 jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 1200.0f }, doubleJumpPower{ 800.0f }, timeInAir(0.0f),// Jumping vars
 dashCooldown{ 2.0f }, dashPower{ 1000.0f }, dashProgress(0.0f), isDashing(false), timeDashing(0.0f),// Dash vars
 // PLAYER IMAGE SPRITES
@@ -114,12 +114,12 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 
 	//PLAYER TEXTURE ARRAYS
 	// Idle left & right
-	idleAnimRightTexArr{ LoadTextureFromImage(idleAnimRightArr[0]), LoadTextureFromImage(idleAnimRightArr[1]) },
-	idleAnimLeftTexArr{ LoadTextureFromImage(idleAnimLeftArr[0]), LoadTextureFromImage(idleAnimLeftArr[1]) },
-	// Walking left & right
-	walkPlayerTextureRightArr{ LoadTextureFromImage(walkPlayerImageRightArr[0]), LoadTextureFromImage(walkPlayerImageRightArr[1]),
-								LoadTextureFromImage(walkPlayerImageRightArr[2]), LoadTextureFromImage(walkPlayerImageRightArr[3]),
-								LoadTextureFromImage(walkPlayerImageRightArr[4]), LoadTextureFromImage(walkPlayerImageRightArr[5]) },
+idleAnimRightTexArr{ LoadTextureFromImage(idleAnimRightArr[0]), LoadTextureFromImage(idleAnimRightArr[1]) },
+idleAnimLeftTexArr{ LoadTextureFromImage(idleAnimLeftArr[0]), LoadTextureFromImage(idleAnimLeftArr[1]) },
+// Walking left & right
+walkPlayerTextureRightArr{ LoadTextureFromImage(walkPlayerImageRightArr[0]), LoadTextureFromImage(walkPlayerImageRightArr[1]),
+							LoadTextureFromImage(walkPlayerImageRightArr[2]), LoadTextureFromImage(walkPlayerImageRightArr[3]),
+							LoadTextureFromImage(walkPlayerImageRightArr[4]), LoadTextureFromImage(walkPlayerImageRightArr[5]) },
 	walkPlayerTextureLeftArr{ LoadTextureFromImage(walkPlayerImageLeftArr[0]), LoadTextureFromImage(walkPlayerImageLeftArr[1]),
 								LoadTextureFromImage(walkPlayerImageLeftArr[2]), LoadTextureFromImage(walkPlayerImageLeftArr[3]),
 								LoadTextureFromImage(walkPlayerImageLeftArr[4]), LoadTextureFromImage(walkPlayerImageLeftArr[5]) },
@@ -213,7 +213,7 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 
 	// Movement vars															// Sprinting vars
 	currentMoveSpeed(0), hitWalkSpeed(2.5f), walkSpeed(5.0f), walkAnimSpeed(0.2f), sprintSpeed(10.0f), curAnimSpeed(0.2f), sprintAnimSpeed(0.1f),
-	notWalking(true), running(false),
+	notWalking(true), running(false), stopControl(false), moveRight(false), displayMoveRightMessageTime(0.0f), displayMoveRightMessage(false),
 	facingRight(true),  // Facing direction vars
 	// Animation time vars
 	animTimeRight(0.0f), animTimeLeft(0.0f), idleAnimTime(0.0f),
@@ -242,16 +242,18 @@ void PlayerMonkey::handlePlayerActions() { // heavy on calculations so separated
 	if (currHealth <= 0) {
 		alive = false;
 	}
-	// Hitting handler
-	this->handleHitting();
+
+	if (!stopControl) {
+		// Hitting handler
+		this->handleHitting();
+
+		// Idle animation handler
+		this->handleIdle();
+	}
+	
 	// Movement handler
 	this->handleMovement();
-
 	
-	// Idle animation handler
-	this->handleIdle();
-
-
 	if (currInvincibilityTime < maxInvincibilityTime) {
 		currInvincibilityTime += GetFrameTime();
 	}
@@ -753,7 +755,7 @@ void PlayerMonkey::hittingHitbox() {
 }
 
 void PlayerMonkey::handleMovement() {
-	if (IsKeyDown(KEY_D)) {
+	if (IsKeyDown(KEY_D) || moveRight) {
 		animLeft = 0;
 		animTimeLeft = 0.0f;
 
@@ -772,7 +774,7 @@ void PlayerMonkey::handleMovement() {
 		facingRight = true;
 
 	}
-	if (IsKeyDown(KEY_A)) {
+	if (IsKeyDown(KEY_A) && !moveRight) {
 		animRight = 0;
 		animTimeRight = 0.0f;
 
@@ -793,7 +795,7 @@ void PlayerMonkey::handleMovement() {
 		facingRight = false;
 
 	}
-	if ((IsKeyPressed(KEY_W) || IsKeyPressed(KEY_SPACE)) && currStamina > 20.0f) {
+	if ((IsKeyPressed(KEY_W) || IsKeyPressed(KEY_SPACE)) && currStamina > 20.0f && !moveRight) {
 		if (inAir) {
 			if (!doubleJumpUsed) {
 				jumpProgress = doubleJumpPower;
@@ -825,7 +827,7 @@ void PlayerMonkey::handleMovement() {
 	
 
 
-	if (IsKeyPressed(KEY_Q) && currStamina > 50.0f) {
+	if (IsKeyPressed(KEY_Q) && currStamina > 50.0f && !moveRight) {
 		if (dashCooldown >= 2.0f) {
 			if (IsKeyDown(KEY_A)) { dashProgress -= dashPower; }
 			if (IsKeyDown(KEY_D)) { dashProgress += dashPower; }
@@ -880,7 +882,7 @@ void PlayerMonkey::handleMovement() {
 	}
 	dashCooldown += GetFrameTime();
 	
-	if (IsKeyDown(KEY_LEFT_SHIFT) && currStamina >= 5.0f) {
+	if (IsKeyDown(KEY_LEFT_SHIFT) && currStamina >= 5.0f && !moveRight) {
 		curAnimSpeed = sprintAnimSpeed;
 		currentMoveSpeed = sprintSpeed;
 		running = true;
@@ -950,8 +952,36 @@ void PlayerMonkey::staminaHandler(float amount, bool regen) {
 		currStamina += staminaRegenRate * GetFrameTime();// regenerate stamina over time
 	}
 }
+// Dialongue handler
+void PlayerMonkey::handleDialogue() {
+	if (PlayerBox.x <= 50.0f) {
+		stopControl = true;
+		moveRight = true;
+		displayMoveRightMessage = true;
+	}
+
+	if (displayMoveRightMessage) {
+		this->messageBox();
+	}
+
+	if(PlayerBox.x >= 500.0f){
+		stopControl = false;
+		moveRight = false;
+	}
+	if (PlayerBox.x > 600.0f) {
+		displayMoveRightMessage = false;
+	}
+	
+}
+
+void PlayerMonkey::messageBox() {
+	DrawRectangleRec({ this->PlayerBox.x - 60, this->PlayerBox.y - 120.0f, 250.0f, 100.0f }, WHITE);
+	DrawRectangleLinesEx({ this->PlayerBox.x - 60, this->PlayerBox.y - 120.0f, 250.0f, 100.0f }, 14, BLACK);
+	DrawRectangleLinesEx({ this->PlayerBox.x - 60, this->PlayerBox.y - 120.0f, 250.0f, 100.0f }, 10, GRAY);
+	DrawText("There is nothing back there \n I should continue foward...", this->PlayerBox.x - 43.0f, this->PlayerBox.y - 85.0f, 16, BLACK);
 
 
+}
 
 // Bars handler
 void PlayerMonkey::handleBars() {
@@ -970,6 +1000,15 @@ void PlayerMonkey::handleBars() {
 		currStamina += staminaRegenRate * GetFrameTime();// regenerate stamina over time
 	
 }
+// Camera handler
+void PlayerMonkey::handleCamera() {
+	if (PlayerBox.x > 1000.0f) {
+		this->mainCamera.target.x = { this->PlayerBox.x };
+	}else
+		this->mainCamera.target.x = 1000.0f;
+	
+}
+
 // Update handler
 void PlayerMonkey::handleUpdates(World world, Enemy& enemy) {// For vars that need to be updated every frame
 	this->handleCamera();
@@ -979,6 +1018,8 @@ void PlayerMonkey::handleUpdates(World world, Enemy& enemy) {// For vars that ne
 }
 // Draw handler
 void PlayerMonkey::handlePlayerVisuals() {
+	this->handleDialogue();
+
 	this->drawPlayer();
 
 }

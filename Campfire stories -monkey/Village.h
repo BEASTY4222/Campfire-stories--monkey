@@ -11,6 +11,7 @@ private:
 	Texture2D chimneyHouseTexture;
 	Texture2D blackSmithHouseTexture;
 	Texture2D stoneTowerTexture;
+	Texture2D grassRoofHouse;
 
 public:
 	Village();

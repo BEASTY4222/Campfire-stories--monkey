@@ -114,6 +114,12 @@ class PlayerMonkey{
 	bool facingRight;
 	bool hitting;
 	// Moving vars
+	//*these(*) are used to move the player in a direction for a short time*
+	//*like when getting to close to the end of the map*
+	bool moveRight;//*
+	bool stopControl;//*
+	float displayMoveRightMessageTime;//*
+	bool displayMoveRightMessage;//*
 	bool running;
 	float timeInAir;
 	float currentMoveSpeed;
@@ -165,7 +171,7 @@ class PlayerMonkey{
 		DrawRectangleLinesEx(staminaBarOutline, 4, BLACK);// stamina outline
 	}
 
-	inline void handleCamera() { this->mainCamera.target.x = { this->PlayerBox.x }; }
+	void handleCamera(); 
 	void handleHitting();
 	void hittingLogic();
 	void hittingHitbox();
@@ -175,6 +181,8 @@ class PlayerMonkey{
 	void handleCollisionsEnemies(Enemy enemy);// Collision with enemies
 	void staminaHandler(float amount, bool regen);
 	void deathScreen();
+	void messageBox();
+	void handleDialogue();
 public:
 	PlayerMonkey();
 

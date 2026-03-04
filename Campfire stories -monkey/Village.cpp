@@ -7,10 +7,12 @@ Village::Village() {
 	tatchRoofHouseTexture = LoadTexture("spritesWorld/village/PNG/buildings/building_5/building_1.png");
 	woodenHouseTexture = LoadTexture("spritesWorld/village/PNG/buildings/building_6/building_1.png");
 	greenRoofHouseTexture2 = LoadTexture("spritesWorld/village/PNG/buildings/building_7/building_1.png");
-	// foreground houses
 	chimneyHouseTexture = LoadTexture("spritesWorld/village/PNG/buildings/building_9/building_1.png");
 	blackSmithHouseTexture = LoadTexture("spritesWorld/village/PNG/buildings/building_10/building_1.png");
 	stoneTowerTexture = LoadTexture("spritesWorld/village/PNG/buildings/building_12/building_1.png");
+	grassRoofHouse = LoadTexture("spritesWorld/village/PNG/buildings/building_13/building_1.png");
+
+
 
 }
 
@@ -22,11 +24,19 @@ void Village::DrawVillageBackHouses() {
 	DrawTexture(woodenHouseTexture, 8650.0f, 420.0f, WHITE);
 	DrawTexture(greenRoofHouseTexture2, 9200.0f, 430.0f, WHITE);
 	DrawTexture(blackSmithHouseTexture, 9650.0f, 520.0f, WHITE);
-	DrawTexture(stoneTowerTexture, 11000.0f, 130.0f, WHITE);
+	DrawTexture(woodenStandTexture, 11000.0f, 550.0f, WHITE);
+	DrawTexture(greenRoofHouseTexture2, 10600.0f, 430.0f, WHITE);
+	DrawTexture(greenRoofHouseTexture, 10200.0f, 550.0f, WHITE);
 
 
+
+	DrawTexture(stoneTowerTexture, 12500.0f, 130.0f, WHITE);
 }
 void Village::DrawVillageFrontHouses() {
 	DrawTexture(chimneyHouseTexture, 8150.0f, 800.0f, Fade(WHITE, 0.5f));
+	DrawTexture(woodenHouseTexture, 9000.0f, 700.0f, Fade(WHITE, 0.5f));
+	DrawTexture(woodenstallTexture, 9510.0f, 750.0f, Fade(WHITE, 0.5f));
+	DrawTexture(tatchRoofHouseTexture, 10000, 750.0f, Fade(WHITE, 0.5f));
+
 
 }
