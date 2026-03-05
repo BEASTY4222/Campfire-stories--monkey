@@ -153,22 +153,12 @@ class PlayerMonkey{
 	bool lightAttack1Used, lightAttack2Used, lightAttack3Used, lightAttack4Used, lightAttack5Used, lightAttack6Used, lightAttack7Used, lightAttack8Used;
 
 	inline void drawPlayer() {
-		// Draw bars
-		this->drawBars();
-
 		//DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
 		//DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
 
 
 		// Draw main character
 		DrawTexture(currPlayerTexture, PlayerBox.x, PlayerBox.y + 10, WHITE);
-	}
-	inline void drawBars() {
-		DrawRectangleRec(healthBar, LIME);// health
-		DrawRectangleLinesEx(healthBarOutline, 4, BLACK);// health outline
-
-		DrawRectangleRec(staminaBar, ORANGE);// stamina
-		DrawRectangleLinesEx(staminaBarOutline, 4, BLACK);// stamina outline
 	}
 
 	void handleCamera(); 
@@ -186,7 +176,15 @@ class PlayerMonkey{
 public:
 	PlayerMonkey();
 
+
 	// Handlers
+	inline void drawPlayerBars()const {
+		DrawRectangleRec(healthBar, LIME);// health
+		DrawRectangleLinesEx(healthBarOutline, 4, BLACK);// health outline
+
+		DrawRectangleRec(staminaBar, ORANGE);// stamina
+		DrawRectangleLinesEx(staminaBarOutline, 4, BLACK);// stamina outline
+	}
 	void handlePlayerActions();// for handling player actions like movement, hitting, etc
 	void handleUpdates(World world, Enemy& enemy);// for vars that need to be updated every frame
 	void handlePlayerVisuals();// visuals

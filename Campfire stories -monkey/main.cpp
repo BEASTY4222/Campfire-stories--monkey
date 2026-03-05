@@ -63,6 +63,8 @@ int main() {
 		goblinMiddle.handleEnemy();
 		goblinBack.handleEnemy();
 
+		Monkey.drawPlayerBars();
+
         village.DrawVillageFrontHouses();
 
 
