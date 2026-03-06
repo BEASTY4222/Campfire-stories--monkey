@@ -89,6 +89,7 @@ EnemyGoblinBrute::EnemyGoblinBrute(const float& x, const float& y, const float& 
 void EnemyGoblinBrute::DrawEnemy() {
 	if (alive) {
 		DrawTexture(currentTexture, enemyBox.x, enemyBox.y + 10, WHITE);
+		//DrawTexturePro(goblinTex, src, dest, origin, 0, WHITE);
 		DrawRectangleRec(this->getHealhBar(), LIME);// health
 	}
 	//attack hitbox for testing
@@ -97,10 +98,10 @@ void EnemyGoblinBrute::DrawEnemy() {
 
 void EnemyGoblinBrute::playerSeenFunc(PlayerMonkey player) {
 	if (playerSeen) {
-		walkingDistanceRight = player.getRectangle().x - enemyBox.width - 70;
-		walkingDistanceLeft = player.getRectangle().x + enemyBox.width + 150;
+		walkingDistanceRight = player.getRectangle().x + enemyBox.width;
+		walkingDistanceLeft = player.getRectangle().x - enemyBox.width;
 
-		closeDistanceToPlayer = abs(player.getRectangle().x - enemyBox.x - 70);
+		closeDistanceToPlayer = abs(player.getRectangle().x - enemyBox.x + 10);
 
 		if (closeDistanceToPlayer <= 80 || animHitLeft > 0 || animHitRight > 0) {
 			hitting = true;
@@ -150,9 +151,9 @@ void EnemyGoblinBrute::handleAttacking() {
 
 			if (animHitLeft == 3) {
 				hitbox.x = enemyBox.x - 50.0f;
-				hitbox.y = enemyBox.y + 20.0f;
-				hitbox.width = 50.0f;
-				hitbox.height = 20.0f;
+				hitbox.y = enemyBox.y + 40.0f;
+				hitbox.width = 80.0f;
+				hitbox.height = 120.0f;
 			}
 		}
 		else {
@@ -169,7 +170,7 @@ void EnemyGoblinBrute::handleAttacking() {
 
 			if (animHitRight == 3) {
 				hitbox.x = enemyBox.x + 130.0f;
-				hitbox.y = enemyBox.y + 30.0f;
+				hitbox.y = enemyBox.y + 40.0f;
 				hitbox.width = 80.0f;
 				hitbox.height = 120.0f;
 			}
@@ -222,7 +223,7 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 	handleStanding();
 
 	if (facingRight && !standing && !hitting) {
-		if (player.getRectangle().x - enemyBox.x <= viewDistanceFoward && player.getRectangle().x - enemyBox.x >= viewDistanceBackwards) {
+		if (player.getRectangle().x - enemyBox.x <= viewDistanceFoward) {//&& player.getRectangle().x - enemyBox.x >= viewDistanceBackwards
 			playerSeen = true;
 			viewDistanceFoward = 500.0f;
 			viewDistanceBackwards = 150.0f;
@@ -252,7 +253,7 @@ void EnemyGoblinBrute::movement(PlayerMonkey player) {
 		}
 	}
 	else if(!facingRight && !standing && !hitting) {
-		if (player.getRectangle().x - enemyBox.x <= viewDistanceFoward && player.getRectangle().x - enemyBox.x >= viewDistanceBackwards) {
+		if (enemyBox.x - player.getRectangle().x <= viewDistanceFoward) {//&& player.getRectangle().x - enemyBox.x >= viewDistanceBackwards
 			playerSeen = true;
 			viewDistanceFoward = 500.0f;
 			viewDistanceBackwards = 150.0f;

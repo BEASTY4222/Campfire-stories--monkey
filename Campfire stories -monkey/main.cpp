@@ -24,9 +24,9 @@ int main() {
 
     PlayerMonkey Monkey;
     //          hp(hp), speed(speed), damage(damage), enemyBox{ x, y, width, hegiht }
-    EnemyGoblinBrute goblinFront(7400.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f,7000.0f, 7500.0f);
-	EnemyGoblinBrute goblinMiddle(8000.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f, 7600.0f, 8100.0f);
-	EnemyGoblinBrute goblinBack(8600.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f, 8200.0f, 8700.0f);
+    EnemyGoblinBrute goblinFront(7400.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f,7000.0f, 8000.0f);
+	EnemyGoblinBrute goblinMiddle(8500.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f, 7600.0f, 8800.0f);
+	EnemyGoblinBrute goblinBack(9100.0f, 600.0f, 80.0f, 200.0f, 200.0f, 3.0f, 50.0f, 8200.0f, 9700.0f);
     World gameWorld;
 	Village village;
 
