@@ -88,10 +88,28 @@ EnemyGoblinBrute::EnemyGoblinBrute(const float& x, const float& y, const float& 
 
 void EnemyGoblinBrute::DrawEnemy() {
 	if (alive) {
-		DrawTexture(currentTexture, enemyBox.x, enemyBox.y + 10, WHITE);
-		//DrawTexturePro(goblinTex, src, dest, origin, 0, WHITE);
-		DrawRectangleRec(this->getHealhBar(), LIME);// health
+		float w = (float)currentTexture.width;
+		float h = (float)currentTexture.height;
+
+		Rectangle src = { 0, 0, w, h };
+
+		// Anchor point: bottom center of the sprite
+		Vector2 origin = { w / 2.0f, h };
+
+		// Position: bottom center of the enemy hitbox
+		float drawX = 0;//enemyBox.x + enemyBox.width / 2;
+		drawX = facingRight ? enemyBox.x + enemyBox.width - 10 : enemyBox.x + enemyBox.width + 10; // Adjust X based on facing direction
+		float drawY = enemyBox.y + enemyBox.height;
+
+		Rectangle dest = { drawX, drawY, w, h };
+
+		DrawTexturePro(currentTexture, src, dest, origin, 0.0f, WHITE);
+
+		DrawRectangleRec(this->getHealhBar(), LIME);
+
 	}
+
+
 	//attack hitbox for testing
 	//DrawRectangleRec(hitbox, BLUE);
 }
@@ -101,7 +119,7 @@ void EnemyGoblinBrute::playerSeenFunc(PlayerMonkey player) {
 		walkingDistanceRight = player.getRectangle().x + enemyBox.width;
 		walkingDistanceLeft = player.getRectangle().x - enemyBox.width;
 
-		closeDistanceToPlayer = abs(player.getRectangle().x - enemyBox.x + 10);
+		closeDistanceToPlayer = abs(player.getRectangle().x - enemyBox.x);
 
 		if (closeDistanceToPlayer <= 80 || animHitLeft > 0 || animHitRight > 0) {
 			hitting = true;
