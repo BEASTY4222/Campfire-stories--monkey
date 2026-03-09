@@ -106,6 +106,10 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 	dashPlayerImageLeftArr{ LoadImage("spritesMonkey/dashAnim/dashLeft/dashLeft1.png"), LoadImage("spritesMonkey/dashAnim/dashLeft/dashLeft2.png"),
 								LoadImage("spritesMonkey/dashAnim/dashLeft/dashLeft3.png") },
 
+	deathPlayerImageRightArr{ LoadImage("spritesMonkey/deathAnim/deathRight/deathRight1.png"), LoadImage("spritesMonkey/deathAnim/deathRight/deathRight2.png"),
+								LoadImage("spritesMonkey/deathAnim/deathRight/deathRight3.png"), LoadImage("spritesMonkey/deathAnim/deathRight/deathRight4.png"),
+								LoadImage("spritesMonkey/deathAnim/deathRight/deathRight5.png"),LoadImage("spritesMonkey/deathAnim/deathRight/deathRight5.png") },
+
 	currPlayerTexture(LoadTextureFromImage(idleAnimRightArr[0])), currPlayerImage(idleAnimRightArr[0]),// CURR PLAYER TEXTURE & IMAGE
 
 	// Sounds & music
@@ -200,6 +204,10 @@ walkPlayerTextureRightArr{ LoadTextureFromImage(walkPlayerImageRightArr[0]), Loa
 								LoadTextureFromImage(hit8PlayerImageLeftArr[6]), LoadTextureFromImage(hit8PlayerImageLeftArr[7]),
 								LoadTextureFromImage(hit8PlayerImageLeftArr[8]) },
 
+	deathPlayerTextureRightArr{ LoadTextureFromImage(deathPlayerImageRightArr[0]), LoadTextureFromImage(deathPlayerImageRightArr[1]),
+								LoadTextureFromImage(deathPlayerImageRightArr[2]), LoadTextureFromImage(deathPlayerImageRightArr[3]),
+								LoadTextureFromImage(deathPlayerImageRightArr[4]), LoadTextureFromImage(deathPlayerImageRightArr[5]) },
+
 
 	// Jumping left & right
 	jumpPlayerTextureRightArr{ LoadTextureFromImage(jumpPlayerImageRightArr[0]) },
@@ -221,7 +229,8 @@ walkPlayerTextureRightArr{ LoadTextureFromImage(walkPlayerImageRightArr[0]), Loa
 	animDashTime(0.0f), animDashLeft(0), animLeftJump(0), animHit(0), animTimeHit(0.0f),
 	// Player stats
 	maxHealth(300.0f), currHealth(maxHealth), maxInvincibilityTime(2.0f), currInvincibilityTime(0.0f), lastInvincibilityTime(0.0f), alive(true),
-	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(7.0f), regenStamina(true),
+	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(7.0f), regenStamina(true), firstStageDeath(false), howBlack(1.0f),
+	lastPlayerX(0.0f), lastPlayerY(0.0f),
 	// Bars Initalization
 	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
 	healthBar{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, currHealth, 30.0f },
@@ -243,19 +252,21 @@ void PlayerMonkey::handlePlayerActions() { // heavy on calculations so separated
 		alive = false;
 	}
 
-	if (!stopControl) {
-		// Hitting handler
-		this->handleHitting();
+	if (alive) {
+		if (!stopControl) {
+			// Hitting handler
+			this->handleHitting();
 
-		// Idle animation handler
-		this->handleIdle();
-	}
-	
-	// Movement handler
-	this->handleMovement();
-	
-	if (currInvincibilityTime < maxInvincibilityTime) {
-		currInvincibilityTime += GetFrameTime();
+			// Idle animation handler
+			this->handleIdle();
+		}
+
+		// Movement handler
+		this->handleMovement();
+
+		if (currInvincibilityTime < maxInvincibilityTime) {
+			currInvincibilityTime += GetFrameTime();
+		}
 	}
 }
 
@@ -1011,17 +1022,23 @@ void PlayerMonkey::handleCamera() {
 
 // Update handler
 void PlayerMonkey::handleUpdates(World world, Enemy& enemy) {// For vars that need to be updated every frame
-	this->handleCamera();
-	this->handleBars();// dependent on the camera x & y
-	this->handleCollisionsGroundObjects(world.getMainGround());
-	this->handleCollisionsEnemies(enemy);// temporary enemy for testing
+	if (alive) {
+		this->handleCamera();
+		this->handleBars();// dependent on the camera x & y
+		this->handleCollisionsGroundObjects(world.getMainGround());
+		this->handleCollisionsEnemies(enemy);
+	}
+	else {
+		this->deathScreen();
+	}
 }
 // Draw handler
 void PlayerMonkey::handlePlayerVisuals() {
-	this->handleDialogue();
-
 	this->drawPlayer();
 
+	if (alive) {
+		this->handleDialogue();
+	}
 }
 // Collision with rectangle objects
 void PlayerMonkey::handleCollisionsEnemies(Enemy enemy) {
@@ -1073,5 +1090,56 @@ void PlayerMonkey::CollisionWithRectangle(Enemy enemy) {
 }
 // Death handler
 void PlayerMonkey::deathScreen() {
+	
 
+	if (!firstStageDeath) {
+		if (facingRight) {
+			currPlayerImage = deathPlayerImageRightArr[animDeath];
+			currPlayerTexture = deathPlayerTextureRightArr[animDeath];
+
+			animDeathTime += GetFrameTime();
+			if (animDeathTime >= 1.0f) {
+				animDeath++;
+				if (animDeath >= 6) {
+					if (animDeath > 1.5f) {
+						animDeath = 0;
+						firstStageDeath = true;
+
+						lastPlayerX = PlayerBox.x;
+						lastPlayerY = PlayerBox.y;
+
+						PlayerBox = { 0.0f ,0.0f, 0.0f, 0.0f };
+					}
+				}
+				animDeathTime = 0.0f;
+			}
+		}
+		else {
+			currPlayerImage = idleAnimLeftArr[animDeath];
+			currPlayerTexture = idleAnimLeftTexArr[animDeath];
+
+			animDeathTime += GetFrameTime();
+			if (animDeathTime >= 1.0f) {
+				animDeath++;
+				if (animDeath > 1.5f) {
+					animDeath = 0;
+					firstStageDeath = true;
+
+					lastPlayerX = PlayerBox.x;
+					lastPlayerY = PlayerBox.y;
+
+					PlayerBox = { 0.0f ,0.0f, 0.0f, 0.0f };
+				}
+				animDeathTime = 0.0f;
+			}
+		}
+
+	}
+	else {
+		DrawRectangle(lastPlayerX, lastPlayerY, 10000, 1980, Fade(BLACK, howBlack));
+		mainCamera.zoom = 0.5f;
+		if (!howBlack <= 0.4f) {
+			howBlack -= 0.1f * GetFrameTime();
+		}
+	}
 }

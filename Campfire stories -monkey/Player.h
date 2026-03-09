@@ -23,6 +23,8 @@ class PlayerMonkey{
 	float curAnimSpeed;
 	float animJumpTime;
 	float animDashTime;
+	float animDeathTime;
+	float animTimeHit;
 	int animDashRight;
 	int animDashLeft;
 	int animRightJump;
@@ -31,7 +33,7 @@ class PlayerMonkey{
 	int animLeft;
 	int animIdle;
 	int animHit;
-	float animTimeHit;
+	int animDeath;
 
 	Image idleAnimRightArr[2];
 	Image idleAnimLeftArr[2];
@@ -93,9 +95,18 @@ class PlayerMonkey{
 	Image dashPlayerImageLeftArr[3];
 	Texture2D dashPlayerTextureLeftArr[3];
 
+	Image deathPlayerImageRightArr[6];
+	Texture2D deathPlayerTextureRightArr[6];
+	Image deathPlayerImageLeftArr[6];
+	Texture2D deathPlayerTextureLeftArr[6];
+
 	// Player Textures
 	Texture2D currPlayerTexture;
 	// Player stats
+	float lastPlayerX;
+	float lastPlayerY;
+	float howBlack;
+	bool firstStageDeath;
 	bool alive;
 	float maxInvincibilityTime;
 	float currInvincibilityTime;
@@ -179,11 +190,13 @@ public:
 
 	// Handlers
 	inline void drawPlayerBars()const {
-		DrawRectangleRec(healthBar, LIME);// health
-		DrawRectangleLinesEx(healthBarOutline, 4, BLACK);// health outline
+		if (alive) {
+			DrawRectangleRec(healthBar, LIME);// health
+			DrawRectangleLinesEx(healthBarOutline, 4, BLACK);// health outline
 
-		DrawRectangleRec(staminaBar, ORANGE);// stamina
-		DrawRectangleLinesEx(staminaBarOutline, 4, BLACK);// stamina outline
+			DrawRectangleRec(staminaBar, ORANGE);// stamina
+			DrawRectangleLinesEx(staminaBarOutline, 4, BLACK);// stamina outline
+		}
 	}
 	void handlePlayerActions();// for handling player actions like movement, hitting, etc
 	void handleUpdates(World world, Enemy& enemy);// for vars that need to be updated every frame
@@ -201,5 +214,6 @@ public:
 	inline Camera2D& getCamera() { return mainCamera; } // Non-const getter
 	inline std::map<std::string, Rectangle> getCurrentCollisionTags() { return currentCollisionTags; } // Non-const getter
 	inline std::string getTag() const { return this->TAG; }
+	inline bool isSecondStage() const { return firstStageDeath; }
 };
  
