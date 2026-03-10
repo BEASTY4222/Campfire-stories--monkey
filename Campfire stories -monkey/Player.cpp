@@ -1028,9 +1028,6 @@ void PlayerMonkey::handleUpdates(World world, Enemy& enemy) {// For vars that ne
 		this->handleCollisionsGroundObjects(world.getMainGround());
 		this->handleCollisionsEnemies(enemy);
 	}
-	else {
-		this->deathScreen();
-	}
 }
 // Draw handler
 void PlayerMonkey::handlePlayerVisuals() {
@@ -1038,6 +1035,9 @@ void PlayerMonkey::handlePlayerVisuals() {
 
 	if (alive) {
 		this->handleDialogue();
+	}
+	else {
+		this->deathScreen();
 	}
 }
 // Collision with rectangle objects
@@ -1090,15 +1090,13 @@ void PlayerMonkey::CollisionWithRectangle(Enemy enemy) {
 }
 // Death handler
 void PlayerMonkey::deathScreen() {
-	
-
 	if (!firstStageDeath) {
 		if (facingRight) {
 			currPlayerImage = deathPlayerImageRightArr[animDeath];
 			currPlayerTexture = deathPlayerTextureRightArr[animDeath];
 
 			animDeathTime += GetFrameTime();
-			if (animDeathTime >= 1.0f) {
+			if (animDeathTime >= 0.3f) {
 				animDeath++;
 				if (animDeath >= 6) {
 					if (animDeath > 1.5f) {
@@ -1119,7 +1117,7 @@ void PlayerMonkey::deathScreen() {
 			currPlayerTexture = idleAnimLeftTexArr[animDeath];
 
 			animDeathTime += GetFrameTime();
-			if (animDeathTime >= 1.0f) {
+			if (animDeathTime >= 0.3f) {
 				animDeath++;
 				if (animDeath > 1.5f) {
 					animDeath = 0;
@@ -1136,9 +1134,8 @@ void PlayerMonkey::deathScreen() {
 
 	}
 	else {
-		DrawRectangle(lastPlayerX, lastPlayerY, 10000, 1980, Fade(BLACK, howBlack));
-		mainCamera.zoom = 0.5f;
-		if (!howBlack <= 0.4f) {
+		DrawRectangle(0, 0, 19200, 10800, Fade(BLACK, howBlack));
+		if (howBlack > 0.5f) {
 			howBlack -= 0.1f * GetFrameTime();
 		}
 	}
