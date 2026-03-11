@@ -13,9 +13,9 @@ struct GroundObject {
 	{}
 	void drawObject(int times) {
 		DrawRectangleLinesEx(groundBox, 3, BLUE);// to see the box
-		float spacebetween = groundBox.x;
+		int spacebetween = groundBox.x;
 		while (times--) {
-			DrawTexture(groundTexture, spacebetween, groundBox.y - 250.0f, WHITE);
+			DrawTexture(groundTexture, spacebetween, groundBox.y - 250, WHITE);
 			spacebetween += groundBox.width;
 		}
 

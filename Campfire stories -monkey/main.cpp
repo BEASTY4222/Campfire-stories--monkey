@@ -59,7 +59,7 @@ int main() {
 
             village.DrawVillageBackHouses();
 
-            Monkey.handlePlayerVisuals();
+            Monkey.handlePlayerVisuals(goblinFront,goblinMiddle, goblinBack);
             goblinFront.handleEnemy();
             goblinMiddle.handleEnemy();
             goblinBack.handleEnemy();
@@ -85,7 +85,7 @@ int main() {
 
             village.DrawVillageFrontHouses();
 
-            Monkey.handlePlayerVisuals();
+            Monkey.handlePlayerVisuals(goblinFront, goblinMiddle, goblinBack);
 
         }
 

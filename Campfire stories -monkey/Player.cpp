@@ -115,6 +115,7 @@ walkPlayerImageRightArr{ LoadImage("spritesMonkey/runAnim/runRight/run1.png"), L
 	// Sounds & music
 	lightAttackSound{ LoadSound("spritesMonkey/hitAnim/hitSound.mp3") },
 	soundPlayed(false),
+	deathSound{ LoadSound("spritesMonkey/deathAnim/deathSound.mp3") },
 
 	//PLAYER TEXTURE ARRAYS
 	// Idle left & right
@@ -222,7 +223,7 @@ walkPlayerTextureRightArr{ LoadTextureFromImage(walkPlayerImageRightArr[0]), Loa
 	// Movement vars															// Sprinting vars
 	currentMoveSpeed(0), hitWalkSpeed(2.5f), walkSpeed(5.0f), walkAnimSpeed(0.2f), sprintSpeed(10.0f), curAnimSpeed(0.2f), sprintAnimSpeed(0.1f),
 	notWalking(true), running(false), stopControl(false), moveRight(false), displayMoveRightMessageTime(0.0f), displayMoveRightMessage(false),
-	facingRight(true),  // Facing direction vars
+	facingRight(true), mousePos({ 0.0f, 0.f }), restartButtonColor(BLACK),  // Facing direction vars
 	// Animation time vars
 	animTimeRight(0.0f), animTimeLeft(0.0f), idleAnimTime(0.0f),
 	animRight(0), animLeft(0), animIdle(0), animDashRight(0), animRightJump(0), animJumpTime(0.0f),
@@ -230,7 +231,7 @@ walkPlayerTextureRightArr{ LoadTextureFromImage(walkPlayerImageRightArr[0]), Loa
 	// Player stats
 	maxHealth(300.0f), currHealth(maxHealth), maxInvincibilityTime(2.0f), currInvincibilityTime(0.0f), lastInvincibilityTime(0.0f), alive(true),
 	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(7.0f), regenStamina(true), firstStageDeath(false), howBlack(1.0f),
-	lastPlayerX(0.0f), lastPlayerY(0.0f),
+	lastPlayerX(0.0f), lastPlayerY(0.0f), restarted(false), restartTime(0.0f),
 	// Bars Initalization
 	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
 	healthBar{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, currHealth, 30.0f },
@@ -243,6 +244,7 @@ walkPlayerTextureRightArr{ LoadTextureFromImage(walkPlayerImageRightArr[0]), Loa
 	lightAttack5Used(false), lightAttack6Used(false), lightAttack7Used(false), lightAttack8Used(false)
 	{
 		SetSoundVolume(lightAttackSound, 0.5f);
+		SetSoundVolume(deathSound, 0.5f);
 	
 	}
 // Handlers
@@ -1030,14 +1032,14 @@ void PlayerMonkey::handleUpdates(World world, Enemy& enemy) {// For vars that ne
 	}
 }
 // Draw handler
-void PlayerMonkey::handlePlayerVisuals() {
+void PlayerMonkey::handlePlayerVisuals(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3) {
 	this->drawPlayer();
 
 	if (alive) {
 		this->handleDialogue();
 	}
 	else {
-		this->deathScreen();
+		this->deathScreen(enemy1, enemy2, enemy3);
 	}
 }
 // Collision with rectangle objects
@@ -1089,7 +1091,7 @@ void PlayerMonkey::CollisionWithRectangle(Enemy enemy) {
 	}
 }
 // Death handler
-void PlayerMonkey::deathScreen() {
+void PlayerMonkey::deathScreen(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3) {
 	if (!firstStageDeath) {
 		if (facingRight) {
 			currPlayerImage = deathPlayerImageRightArr[animDeath];
@@ -1106,7 +1108,7 @@ void PlayerMonkey::deathScreen() {
 						lastPlayerX = PlayerBox.x;
 						lastPlayerY = PlayerBox.y;
 
-						PlayerBox = { 0.0f ,0.0f, 0.0f, 0.0f };
+						PlayerBox = { 0.0f ,0.0f, 80.0f, 150.0f };
 					}
 				}
 				animDeathTime = 0.0f;
@@ -1126,7 +1128,7 @@ void PlayerMonkey::deathScreen() {
 					lastPlayerX = PlayerBox.x;
 					lastPlayerY = PlayerBox.y;
 
-					PlayerBox = { 0.0f ,0.0f, 0.0f, 0.0f };
+					PlayerBox = { 0.0f ,0.0f, 80.0f, 150.0f };
 				}
 				animDeathTime = 0.0f;
 			}
@@ -1135,21 +1137,48 @@ void PlayerMonkey::deathScreen() {
 	}
 	else {
 		DrawRectangle(0, 0, 19200, 10800, Fade(BLACK, howBlack));
-		if (howBlack > 0.5f) {
+		if (howBlack > 0.6f && !restarted) {
 			howBlack -= 0.1f * GetFrameTime();
 		}
 		else {
+			Rectangle restartButton = { lastPlayerX - 180, 900, 400, 80 };
+
 			DrawRectangle(lastPlayerX - 150, 310, 370, 70, BLACK);
 			DrawText("You failed...", lastPlayerX - 100, 320, 50, RED);
-			DrawRectangle(lastPlayerX - 180, 900, 400, 70, BLACK);
 
-			Rectangle restartButton = { lastPlayerX - 180, 900, 400, 70 };
-
-			if (CheckCollisionPointRec(GetMousePosition(), restartButton)) {
+			DrawRectangleRec(restartButton, restartButtonColor);
+			mousePos = GetScreenToWorld2D(GetMousePosition(), mainCamera);
+			if (CheckCollisionPointRec(mousePos, restartButton)) {
 				DrawRectangleLinesEx(restartButton, 7, RED);
 				DrawText("Restart", lastPlayerX - 80, 910, 50, RED);
+				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+					restartButtonColor = RED;
+					howBlack = 1.0f;
+					restarted = true;
+					PlaySound(deathSound);
+				}
 			}
 
+			if (restarted) {
+				restartTime += GetFrameTime();
+
+				if (restartTime >= 1.5f) {					
+
+					firstStageDeath = false;
+					alive = true;
+					PlayerBox.x = 4000.0f;
+					PlayerBox.y = 800.0f;
+					currHealth = maxHealth;
+
+					enemy1.changeHp(enemy1.getMaxHp());
+					enemy2.changeHp(enemy2.getMaxHp());
+					enemy3.changeHp(enemy3.getMaxHp());
+
+					enemy1.revive(true);
+					enemy2.revive(true);
+					enemy3.revive(true);
+				}
+			}		
 		}
 
 		

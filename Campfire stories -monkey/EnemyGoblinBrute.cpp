@@ -136,7 +136,7 @@ void EnemyGoblinBrute::playerSeenFunc(PlayerMonkey player) {
 void EnemyGoblinBrute::handleUpdates(PlayerMonkey player, World world) {
 	if (hp <= 0) {
 		alive = false;
-		enemyBox = { 0,0,0,0 };
+		enemyBox = { 0, 0, 80, 200 };
 	}
 
 	if (alive) {

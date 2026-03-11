@@ -121,6 +121,9 @@ class PlayerMonkey{
 	float currStamina;
 	Rectangle staminaBar;
 	Rectangle staminaBarOutline;
+	bool restarted;
+	float restartTime;
+	Sound deathSound;
 	// Direction vars
 	bool facingRight;
 	bool hitting;
@@ -138,6 +141,8 @@ class PlayerMonkey{
 	const float sprintSpeed;
 	const float hitWalkSpeed;
 	bool notWalking;
+	Vector2 mousePos;
+	Color restartButtonColor;
 	// Jump mechanics
 	bool doubleJumpUsed = false;
 	bool inAir = false;
@@ -163,6 +168,9 @@ class PlayerMonkey{
 	float lightAttackDamage;
 	bool lightAttack1Used, lightAttack2Used, lightAttack3Used, lightAttack4Used, lightAttack5Used, lightAttack6Used, lightAttack7Used, lightAttack8Used;
 
+	
+
+
 	inline void drawPlayer() {
 		//DrawRectangleLinesEx(PlayerBox, 3, RED);// to see the playerBox
 		//DrawRectangleLinesEx(lightAttackHitBox, 3, GREEN);// to see the hitbox
@@ -181,7 +189,7 @@ class PlayerMonkey{
 	void handleCollisionsGroundObjects(GroundObject object);// Collision with ground objects
 	void handleCollisionsEnemies(Enemy enemy);// Collision with enemies
 	void staminaHandler(float amount, bool regen);
-	void deathScreen();
+	void deathScreen(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3);
 	void messageBox();
 	void handleDialogue();
 public:
@@ -200,7 +208,7 @@ public:
 	}
 	void handlePlayerActions();// for handling player actions like movement, hitting, etc
 	void handleUpdates(World world, Enemy& enemy);// for vars that need to be updated every frame
-	void handlePlayerVisuals();// visuals
+	void handlePlayerVisuals(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3);// visuals
 	void handleBars();// stamina, hp, mana bars...
 
 	// Collision with rectangle objects

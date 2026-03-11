@@ -30,6 +30,7 @@ protected:
 	Rectangle healthBar;
 	float enemyTimeInAir;
 	float hp;
+	float maxHp;
 	float speed;
 	float damage;
 	std::string TAG;
@@ -65,6 +66,8 @@ protected:
 	float viewDistanceBackwards;
 	bool inCombat;
 	bool alive;
+	float enemyBaseX;
+	float enemyBaseY;
 
 	std::map <std::string, Rectangle> currentCollisionTags;
 
@@ -80,7 +83,7 @@ protected:
 	virtual void handleAttacking();
 	virtual void handleStanding();
 public:
-	Enemy(const float& x, const  float& y, const  float& width, const  float& hegiht, const float& hp, const  float& speed, const  float& damage, const float& walkingDistanceRight,const float &walkingDistanceLeft);
+	Enemy(const float& x, const  float& y, const  float& width, const  float& hegiht, const float& maxHp, const  float& speed, const  float& damage, const float& walkingDistanceRight,const float &walkingDistanceLeft);
 
 	void handleEnemy() { this->DrawEnemy(); }
 	virtual void handleUpdates(PlayerMonkey player, World world);
@@ -98,6 +101,9 @@ public:
 	inline std::string getTag() const { return this->TAG; }
 	inline float getDamage() const { return damage; }
 	inline float getHp() const { return hp; }
+	inline void changeHp(float amount) { this->hp = amount; }
+	inline float getMaxHp() const { return maxHp; }
+	inline void revive(bool alive) { this->alive = alive; this->enemyBox = { enemyBaseX, enemyBaseY, 80, 200 };}
 	inline Rectangle& getRectangle() { return enemyBox; } // Non-const getter
 	inline std::map<std::string, Rectangle> getCurrentCollisionTags() { return currentCollisionTags; } // Non-const getter
 	inline Rectangle getHealhBar() const { return healthBar; }

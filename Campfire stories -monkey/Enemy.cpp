@@ -1,9 +1,9 @@
 #include "Enemy.h"
 
-Enemy::Enemy(const float& x, const  float& y, const  float& width, const  float& height, const float& hp, const  float& speed, const  float& damage, const float& walkingDistanceRight, const float& walkingDistanceLeft) :
-	enemyBox{ x, y, width, height },
+Enemy::Enemy(const float& x, const  float& y, const  float& width, const  float& height, const float& maxHp, const  float& speed, const  float& damage, const float& walkingDistanceRight, const float& walkingDistanceLeft) :
+	enemyBox{ x, y, width, height }, enemyBaseX(x), enemyBaseY(y),
 	healthBar{ x, y - 20.0f, width, 10.0f },
-	hp(hp),
+	maxHp(maxHp), hp(maxHp),
 	speed(speed),
 	damage(damage),
 	maxInvincibilityTime(2.0f), inlvincibilityTime(0.0f),
