@@ -1138,5 +1138,22 @@ void PlayerMonkey::deathScreen() {
 		if (howBlack > 0.5f) {
 			howBlack -= 0.1f * GetFrameTime();
 		}
+		else {
+			DrawRectangle(lastPlayerX - 150, 310, 370, 70, BLACK);
+			DrawText("You failed...", lastPlayerX - 100, 320, 50, RED);
+			DrawRectangle(lastPlayerX - 180, 900, 400, 70, BLACK);
+
+			Rectangle restartButton = { lastPlayerX - 180, 900, 400, 70 };
+
+			if (CheckCollisionPointRec(GetMousePosition(), restartButton)) {
+				DrawRectangleLinesEx(restartButton, 7, RED);
+				DrawText("Restart", lastPlayerX - 80, 910, 50, RED);
+			}
+
+		}
+
+		
+
+
 	}
 }
