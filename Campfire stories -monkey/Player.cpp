@@ -222,7 +222,7 @@ walkPlayerTextureRightArr{ LoadTextureFromImage(walkPlayerImageRightArr[0]), Loa
 
 	// Movement vars															// Sprinting vars
 	currentMoveSpeed(0), hitWalkSpeed(2.5f), walkSpeed(5.0f), walkAnimSpeed(0.2f), sprintSpeed(10.0f), curAnimSpeed(0.2f), sprintAnimSpeed(0.1f),
-	notWalking(true), running(false), stopControl(false), moveRight(false), displayMoveRightMessageTime(0.0f), displayMoveRightMessage(false),
+	notWalking(true), running(false), stopControl(false), moveRight(false), displayMoveRightMessage(false), moveLeft(false), displayMoveLeftMessage(false),
 	facingRight(true), mousePos({ 0.0f, 0.f }), restartButtonColor(BLACK),  // Facing direction vars
 	// Animation time vars
 	animTimeRight(0.0f), animTimeLeft(0.0f), idleAnimTime(0.0f),
@@ -768,7 +768,7 @@ void PlayerMonkey::hittingHitbox() {
 }
 
 void PlayerMonkey::handleMovement() {
-	if (IsKeyDown(KEY_D) || moveRight) {
+	if (IsKeyDown(KEY_D) && !moveLeft || moveRight) {
 		animLeft = 0;
 		animTimeLeft = 0.0f;
 
@@ -787,7 +787,7 @@ void PlayerMonkey::handleMovement() {
 		facingRight = true;
 
 	}
-	if (IsKeyDown(KEY_A) && !moveRight) {
+	if (IsKeyDown(KEY_A) && !moveRight || moveLeft) {
 		animRight = 0;
 		animTimeRight = 0.0f;
 
@@ -808,7 +808,7 @@ void PlayerMonkey::handleMovement() {
 		facingRight = false;
 
 	}
-	if ((IsKeyPressed(KEY_W) || IsKeyPressed(KEY_SPACE)) && currStamina > 20.0f && !moveRight) {
+	if ((IsKeyPressed(KEY_W) || IsKeyPressed(KEY_SPACE)) && currStamina > 20.0f && !moveRight && !moveLeft) {
 		if (inAir) {
 			if (!doubleJumpUsed) {
 				jumpProgress = doubleJumpPower;
@@ -840,7 +840,7 @@ void PlayerMonkey::handleMovement() {
 	
 
 
-	if (IsKeyPressed(KEY_Q) && currStamina > 50.0f && !moveRight) {
+	if (IsKeyPressed(KEY_Q) && currStamina > 50.0f && !moveRight && !moveLeft) {
 		if (dashCooldown >= 2.0f) {
 			if (IsKeyDown(KEY_A)) { dashProgress -= dashPower; }
 			if (IsKeyDown(KEY_D)) { dashProgress += dashPower; }
@@ -895,7 +895,7 @@ void PlayerMonkey::handleMovement() {
 	}
 	dashCooldown += GetFrameTime();
 	
-	if (IsKeyDown(KEY_LEFT_SHIFT) && currStamina >= 5.0f && !moveRight) {
+	if (IsKeyDown(KEY_LEFT_SHIFT) && currStamina >= 5.0f && !moveRight && !moveLeft) {
 		curAnimSpeed = sprintAnimSpeed;
 		currentMoveSpeed = sprintSpeed;
 		running = true;
@@ -967,33 +967,59 @@ void PlayerMonkey::staminaHandler(float amount, bool regen) {
 }
 // Dialongue handler
 void PlayerMonkey::handleDialogue() {
-	if (PlayerBox.x <= 50.0f) {
-		stopControl = true;
-		moveRight = true;
-		displayMoveRightMessage = true;
-	}
+	// Left bound
+	if (PlayerBox.x < 1000.0f) {
+		if (PlayerBox.x <= 50.0f) {
+			stopControl = true;
+			moveRight = true;
+			displayMoveRightMessage = true;
+		}
 
-	if (displayMoveRightMessage) {
-		this->messageBox();
-	}
+		if (displayMoveRightMessage) {
+			this->messageBoxOutOfBoundsLeft();
+		}
 
-	if(PlayerBox.x >= 500.0f){
-		stopControl = false;
-		moveRight = false;
+		if (PlayerBox.x >= 500.0f) {
+			stopControl = false;
+			moveRight = false;
+		}
+		if (PlayerBox.x > 600.0f) {
+			displayMoveRightMessage = false;
+		}
 	}
-	if (PlayerBox.x > 600.0f) {
-		displayMoveRightMessage = false;
+	// Right bound
+	if (PlayerBox.x > 13000.0f) {
+		if (PlayerBox.x > 14900.0f) {
+			stopControl = true;
+			moveLeft = true;
+			displayMoveLeftMessage = true;
+		}
+
+		if (displayMoveLeftMessage) {
+			this->messageBoxOutOfBoundsRight();
+		}
+
+		if (PlayerBox.x <= 14550.0f) {
+			stopControl = false;
+			moveLeft = false;
+		}
+		if (PlayerBox.x < 14450.0f) {
+			displayMoveLeftMessage = false;
+		}
 	}
-	
 }
 
-void PlayerMonkey::messageBox() {
+void PlayerMonkey::messageBoxOutOfBoundsLeft() {
 	DrawRectangleRec({ this->PlayerBox.x - 60, this->PlayerBox.y - 120.0f, 250.0f, 100.0f }, WHITE);
 	DrawRectangleLinesEx({ this->PlayerBox.x - 60, this->PlayerBox.y - 120.0f, 250.0f, 100.0f }, 14, BLACK);
 	DrawRectangleLinesEx({ this->PlayerBox.x - 60, this->PlayerBox.y - 120.0f, 250.0f, 100.0f }, 10, GRAY);
 	DrawText("There is nothing back there \n I should continue foward...", this->PlayerBox.x - 43.0f, this->PlayerBox.y - 85.0f, 16, BLACK);
-
-
+}
+void PlayerMonkey::messageBoxOutOfBoundsRight() {
+	DrawRectangleRec({ this->PlayerBox.x- 60, this->PlayerBox.y - 120.0f, 250.0f, 100.0f }, WHITE);
+	DrawRectangleLinesEx({ this->PlayerBox.x - 60, this->PlayerBox.y - 120.0f, 250.0f, 100.0f }, 14, BLACK);
+	DrawRectangleLinesEx({ this->PlayerBox.x - 60, this->PlayerBox.y - 120.0f, 250.0f, 100.0f }, 10, GRAY);
+	DrawText("There is nothing foward \n I should return back...", this->PlayerBox.x - 30.0f, this->PlayerBox.y - 85.0f, 16, BLACK);
 }
 
 // Bars handler
@@ -1015,10 +1041,12 @@ void PlayerMonkey::handleBars() {
 }
 // Camera handler
 void PlayerMonkey::handleCamera() {
-	if (PlayerBox.x > 1000.0f) {
-		this->mainCamera.target.x = { this->PlayerBox.x };
-	}else
-		this->mainCamera.target.x = 1000.0f;
+	if (PlayerBox.x > 1000.0f) this->mainCamera.target.x = { this->PlayerBox.x };
+	else this->mainCamera.target.x = 1000.0f;
+
+	if (PlayerBox.x < 14000.0f) this->mainCamera.target.x = { this->PlayerBox.x };
+	else this->mainCamera.target.x = 14000.0f;
+
 	
 }
 

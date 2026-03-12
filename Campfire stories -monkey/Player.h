@@ -131,9 +131,10 @@ class PlayerMonkey{
 	//*these(*) are used to move the player in a direction for a short time*
 	//*like when getting to close to the end of the map*
 	bool moveRight;//*
+	bool moveLeft;//*
 	bool stopControl;//*
-	float displayMoveRightMessageTime;//*
 	bool displayMoveRightMessage;//*
+	bool displayMoveLeftMessage;//*
 	bool running;
 	float timeInAir;
 	float currentMoveSpeed;
@@ -190,7 +191,8 @@ class PlayerMonkey{
 	void handleCollisionsEnemies(Enemy enemy);// Collision with enemies
 	void staminaHandler(float amount, bool regen);
 	void deathScreen(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3);
-	void messageBox();
+	void messageBoxOutOfBoundsLeft();
+	void messageBoxOutOfBoundsRight();
 	void handleDialogue();
 public:
 	PlayerMonkey();
