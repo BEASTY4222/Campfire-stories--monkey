@@ -228,7 +228,7 @@ walkPlayerTextureRightArr{ LoadTextureFromImage(walkPlayerImageRightArr[0]), Loa
 	animTimeRight(0.0f), animTimeLeft(0.0f), idleAnimTime(0.0f),
 	animRight(0), animLeft(0), animIdle(0), animDashRight(0), animRightJump(0), animJumpTime(0.0f),
 	animDashTime(0.0f), animDashLeft(0), animLeftJump(0), animHit(0), animTimeHit(0.0f),
-	// Player stats
+	// Player stats// maxhp 300
 	maxHealth(300.0f), currHealth(maxHealth), maxInvincibilityTime(2.0f), currInvincibilityTime(0.0f), lastInvincibilityTime(0.0f), alive(true),
 	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(7.0f), regenStamina(true), firstStageDeath(false), howBlack(1.0f),
 	lastPlayerX(0.0f), lastPlayerY(0.0f), restarted(false), restartTime(0.0f),
@@ -1007,6 +1007,9 @@ void PlayerMonkey::handleDialogue() {
 			displayMoveLeftMessage = false;
 		}
 	}
+
+	//Tower entrance (end)
+	
 }
 
 void PlayerMonkey::messageBoxOutOfBoundsLeft() {

@@ -15,7 +15,7 @@ Village::Village() {
 
 	// Villagers
 	deadOldManTexture= LoadTexture("spritesWorld/villagers/1Old_man/Old_man_death_last.png");
-	deadOldWomanTexture = LoadTexture("spritesWorld/villagers/2Old_woman/Old_woman_death.png");
+	deadOldWomanTexture = LoadTexture("spritesWorld/villagers/2Old_woman/Old_woman_death_last.png");
 	deadManTexture = LoadTexture("spritesWorld/villagers/3Man/Man_death_last.png");
 	deadWomanTexture = LoadTexture("spritesWorld/villagers/4Woman/Woman_death_last.png");
 	deadBoyTexture = LoadTexture("spritesWorld/villagers/5Boy/Boy_death_last.png");
@@ -26,17 +26,32 @@ Village::Village() {
 }
 
 void Village::DrawVillageBackHouses() {
-	DrawTexture(greenRoofHouseTexture, 7000.0f, 550.0f, WHITE);
-	DrawTexture(woodenStandTexture, 7330.0f, 550.0f, WHITE);
-	DrawTexture(woodenstallTexture, 7710.0f, 550.0f, WHITE);
-	DrawTexture(tatchRoofHouseTexture, 8120.0f, 550.0f, WHITE);
-	DrawTexture(woodenHouseTexture, 8650.0f, 420.0f, WHITE);
-	DrawTexture(greenRoofHouseTexture2, 9200.0f, 430.0f, WHITE);
-	DrawTexture(blackSmithHouseTexture, 9650.0f, 520.0f, WHITE);
-	DrawTexture(woodenStandTexture, 11000.0f, 550.0f, WHITE);
-	DrawTexture(greenRoofHouseTexture2, 10600.0f, 430.0f, WHITE);
-	DrawTexture(greenRoofHouseTexture, 10200.0f, 550.0f, WHITE);
+	DrawTexture(greenRoofHouseTexture, 7000, 550, WHITE);
+	DrawTexture(woodenStandTexture, 7330, 550, WHITE);
+	DrawTexture(deadOldManTexture, 7440, 650, WHITE);
 
+	DrawTexture(deadBoyTexture, 7330, 900, WHITE);
+
+	DrawTexture(woodenstallTexture, 7710, 550, WHITE);
+	DrawTexture(deadOldWomanTexture, 7840, 830, WHITE);
+
+	DrawTexture(tatchRoofHouseTexture, 8120, 550, WHITE);
+	DrawTexture(deadGirlTexture, 8600, 900, WHITE);
+	DrawTexture(woodenHouseTexture, 8650, 420, WHITE);
+	DrawTexture(deadWomanTexture, 8800, 650, WHITE);
+	DrawTexture(deadOldManTexture, 9050, 950, WHITE);
+
+	DrawTexture(greenRoofHouseTexture2, 9200, 430, WHITE);
+	DrawTexture(blackSmithHouseTexture, 9650, 520, WHITE);
+	DrawTexture(deadGirlTexture, 11000, 900, WHITE);
+	DrawTexture(woodenStandTexture, 11000, 550, WHITE);
+	DrawTexture(deadManTexture, 11100, 650, WHITE);
+
+	DrawTexture(greenRoofHouseTexture2, 10600, 430, WHITE);
+	DrawTexture(greenRoofHouseTexture, 10200, 550, WHITE);
+
+	DrawTexture(deadManTexture, 10000,1000,WHITE);
+	DrawTexture(deadWomanTexture, 10500, 1050,WHITE);
 
 
 	DrawTexture(stoneTowerTexture, 12500.0f, 130.0f, WHITE);
