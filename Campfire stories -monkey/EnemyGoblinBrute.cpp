@@ -111,7 +111,8 @@ void EnemyGoblinBrute::DrawEnemy() {
 
 
 	//attack hitbox for testing
-	//DrawRectangleRec(hitbox, BLUE);
+	DrawRectangleRec(hitbox, BLUE);
+	DrawRectangleRec(enemyBox, RED);
 }
 
 void EnemyGoblinBrute::playerSeenFunc(PlayerMonkey player) {
@@ -121,7 +122,7 @@ void EnemyGoblinBrute::playerSeenFunc(PlayerMonkey player) {
 
 		closeDistanceToPlayer = abs(player.getRectangle().x - enemyBox.x);
 
-		if (closeDistanceToPlayer <= 80 || animHitLeft > 0 || animHitRight > 0) {
+		if (closeDistanceToPlayer <= 100 || animHitLeft > 0 || animHitRight > 0) {
 			hitting = true;
 			inCombat = true;
 			standTime = 0.0f;

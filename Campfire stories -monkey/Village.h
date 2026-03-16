@@ -1,3 +1,4 @@
+#pragma once
 #include "raylib.h"
 
 class Village {
@@ -28,4 +29,7 @@ public:
 	Village();
 	void DrawVillageBackHouses();
 	void DrawVillageFrontHouses();
+
+	inline Vector2 getBoyCords() {
+	return Vector2{ 12900.0f, 900.0f };}
 };

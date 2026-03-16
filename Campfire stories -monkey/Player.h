@@ -6,6 +6,7 @@
 #include "GroundObject.h"
 #include "Enemy.h"
 #include "World.h"
+#include "Village.h"
 
 class Enemy;
 
@@ -124,12 +125,20 @@ class PlayerMonkey{
 	bool restarted;
 	float restartTime;
 	Sound deathSound;
+	bool hasKey;
+	bool showLockedDoorMessage;
+	bool talkingToBoy;
+	int golbinsKilled;
+	bool goblin1Dead;
+	bool goblin2Dead;
+	bool goblin3Dead;
 	// Direction vars
 	bool facingRight;
 	bool hitting;
 	// Moving vars
 	//*these(*) are used to move the player in a direction for a short time*
 	//*like when getting to close to the end of the map*
+	bool canJump;
 	bool moveRight;//*
 	bool moveLeft;//*
 	bool stopControl;//*
@@ -193,7 +202,9 @@ class PlayerMonkey{
 	void deathScreen(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3);
 	void messageBoxOutOfBoundsLeft();
 	void messageBoxOutOfBoundsRight();
-	void handleDialogue();
+	void messageBoxTowerEntrance();
+	void messageBoxBoy(Village village);
+	void handleDialogue(Village village);
 public:
 	PlayerMonkey();
 
@@ -210,7 +221,7 @@ public:
 	}
 	void handlePlayerActions();// for handling player actions like movement, hitting, etc
 	void handleUpdates(World world, Enemy& enemy);// for vars that need to be updated every frame
-	void handlePlayerVisuals(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3);// visuals
+	void handlePlayerVisuals(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3, Village vilage);// visuals
 	void handleBars();// stamina, hp, mana bars...
 
 	// Collision with rectangle objects

@@ -55,6 +55,7 @@ void Village::DrawVillageBackHouses() {
 
 
 	DrawTexture(stoneTowerTexture, 12500.0f, 130.0f, WHITE);
+	DrawTexture(boyTexture, 12900.0f, 900.0f, WHITE);
 }
 void Village::DrawVillageFrontHouses() {
 	DrawTexture(chimneyHouseTexture, 8450.0f, 800.0f, Fade(WHITE, 0.5f));
