@@ -132,6 +132,7 @@ class PlayerMonkey{
 	bool goblin1Dead;
 	bool goblin2Dead;
 	bool goblin3Dead;
+	bool enteredTower;
 	// Direction vars
 	bool facingRight;
 	bool hitting;
@@ -202,9 +203,9 @@ class PlayerMonkey{
 	void deathScreen(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3);
 	void messageBoxOutOfBoundsLeft();
 	void messageBoxOutOfBoundsRight();
-	void messageBoxTowerEntrance();
+	void messageBoxTowerEntrance(bool &closeWindow);
 	void messageBoxBoy(Village village);
-	void handleDialogue(Village village);
+	void handleDialogue(Village village, bool& closeWindow);
 public:
 	PlayerMonkey();
 
@@ -221,7 +222,7 @@ public:
 	}
 	void handlePlayerActions();// for handling player actions like movement, hitting, etc
 	void handleUpdates(World world, Enemy& enemy);// for vars that need to be updated every frame
-	void handlePlayerVisuals(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3, Village vilage);// visuals
+	void handlePlayerVisuals(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3, Village vilage, bool &closeWindow);// visuals
 	void handleBars();// stamina, hp, mana bars...
 
 	// Collision with rectangle objects

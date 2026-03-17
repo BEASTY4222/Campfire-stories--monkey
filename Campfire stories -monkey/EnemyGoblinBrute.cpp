@@ -138,6 +138,7 @@ void EnemyGoblinBrute::handleUpdates(PlayerMonkey player, World world) {
 	if (hp <= 0) {
 		alive = false;
 		enemyBox = { 0, 0, 80, 200 };
+		hitbox = { 0, 0, 0, 0 };
 	}
 
 	if (alive) {
@@ -174,6 +175,9 @@ void EnemyGoblinBrute::handleAttacking() {
 				hitbox.width = 80.0f;
 				hitbox.height = 120.0f;
 			}
+			else {
+				hitbox = { 0,0,0,0 };
+			}
 		}
 		else {
 			currentTexture = textureHitRightArr[animHitRight];
@@ -192,6 +196,9 @@ void EnemyGoblinBrute::handleAttacking() {
 				hitbox.y = enemyBox.y + 40.0f;
 				hitbox.width = 80.0f;
 				hitbox.height = 120.0f;
+			}
+			else {
+				hitbox = { 0,0,0,0 };
 			}
 		}
 

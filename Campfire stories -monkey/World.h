@@ -18,6 +18,9 @@ class World {
 	Texture2D startingForestTreesTexture;
 	Image startingForestGroundImage;
 	Texture2D startingForestGroundTexture;
+	float timeMessage1;
+	float timeMessage2;
+	float timeMessage3;
 
 
 
@@ -44,7 +47,9 @@ public:
 		startingForestTreesTexture(LoadTextureFromImage(startingForestTreesImage)),
 		startingForestGroundTexture(LoadTextureFromImage(startingForestGroundImage)),
 		mainGround(0.0f, 1000.0f, 100000.0f, 400.0f, "MAIN_GROUND"),
-		groundObjects{ { "MAIN_GROUND", mainGround } }
+		groundObjects{ { "MAIN_GROUND", mainGround } },
+
+		timeMessage1(0.0f), timeMessage2(0.0f), timeMessage3(0.0f)
 
 	{
 		mainGround.setTexture(startingForestGroundTexture);
@@ -67,6 +72,27 @@ public:
 	void handleWorld(Rectangle& entity,std::map <std::string,Rectangle> entityCollisins, float entinysTimeInAir) {
 		gravityEffect(entity, entityCollisins, entinysTimeInAir);          
 		drawWorld();
+	}
+
+	void gameStart(bool & prologuePassed) {
+		DrawRectangle(0, 0, 19200, 10800, BLACK);
+
+		DrawText("You hear distant cries", 4100.0f, 320, 50, DARKGRAY);
+		timeMessage2 += GetFrameTime();
+
+		if (timeMessage2 >= 4.0f) {
+			DrawText("from a village you bearly see", 4100.0f, 420, 50, DARKGRAY);
+			timeMessage3 += GetFrameTime();
+		}
+
+		if (timeMessage3 >= 4.0f) {
+			DrawText("you rush towards it", 4100.0f, 520, 50, DARKGRAY);
+			timeMessage1 += GetFrameTime();
+		}
+
+		if (timeMessage1 >= 5.5f) {
+			prologuePassed = true;
+		}
 	}
 
 	float getGroundLevel() const {

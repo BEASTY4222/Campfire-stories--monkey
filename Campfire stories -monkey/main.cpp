@@ -13,6 +13,8 @@ int main() {
     SetTraceLogLevel(LOG_ALL);
     const int screenWidth = 1920;
     const int screenHeight = 1080;
+	bool closeWindow = false;
+	bool prologuePassed = false;
 
     InitWindow(screenWidth, screenHeight, "Campfire stories: Monkey");
     InitAudioDevice();
@@ -31,7 +33,7 @@ int main() {
 	Village village;
 
     // Main game loop
-    while (!WindowShouldClose()) {  // Detect window close button or ESC key
+    while (!WindowShouldClose() && !closeWindow) {  // Detect window close button or ESC key
         // Update
         // Update variables here
 		Monkey.handlePlayerActions();
@@ -49,45 +51,50 @@ int main() {
         ClearBackground(RAYWHITE);
         BeginMode2D(Monkey.getCamera());
 
-        if (!Monkey.isSecondStage()) {
+        if(!prologuePassed) gameWorld.gameStart(prologuePassed);
 
-            gameWorld.handleWorld(goblinFront.getRectangle(), goblinFront.getCurrentCollisionTags(), goblinFront.getAirTime());
-            gameWorld.handleWorld(goblinMiddle.getRectangle(), goblinMiddle.getCurrentCollisionTags(), goblinMiddle.getAirTime());
-            gameWorld.handleWorld(goblinBack.getRectangle(), goblinBack.getCurrentCollisionTags(), goblinBack.getAirTime());
+        if (prologuePassed) {
+            if (!Monkey.isSecondStage()) {
 
-            gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags(), Monkey.getTimeInAir());
+                gameWorld.handleWorld(goblinFront.getRectangle(), goblinFront.getCurrentCollisionTags(), goblinFront.getAirTime());
+                gameWorld.handleWorld(goblinMiddle.getRectangle(), goblinMiddle.getCurrentCollisionTags(), goblinMiddle.getAirTime());
+                gameWorld.handleWorld(goblinBack.getRectangle(), goblinBack.getCurrentCollisionTags(), goblinBack.getAirTime());
 
-            village.DrawVillageBackHouses();
+                gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags(), Monkey.getTimeInAir());
 
-            Monkey.handlePlayerVisuals(goblinFront,goblinMiddle, goblinBack, village);
-            goblinFront.handleEnemy();
-            goblinMiddle.handleEnemy();
-            goblinBack.handleEnemy();
+                village.DrawVillageBackHouses();
 
-            Monkey.drawPlayerBars();
+                Monkey.handlePlayerVisuals(goblinFront, goblinMiddle, goblinBack, village, closeWindow);
+                goblinFront.handleEnemy();
+                goblinMiddle.handleEnemy();
+                goblinBack.handleEnemy();
 
-            village.DrawVillageFrontHouses();
+                Monkey.drawPlayerBars();
+
+                village.DrawVillageFrontHouses();
+            }
+            else {
+                gameWorld.handleWorld(goblinFront.getRectangle(), goblinFront.getCurrentCollisionTags(), goblinFront.getAirTime());
+                gameWorld.handleWorld(goblinMiddle.getRectangle(), goblinMiddle.getCurrentCollisionTags(), goblinMiddle.getAirTime());
+                gameWorld.handleWorld(goblinBack.getRectangle(), goblinBack.getCurrentCollisionTags(), goblinBack.getAirTime());
+
+                gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags(), Monkey.getTimeInAir());
+
+                village.DrawVillageBackHouses();
+
+                goblinFront.handleEnemy();
+                goblinMiddle.handleEnemy();
+                goblinBack.handleEnemy();
+
+                Monkey.drawPlayerBars();
+
+                village.DrawVillageFrontHouses();
+
+                Monkey.handlePlayerVisuals(goblinFront, goblinMiddle, goblinBack, village, closeWindow);
+
+            }
         }
-        else {
-            gameWorld.handleWorld(goblinFront.getRectangle(), goblinFront.getCurrentCollisionTags(), goblinFront.getAirTime());
-            gameWorld.handleWorld(goblinMiddle.getRectangle(), goblinMiddle.getCurrentCollisionTags(), goblinMiddle.getAirTime());
-            gameWorld.handleWorld(goblinBack.getRectangle(), goblinBack.getCurrentCollisionTags(), goblinBack.getAirTime());
-
-            gameWorld.handleWorld(Monkey.getRectangle(), Monkey.getCurrentCollisionTags(), Monkey.getTimeInAir());
-
-            village.DrawVillageBackHouses();
-
-            goblinFront.handleEnemy();
-            goblinMiddle.handleEnemy();
-            goblinBack.handleEnemy();
-
-            Monkey.drawPlayerBars();
-
-            village.DrawVillageFrontHouses();
-
-            Monkey.handlePlayerVisuals(goblinFront, goblinMiddle, goblinBack, village);
-
-        }
+        
 
         EndMode2D();
         EndDrawing();

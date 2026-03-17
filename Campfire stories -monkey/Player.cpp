@@ -1,7 +1,7 @@
 #include "Player.h"
 #include"iostream"						
 										//  x,      y,    width, height
-PlayerMonkey::PlayerMonkey() : PlayerBox{ 12000.0f, 800.0f,80.0f, 150.0f },// Player rectangle
+PlayerMonkey::PlayerMonkey() : PlayerBox{ 4100.0f, 800.0f,80.0f, 150.0f },// Player rectangle
 mainCamera{ { 1920.0 / 2, 720.0f}, { 1920 / 2, 1080 * 0.72f }, 0.0f, 1.0f },// Camera
 jumpProgress{ 0.0f }, jumpProgressDoubleJump{ 0.0f }, jumpPower{ 1200.0f }, doubleJumpPower{ 800.0f }, timeInAir(0.0f),// Jumping vars
 dashCooldown{ 2.0f }, dashPower{ 1000.0f }, dashProgress(0.0f), isDashing(false), timeDashing(0.0f),// Dash vars
@@ -232,7 +232,7 @@ walkPlayerTextureRightArr{ LoadTextureFromImage(walkPlayerImageRightArr[0]), Loa
 	maxHealth(300.0f), currHealth(maxHealth), maxInvincibilityTime(2.0f), currInvincibilityTime(0.0f), lastInvincibilityTime(0.0f), alive(true),
 	maxStamina(260.0f), currStamina(maxStamina), staminaRegenRate(7.0f), regenStamina(true), firstStageDeath(false), howBlack(1.0f), canJump(true),
 	lastPlayerX(0.0f), lastPlayerY(0.0f), restarted(false), restartTime(0.0f), hasKey(false), showLockedDoorMessage(false), talkingToBoy(false),
-	golbinsKilled(0), goblin1Dead(false), goblin2Dead(false), goblin3Dead(false),
+	golbinsKilled(0), goblin1Dead(false), goblin2Dead(false), goblin3Dead(false), enteredTower(false),
 	// Bars Initalization
 	healthBarOutline{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, 304.0f, 30.0f },
 	healthBar{ mainCamera.target.x + 640.0f, mainCamera.target.y + 220.0f, currHealth, 30.0f },
@@ -263,12 +263,16 @@ void PlayerMonkey::handlePlayerActions() { // heavy on calculations so separated
 			// Idle animation handler
 			this->handleIdle();
 		}
-
-		// Movement handler
-		this->handleMovement();
+			// Movement handler
+			this->handleMovement();
+		
 
 		if (currInvincibilityTime < maxInvincibilityTime) {
 			currInvincibilityTime += GetFrameTime();
+		}
+
+		if (IsKeyPressed(KEY_F1)) {
+			hasKey = true;
 		}
 	}
 }
@@ -967,7 +971,7 @@ void PlayerMonkey::staminaHandler(float amount, bool regen) {
 	}
 }
 // Dialongue handler
-void PlayerMonkey::handleDialogue(Village village) {
+void PlayerMonkey::handleDialogue(Village village,bool& closeWindow) {
 	// Left bound
 	if (PlayerBox.x < 1000.0f) {
 		if (PlayerBox.x <= 50.0f) {
@@ -1011,7 +1015,7 @@ void PlayerMonkey::handleDialogue(Village village) {
 
 	//Tower entrance (end)
 	if (PlayerBox.x >= 12580 && PlayerBox.x <= 12670) 
-		this->messageBoxTowerEntrance();
+		this->messageBoxTowerEntrance(closeWindow);
 	else {
 		canJump = true; 
 		showLockedDoorMessage = false;
@@ -1019,6 +1023,9 @@ void PlayerMonkey::handleDialogue(Village village) {
 
 	if (PlayerBox.x >= 12830 && PlayerBox.x <= 12970) {
 		this->messageBoxBoy(village);
+	}
+	else {
+		talkingToBoy = false;
 	}
 		
 }
@@ -1035,7 +1042,7 @@ void PlayerMonkey::messageBoxOutOfBoundsRight() {
 	DrawRectangleLinesEx({ this->PlayerBox.x - 60, this->PlayerBox.y - 120.0f, 250.0f, 100.0f }, 10, GRAY);
 	DrawText("There is nothing foward \n I should return back...", this->PlayerBox.x - 30.0f, this->PlayerBox.y - 85.0f, 16, BLACK);
 }
-void PlayerMonkey::messageBoxTowerEntrance() {
+void PlayerMonkey::messageBoxTowerEntrance(bool& closeWindow) {
 	canJump = false;
 
 	if (IsKeyPressed(KEY_W) || showLockedDoorMessage) {
@@ -1047,7 +1054,25 @@ void PlayerMonkey::messageBoxTowerEntrance() {
 			DrawText("Door is locked \n I need a key.", this->PlayerBox.x - 30.0f, this->PlayerBox.y - 85.0f, 16, BLACK);
 		}
 		else {
-			// ending logic here
+			stopControl = true;
+			enteredTower = true;
+			DrawRectangle(0, 0, 19200, 10800, BLACK);
+
+			Rectangle restartButton = { this->PlayerBox.x - 180, 900, 400, 80 };
+
+			DrawRectangle(this->PlayerBox.x - 150, 900, 370, 70, DARKGREEN);
+			DrawText("You saved the village CONGRATS \n You also completed the game", this->PlayerBox.x - 400, 320, 50, DARKGREEN);
+
+			DrawRectangleRec(restartButton, restartButtonColor);
+			mousePos = GetScreenToWorld2D(GetMousePosition(), mainCamera);
+			if (CheckCollisionPointRec(mousePos, restartButton)) {
+				DrawRectangleLinesEx(restartButton, 7, DARKGREEN);
+				DrawText("Close game", this->PlayerBox.x - 120, 910, 50, DARKGREEN);
+				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+					closeWindow = true;
+				}
+			}
+			//DrawRectangle(0, 0, 19200, 10800, BLACK);
 		}
 	}else {
 		DrawRectangleRec({ this->PlayerBox.x - 30, this->PlayerBox.y - 120.0f, 130.0f, 80.0f }, WHITE);
@@ -1059,29 +1084,30 @@ void PlayerMonkey::messageBoxTowerEntrance() {
 void PlayerMonkey::messageBoxBoy(Village village) {
 	if (IsKeyPressed(KEY_F) || talkingToBoy) {
 		talkingToBoy = true;
-		if (golbinsKilled <= 0) {
+		if (!goblin1Dead && !goblin2Dead && !goblin3Dead) {
 			DrawRectangleRec({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, WHITE);
 			DrawRectangleLinesEx({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, 14, BLACK);
 			DrawRectangleLinesEx({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, 10, GRAY);
 			DrawText("Please kill all the goblins \n I will give you a key \n to the tower in return", village.getBoyCords().x - 30.0f, village.getBoyCords().y - 95.0f, 16, BLACK);
 		}
-		if(golbinsKilled == 1) {
+		else if(goblin1Dead && !goblin2Dead && !goblin3Dead) {
 			DrawRectangleRec({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, WHITE);
 			DrawRectangleLinesEx({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, 14, BLACK);
 			DrawRectangleLinesEx({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, 10, GRAY);
-			DrawText("You got one goblin \n good go finish the rest for the key", village.getBoyCords().x - 30.0f, village.getBoyCords().y - 95.0f, 16, BLACK);
+			DrawText("You got one goblin \n good go finish the rest \n for the key", village.getBoyCords().x - 30.0f, village.getBoyCords().y - 95.0f, 16, BLACK);
 		}
-		if (golbinsKilled == 2) {
+		else if (goblin1Dead && goblin2Dead && !goblin3Dead) {
 			DrawRectangleRec({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, WHITE);
 			DrawRectangleLinesEx({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, 14, BLACK);
 			DrawRectangleLinesEx({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, 10, GRAY);
 			DrawText("You got two goblins \n you are close kill the last one", village.getBoyCords().x - 30.0f, village.getBoyCords().y - 95.0f, 16, BLACK);
 		}
-		if (golbinsKilled == 3) {
+		else if (goblin1Dead && goblin2Dead && goblin3Dead) {
 			DrawRectangleRec({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, WHITE);
 			DrawRectangleLinesEx({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, 14, BLACK);
 			DrawRectangleLinesEx({ village.getBoyCords().x - 60, village.getBoyCords().y - 120.0f, 250.0f, 100.0f }, 10, GRAY);
 			DrawText("You killed them all \n you rid the village of them \n here is the key you \n can go up the tower now", village.getBoyCords().x - 30.0f, village.getBoyCords().y - 105.0f, 16, BLACK);
+			hasKey = true;
 		}
 		
 	}
@@ -1095,20 +1121,34 @@ void PlayerMonkey::messageBoxBoy(Village village) {
 }
 // Bars handler
 void PlayerMonkey::handleBars() {
-	healthBarOutline.x = mainCamera.target.x + 640.0f;
-	healthBarOutline.y = mainCamera.target.y + 220.0f;
-	healthBar.x = mainCamera.target.x + 640.0f;
-	healthBar.y = mainCamera.target.y + 220.0f;
-	healthBar.width = currHealth;
+	if (enteredTower) {
+		healthBarOutline.x = 0;
+		healthBarOutline.y = 0;
+		healthBar.x = 0;
+		healthBar.y = 0;
+		healthBar.width = 0;
 
-	staminaBarOutline.x = mainCamera.target.x + 680.0f;
-	staminaBarOutline.y = mainCamera.target.y + 260.0f;
-	staminaBar.x = mainCamera.target.x + 680.0f;
-	staminaBar.y = mainCamera.target.y + 260.0f;
-	staminaBar.width = currStamina;
-	if ((currStamina < maxStamina) && regenStamina) 
-		currStamina += staminaRegenRate * GetFrameTime();// regenerate stamina over time
-	
+		staminaBarOutline.x = 0;
+		staminaBarOutline.y = 0;
+		staminaBar.x = 0;
+		staminaBar.y = 0;
+		staminaBar.width = 0;
+	}
+	else {
+		healthBarOutline.x = mainCamera.target.x + 640.0f;
+		healthBarOutline.y = mainCamera.target.y + 220.0f;
+		healthBar.x = mainCamera.target.x + 640.0f;
+		healthBar.y = mainCamera.target.y + 220.0f;
+		healthBar.width = currHealth;
+
+		staminaBarOutline.x = mainCamera.target.x + 680.0f;
+		staminaBarOutline.y = mainCamera.target.y + 260.0f;
+		staminaBar.x = mainCamera.target.x + 680.0f;
+		staminaBar.y = mainCamera.target.y + 260.0f;
+		staminaBar.width = currStamina;
+		if ((currStamina < maxStamina) && regenStamina)
+			currStamina += staminaRegenRate * GetFrameTime();// regenerate stamina over time
+	}
 }
 // Camera handler
 void PlayerMonkey::handleCamera() {
@@ -1131,25 +1171,22 @@ void PlayerMonkey::handleUpdates(World world, Enemy& enemy) {// For vars that ne
 	}
 }
 // Draw handler
-void PlayerMonkey::handlePlayerVisuals(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3, Village village) {
+void PlayerMonkey::handlePlayerVisuals(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3, Village village, bool &closeWindow) {
 	this->drawPlayer();
 
 	if (enemy1.getHp() <= 0) {
-		golbinsKilled++;
 		goblin1Dead = true;
 	}
 	if (enemy2.getHp() <= 0) {
-		golbinsKilled++;
 		goblin2Dead = true;
 	}
 	if (enemy3.getHp() <= 0) {
-		golbinsKilled++;
 		goblin3Dead = true;
 	}
 
 
 	if (alive) {
-		this->handleDialogue(village);
+		this->handleDialogue(village, closeWindow);
 	}
 	else {
 		this->deathScreen(enemy1, enemy2, enemy3);
@@ -1291,7 +1328,8 @@ void PlayerMonkey::deathScreen(Enemy& enemy1, Enemy& enemy2, Enemy& enemy3) {
 					enemy2.revive(true);
 					enemy3.revive(true);
 
-					golbinsKilled = 0;
+					goblin1Dead, goblin2Dead, goblin3Dead = true;
+
 				}
 			}		
 		}
